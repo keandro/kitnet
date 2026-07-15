@@ -1,42 +1,37 @@
-<%= form_with(model: pessoa, class: "contents") do |form| %>
-  <% if pessoa.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2>Corrija os erros abaixo antes de salvar esta pessoa (<%= pluralize(pessoa.errors.count, "erro") %>):</h2>
+<div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
+  <%= render "shared/error_summary", object: pessoa %>
 
-      <ul class="list-disc ml-6">
-        <% pessoa.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <%= form_with(model: pessoa) do |form| %>
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <%= form.label :nome, class: label_classes %>
+        <%= form.text_field :nome, class: field_classes(pessoa, :nome) %>
+      </div>
+
+      <div>
+        <%= form.label :cpf, class: label_classes %>
+        <%= form.text_field :cpf, class: field_classes(pessoa, :cpf) %>
+      </div>
+
+      <div>
+        <%= form.label :telefone, class: label_classes %>
+        <%= form.text_field :telefone, class: field_classes(pessoa, :telefone) %>
+      </div>
+
+      <div>
+        <%= form.label :email, class: label_classes %>
+        <%= form.email_field :email, class: field_classes(pessoa, :email) %>
+      </div>
+
+      <div>
+        <%= form.label :endereco, class: label_classes %>
+        <%= form.text_field :endereco, class: field_classes(pessoa, :endereco) %>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-5 dark:border-white/10">
+      <%= link_to "Cancelar", pessoas_path, class: "rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" %>
+      <%= form.submit "Salvar", class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
     </div>
   <% end %>
-
-  <div class="my-5">
-    <%= form.label :nome %>
-    <%= form.text_field :nome, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pessoa.errors[:nome].none?, "border-red-400 focus:outline-red-600": pessoa.errors[:nome].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :cpf %>
-    <%= form.text_field :cpf, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pessoa.errors[:cpf].none?, "border-red-400 focus:outline-red-600": pessoa.errors[:cpf].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :telefone %>
-    <%= form.text_field :telefone, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pessoa.errors[:telefone].none?, "border-red-400 focus:outline-red-600": pessoa.errors[:telefone].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :email %>
-    <%= form.text_field :email, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pessoa.errors[:email].none?, "border-red-400 focus:outline-red-600": pessoa.errors[:email].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :endereco %>
-    <%= form.text_field :endereco, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pessoa.errors[:endereco].none?, "border-red-400 focus:outline-red-600": pessoa.errors[:endereco].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>

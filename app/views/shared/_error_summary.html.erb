@@ -1,0 +1,10 @@
+<% if object.errors.any? %>
+  <div class="mb-6 rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 ring-1 ring-inset ring-rose-600/20 dark:bg-rose-400/10 dark:text-rose-400 dark:ring-rose-400/20">
+    <p class="font-medium">Corrija <%= pluralize(object.errors.count, "erro", "erros") %> antes de continuar:</p>
+    <ul class="mt-1 list-disc pl-5">
+      <% object.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

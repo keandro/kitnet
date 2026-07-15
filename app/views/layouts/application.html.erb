@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
   <head>
     <title><%= content_for(:title) || "Kitnet" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Kitnet">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="color-scheme" content="light dark">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -23,32 +24,71 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="h-full bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100">
     <% if usuario_signed_in? %>
-      <nav class="bg-gray-900 text-white px-5 py-4 flex items-center justify-between">
-        <div class="flex items-center space-x-6">
-          <%= link_to "Kitnet", root_path, class: "font-bold text-lg" %>
-          <%= link_to "Pessoas", pessoas_path, class: "hover:text-gray-300" %>
-          <%= link_to "Unidades", unidades_path, class: "hover:text-gray-300" %>
-          <%= link_to "Contratos", contratos_path, class: "hover:text-gray-300" %>
-          <%= link_to "Pagamentos", pagamentos_path, class: "hover:text-gray-300" %>
+      <div class="flex h-full" data-controller="sidebar">
+        <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-20 hidden bg-slate-900/30 lg:hidden"></div>
+
+        <aside data-sidebar-target="panel" class="fixed inset-y-0 left-0 z-30 flex w-64 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 lg:static lg:translate-x-0 dark:border-white/10 dark:bg-slate-800">
+          <div class="flex h-16 shrink-0 items-center gap-2 border-b border-slate-200 px-5 dark:border-white/10">
+            <span class="flex size-8 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white">K</span>
+            <span class="text-lg font-semibold">Kitnet</span>
+          </div>
+
+          <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+            <%= sidebar_nav_link "Dashboard", root_path, :home %>
+            <%= sidebar_nav_link "Pessoas", pessoas_path, :users %>
+            <%= sidebar_nav_link "Unidades", unidades_path, :building %>
+            <%= sidebar_nav_link "Contratos", contratos_path, :document %>
+            <%= sidebar_nav_link "Pagamentos", pagamentos_path, :cash %>
+          </nav>
+
+          <div class="border-t border-slate-200 p-4 dark:border-white/10">
+            <p class="truncate text-sm font-medium text-slate-700 dark:text-slate-200"><%= current_usuario.email %></p>
+            <%= button_to destroy_usuario_session_path, method: :delete, class: "mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white" do %>
+              <%= icon :logout, css_class: "size-4" %> Sair
+            <% end %>
+          </div>
+        </aside>
+
+        <div class="flex min-w-0 flex-1 flex-col">
+          <header class="flex h-16 shrink-0 items-center gap-4 border-b border-slate-200 bg-white px-4 sm:px-6 lg:hidden dark:border-white/10 dark:bg-slate-800">
+            <button type="button" data-action="sidebar#toggle" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white" aria-label="Abrir menu">
+              <%= icon :menu, css_class: "size-6" %>
+            </button>
+            <span class="text-base font-semibold">Kitnet</span>
+          </header>
+
+          <main class="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-10">
+            <div class="mx-auto max-w-6xl">
+              <% if notice.present? %>
+                <div class="mb-6 flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/20">
+                  <%= icon :check_circle, css_class: "size-5 shrink-0" %> <%= notice %>
+                </div>
+              <% end %>
+              <% if alert.present? %>
+                <div class="mb-6 flex items-center gap-2 rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 ring-1 ring-inset ring-rose-600/20 dark:bg-rose-400/10 dark:text-rose-400 dark:ring-rose-400/20">
+                  <%= icon :exclamation_triangle, css_class: "size-5 shrink-0" %> <%= alert %>
+                </div>
+              <% end %>
+
+              <%= yield %>
+            </div>
+          </main>
         </div>
-        <div class="flex items-center space-x-4">
-          <span class="text-sm text-gray-300"><%= current_usuario.email %></span>
-          <%= button_to "Sair", destroy_usuario_session_path, method: :delete, class: "text-sm underline bg-transparent cursor-pointer" %>
+      </div>
+    <% else %>
+      <main class="flex min-h-full items-center justify-center px-4 py-12">
+        <div class="w-full max-w-sm">
+          <% if notice.present? %>
+            <div class="mb-6 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20"><%= notice %></div>
+          <% end %>
+          <% if alert.present? %>
+            <div class="mb-6 rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 ring-1 ring-inset ring-rose-600/20"><%= alert %></div>
+          <% end %>
+          <%= yield %>
         </div>
-      </nav>
+      </main>
     <% end %>
-
-    <main class="container mx-auto mt-10 px-5">
-      <% if notice.present? %>
-        <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block"><%= notice %></p>
-      <% end %>
-      <% if alert.present? %>
-        <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-md inline-block"><%= alert %></p>
-      <% end %>
-
-      <%= yield %>
-    </main>
   </body>
 </html>

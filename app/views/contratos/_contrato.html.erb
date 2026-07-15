@@ -1,38 +1,37 @@
-<div id="<%= dom_id contrato %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Morador:</strong>
-    <%= contrato.morador.nome %>
+<div id="<%= dom_id contrato %>" class="rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="flex flex-wrap items-center gap-4 border-b border-slate-200 p-6 dark:border-white/10">
+    <span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400">
+      <%= icon :document, css_class: "size-6" %>
+    </span>
+    <div class="min-w-0 flex-1">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white"><%= contrato.morador.nome %> · <%= contrato.unidade.nome %></h2>
+      <div class="mt-1 flex flex-wrap gap-2">
+        <%= contrato_status_badge(contrato.status) %>
+        <%= status_pagamento_badge(contrato.status_pagamento) %>
+      </div>
+    </div>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Unidade:</strong>
-    <%= contrato.unidade.nome %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Fiadores:</strong>
-    <%= contrato.fiadores.map(&:nome).join(", ") %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Data de início:</strong>
-    <%= l(contrato.data_inicio) if contrato.data_inicio %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Data de fim:</strong>
-    <%= l(contrato.data_fim) if contrato.data_fim %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Valor do aluguel:</strong>
-    <%= number_to_currency(contrato.valor_aluguel) %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Dia de pagamento:</strong>
-    <%= contrato.dia_pagamento %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status do contrato:</strong>
-    <%= t("contrato.status.#{contrato.status}") %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status de pagamento:</strong>
-    <%= status_pagamento_badge(contrato.status_pagamento) %>
-  </div>
+
+  <dl class="grid grid-cols-1 gap-x-6 gap-y-5 p-6 sm:grid-cols-2">
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Fiadores</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= contrato.fiadores.map(&:nome).join(", ") %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor do aluguel</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= number_to_currency(contrato.valor_aluguel) %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Data de início</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= l(contrato.data_inicio) if contrato.data_inicio %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Data de fim</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= contrato.data_fim ? l(contrato.data_fim) : "—" %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Dia de pagamento</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white">Todo dia <%= contrato.dia_pagamento %></dd>
+    </div>
+  </dl>
 </div>

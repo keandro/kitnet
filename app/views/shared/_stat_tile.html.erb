@@ -1,0 +1,12 @@
+<div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/40 p-5 flex items-start gap-4">
+  <div class="shrink-0 rounded-lg p-2.5 <%= icon_chip_classes(local_assigns.fetch(:tone, :primary)) %>">
+    <%= icon(icon_name, css_class: "size-5") %>
+  </div>
+  <div class="min-w-0">
+    <p class="text-sm text-slate-500 dark:text-slate-400"><%= label %></p>
+    <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-white"><%= value %></p>
+    <% if local_assigns[:sublabel].present? %>
+      <p class="mt-1 text-xs text-slate-500 dark:text-slate-400"><%= sublabel %></p>
+    <% end %>
+  </div>
+</div>

@@ -1,26 +1,30 @@
-<div id="<%= dom_id pessoa %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Nome:</strong>
-    <%= pessoa.nome %>
+<div id="<%= dom_id pessoa %>" class="rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="flex items-center gap-4 border-b border-slate-200 p-6 dark:border-white/10">
+    <span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-lg font-medium text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400">
+      <%= pessoa.nome.first.upcase %>
+    </span>
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white"><%= pessoa.nome %></h2>
+      <div class="mt-1"><%= pessoa_categoria_badge(pessoa.categoria) %></div>
+    </div>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">CPF:</strong>
-    <%= pessoa.cpf %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Telefone:</strong>
-    <%= pessoa.telefone %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Email:</strong>
-    <%= pessoa.email %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Endereço:</strong>
-    <%= pessoa.endereco %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Categoria:</strong>
-    <%= t("pessoa.categoria.#{pessoa.categoria}") %>
-  </div>
+
+  <dl class="grid grid-cols-1 gap-x-6 gap-y-5 p-6 sm:grid-cols-2">
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">CPF</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= pessoa.cpf %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Telefone</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= pessoa.telefone.presence || "—" %></dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Email</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= pessoa.email.presence || "—" %></dd>
+    </div>
+    <div class="sm:col-span-2">
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Endereço</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= pessoa.endereco.presence || "—" %></dd>
+    </div>
+  </dl>
 </div>

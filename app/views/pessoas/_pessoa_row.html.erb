@@ -1,0 +1,18 @@
+<tr id="<%= dom_id pessoa %>" class="hover:bg-slate-50 dark:hover:bg-white/5">
+  <td class="whitespace-nowrap px-4 py-3">
+    <div class="flex items-center gap-3">
+      <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-medium text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400">
+        <%= pessoa.nome.first.upcase %>
+      </span>
+      <%= link_to pessoa.nome, pessoa, class: "font-medium text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
+    </div>
+  </td>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= pessoa.cpf %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= pessoa.telefone %></td>
+  <td class="whitespace-nowrap px-4 py-3"><%= pessoa_categoria_badge(pessoa.categoria) %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+    <%= link_to icon(:eye, css_class: "size-4"), pessoa, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Ver" %>
+    <%= link_to icon(:pencil, css_class: "size-4"), edit_pessoa_path(pessoa), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
+    <%= button_to icon(:trash, css_class: "size-4"), pessoa, method: :delete, class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
+  </td>
+</tr>

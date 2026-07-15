@@ -1,0 +1,16 @@
+<tr id="<%= dom_id pagamento %>" class="hover:bg-slate-50 dark:hover:bg-white/5">
+  <% if show_contrato %>
+    <td class="whitespace-nowrap px-4 py-3">
+      <%= link_to pagamento.contrato.morador.nome, pagamento.contrato, class: "font-medium text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
+      <p class="text-xs text-slate-500 dark:text-slate-400"><%= pagamento.contrato.unidade.nome %></p>
+    </td>
+  <% end %>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= l(pagamento.data_vencimento) %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= pagamento.data_pagamento ? l(pagamento.data_pagamento) : "—" %></td>
+  <td class="whitespace-nowrap px-4 py-3"><%= status_pagamento_badge(pagamento.status) %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+    <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
+    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
+  </td>
+</tr>

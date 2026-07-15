@@ -1,25 +1,37 @@
 <% content_for :title, "Unidades" %>
 
-<div class="w-full">
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Unidades</h1>
-    <%= link_to "Nova unidade", new_unidade_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+<div class="flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Unidades</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Kitnets cadastradas e seu status de ocupação.</p>
   </div>
+  <%= link_to new_unidade_path, class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
+    <%= icon :plus, css_class: "size-4" %> Nova unidade
+  <% end %>
+</div>
 
-  <div id="unidades" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @unidades.any? %>
-      <% @unidades.each do |unidade| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render unidade %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Ver", unidade, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Editar", edit_unidade_path(unidade), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Remover", unidade, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Tem certeza?" } %>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-center my-10">Nenhuma unidade encontrada.</p>
-    <% end %>
-  </div>
+<div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <% if @unidades.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+        <thead class="bg-slate-50 dark:bg-white/5">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Nome</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Endereço</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor base</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+          <%= render partial: "unidade_row", collection: @unidades, as: :unidade %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-4 py-12 text-center">
+      <%= icon :building, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhuma unidade cadastrada ainda.</p>
+    </div>
+  <% end %>
 </div>
