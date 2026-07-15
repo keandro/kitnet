@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_220014) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_222113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "contrato_fiadors", force: :cascade do |t|
+  create_table "contrato_fiadores", force: :cascade do |t|
     t.bigint "contrato_id", null: false
     t.datetime "created_at", null: false
     t.bigint "pessoa_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["contrato_id"], name: "index_contrato_fiadors_on_contrato_id"
-    t.index ["pessoa_id"], name: "index_contrato_fiadors_on_pessoa_id"
+    t.index ["contrato_id"], name: "index_contrato_fiadores_on_contrato_id"
+    t.index ["pessoa_id"], name: "index_contrato_fiadores_on_pessoa_id"
   end
 
   create_table "contratos", force: :cascade do |t|
@@ -67,8 +67,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_220014) do
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "contrato_fiadors", "contratos"
-  add_foreign_key "contrato_fiadors", "pessoas"
+  add_foreign_key "contrato_fiadores", "contratos"
+  add_foreign_key "contrato_fiadores", "pessoas"
   add_foreign_key "contratos", "pessoas", column: "morador_id"
   add_foreign_key "contratos", "unidades"
 end

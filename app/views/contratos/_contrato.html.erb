@@ -1,0 +1,30 @@
+<div id="<%= dom_id contrato %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Morador:</strong>
+    <%= contrato.morador.nome %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Unidade:</strong>
+    <%= contrato.unidade.nome %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Fiadores:</strong>
+    <%= contrato.fiadores.map(&:nome).join(", ") %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Data de início:</strong>
+    <%= l(contrato.data_inicio) if contrato.data_inicio %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Data de fim:</strong>
+    <%= l(contrato.data_fim) if contrato.data_fim %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Valor do aluguel:</strong>
+    <%= number_to_currency(contrato.valor_aluguel) %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= t("contrato.status.#{contrato.status}") %>
+  </div>
+</div>

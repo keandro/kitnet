@@ -1,7 +1,7 @@
 class Pessoa < ApplicationRecord
   has_many :contratos_como_morador, class_name: "Contrato", foreign_key: :morador_id, dependent: :restrict_with_error
-  has_many :contrato_fiadors, dependent: :destroy
-  has_many :contratos_como_fiador, through: :contrato_fiadors, source: :contrato
+  has_many :contrato_fiadores, dependent: :destroy
+  has_many :contratos_como_fiador, through: :contrato_fiadores, source: :contrato
 
   before_validation { self.cpf = cpf.gsub(/\D/, "") if cpf.present? }
 

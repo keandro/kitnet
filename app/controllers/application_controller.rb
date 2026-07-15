@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def pundit_user
+    current_usuario
+  end
+
   def user_not_authorized
     flash[:alert] = "Você não tem permissão para fazer isso."
     redirect_back fallback_location: root_path

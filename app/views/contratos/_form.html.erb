@@ -1,0 +1,53 @@
+<%= form_with(model: contrato, class: "contents") do |form| %>
+  <% if contrato.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2>Corrija os erros abaixo antes de salvar este contrato (<%= pluralize(contrato.errors.count, "erro") %>):</h2>
+
+      <ul class="list-disc ml-6">
+        <% contrato.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :morador_id, "Morador" %>
+    <%= form.collection_select :morador_id, Pessoa.order(:nome), :id, :nome, { prompt: "Selecione o morador" }, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:morador_id].none?, "border-red-400 focus:outline-red-600": contrato.errors[:morador_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :unidade_id, "Unidade" %>
+    <%= form.collection_select :unidade_id, Unidade.order(:nome), :id, :nome, { prompt: "Selecione a unidade" }, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:unidade_id].none?, "border-red-400 focus:outline-red-600": contrato.errors[:unidade_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :fiador_ids, "Fiadores" %>
+    <%= form.collection_select :fiador_ids, Pessoa.order(:nome), :id, :nome, {}, multiple: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full h-32", {"border-gray-400 focus:outline-blue-600": contrato.errors[:fiadores].none?, "border-red-400 focus:outline-red-600": contrato.errors[:fiadores].any?}] %>
+    <p class="text-sm text-gray-500 mt-1">Segure Ctrl (ou Cmd) para selecionar mais de um fiador.</p>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :data_inicio %>
+    <%= form.date_field :data_inicio, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:data_inicio].none?, "border-red-400 focus:outline-red-600": contrato.errors[:data_inicio].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :data_fim %>
+    <%= form.date_field :data_fim, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:data_fim].none?, "border-red-400 focus:outline-red-600": contrato.errors[:data_fim].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :valor_aluguel %>
+    <%= form.text_field :valor_aluguel, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:valor_aluguel].none?, "border-red-400 focus:outline-red-600": contrato.errors[:valor_aluguel].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :status %>
+    <%= form.select :status, Contrato.statuses.keys.map { |s| [t("contrato.status.#{s}"), s] }, {}, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:status].none?, "border-red-400 focus:outline-red-600": contrato.errors[:status].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

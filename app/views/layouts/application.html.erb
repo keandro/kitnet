@@ -24,7 +24,29 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <% if usuario_signed_in? %>
+      <nav class="bg-gray-900 text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-6">
+          <%= link_to "Kitnet", root_path, class: "font-bold text-lg" %>
+          <%= link_to "Pessoas", pessoas_path, class: "hover:text-gray-300" %>
+          <%= link_to "Unidades", unidades_path, class: "hover:text-gray-300" %>
+          <%= link_to "Contratos", contratos_path, class: "hover:text-gray-300" %>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-gray-300"><%= current_usuario.email %></span>
+          <%= button_to "Sair", destroy_usuario_session_path, method: :delete, class: "text-sm underline bg-transparent cursor-pointer" %>
+        </div>
+      </nav>
+    <% end %>
+
+    <main class="container mx-auto mt-10 px-5">
+      <% if notice.present? %>
+        <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block"><%= notice %></p>
+      <% end %>
+      <% if alert.present? %>
+        <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-md inline-block"><%= alert %></p>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>

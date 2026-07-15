@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym "RESTful"
 # end
+
+# The domain uses Portuguese words, whose plurals don't follow English rules
+# (e.g. "fiadores" would otherwise singularize to "fiadore").
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.irregular "fiador", "fiadores"
+end

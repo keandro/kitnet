@@ -4,10 +4,8 @@ class Contrato < ApplicationRecord
   belongs_to :morador, class_name: "Pessoa"
   belongs_to :unidade
 
-  has_many :contrato_fiadors, dependent: :destroy
-  has_many :fiadores, through: :contrato_fiadors, source: :pessoa
-
-  accepts_nested_attributes_for :contrato_fiadors, allow_destroy: true
+  has_many :contrato_fiadores, dependent: :destroy
+  has_many :fiadores, through: :contrato_fiadores, source: :pessoa
 
   validates :data_inicio, presence: true
   validates :valor_aluguel, numericality: { greater_than: 0 }
@@ -16,8 +14,6 @@ class Contrato < ApplicationRecord
   private
 
   def pelo_menos_um_fiador
-    if contrato_fiadors.reject(&:marked_for_destruction?).empty?
-      errors.add(:fiadores, "deve ter pelo menos um fiador")
-    end
+    errors.add(:fiadores, "deve ter pelo menos um fiador") if fiadores.empty?
   end
 end

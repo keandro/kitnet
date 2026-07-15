@@ -8,16 +8,18 @@ class ApplicationPolicy
     @record = record
   end
 
+  # Any authenticated usuario can manage all records — this is a single-team
+  # internal admin tool, so there are no per-role restrictions yet.
   def index?
-    false
+    true
   end
 
   def show?
-    false
+    true
   end
 
   def create?
-    false
+    true
   end
 
   def new?
@@ -25,7 +27,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    true
   end
 
   def edit?
@@ -33,7 +35,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    true
   end
 
   class Scope
@@ -43,7 +45,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      raise NoMethodError, "You must define #resolve in #{self.class}"
+      scope.all
     end
 
     private

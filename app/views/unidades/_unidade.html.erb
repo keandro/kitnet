@@ -1,0 +1,18 @@
+<div id="<%= dom_id unidade %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Nome:</strong>
+    <%= unidade.nome %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Endereço:</strong>
+    <%= unidade.endereco %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Valor base:</strong>
+    <%= number_to_currency(unidade.valor_base) %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= t("unidade.status.#{unidade.status}") %>
+  </div>
+</div>

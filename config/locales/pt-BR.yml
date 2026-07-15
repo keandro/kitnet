@@ -1,0 +1,23 @@
+pt-BR:
+  activerecord:
+    attributes:
+      pessoa:
+        cpf: CPF
+      contrato:
+        data_inicio: Data de início
+        data_fim: Data de fim
+        valor_aluguel: Valor do aluguel
+      unidade:
+        valor_base: Valor base
+
+  unidade:
+    status:
+      livre: Livre
+      ocupada: Ocupada
+      manutencao: Manutenção
+
+  contrato:
+    status:
+      ativo: Ativo
+      encerrado: Encerrado
+      cancelado: Cancelado
