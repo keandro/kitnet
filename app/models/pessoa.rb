@@ -8,4 +8,24 @@ class Pessoa < ApplicationRecord
   validates :nome, presence: true
   validates :cpf, presence: true, uniqueness: true, format: { with: /\A\d{11}\z/, message: "deve conter 11 dígitos" }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+
+  def morador_ativo?
+    contratos_como_morador.ativo.exists?
+  end
+
+  def fiador_ativo?
+    contratos_como_fiador.ativo.exists?
+  end
+
+  def categoria
+    if morador_ativo? && fiador_ativo?
+      :ambos
+    elsif morador_ativo?
+      :morador
+    elsif fiador_ativo?
+      :fiador
+    else
+      :sem_contrato_ativo
+    end
+  end
 end

@@ -21,3 +21,10 @@ pt-BR:
       ativo: Ativo
       encerrado: Encerrado
       cancelado: Cancelado
+
+  pessoa:
+    categoria:
+      morador: Morador
+      fiador: Fiador
+      ambos: Morador e fiador
+      sem_contrato_ativo: Sem contrato ativo
