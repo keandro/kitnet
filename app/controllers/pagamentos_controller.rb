@@ -1,19 +1,26 @@
 class PagamentosController < ApplicationController
-  before_action :set_contrato, only: %i[ index new create ]
+  before_action :set_contrato, only: %i[ index new ], if: -> { params[:contrato_id].present? }
   before_action :set_pagamento, only: %i[ show edit update destroy ]
 
-  # GET /contratos/:contrato_id/pagamentos
+  # GET /pagamentos
+  # GET /pagamentos?contrato_id=1
   def index
-    @pagamentos = policy_scope(@contrato.pagamentos).order(data_vencimento: :desc)
+    scope = @contrato ? @contrato.pagamentos : Pagamento.all
+    @pagamentos = policy_scope(scope).includes(contrato: :morador).order(data_vencimento: :desc)
   end
 
   # GET /pagamentos/1
   def show
   end
 
-  # GET /contratos/:contrato_id/pagamentos/new
+  # GET /pagamentos/new
+  # GET /pagamentos/new?contrato_id=1
   def new
-    @pagamento = @contrato.pagamentos.new(data_vencimento: proxima_data_vencimento, valor: @contrato.valor_aluguel)
+    @pagamento = Pagamento.new(
+      contrato_id: params[:contrato_id],
+      valor: @contrato&.valor_aluguel,
+      data_vencimento: @contrato ? proxima_data_vencimento : nil
+    )
     authorize @pagamento
   end
 
@@ -21,13 +28,13 @@ class PagamentosController < ApplicationController
   def edit
   end
 
-  # POST /contratos/:contrato_id/pagamentos
+  # POST /pagamentos
   def create
-    @pagamento = @contrato.pagamentos.new(pagamento_params)
+    @pagamento = Pagamento.new(pagamento_params)
     authorize @pagamento
 
     if @pagamento.save
-      redirect_to contrato_path(@contrato), notice: "Pagamento registrado com sucesso."
+      redirect_to contrato_path(@pagamento.contrato), notice: "Pagamento registrado com sucesso."
     else
       render :new, status: :unprocessable_content
     end
@@ -57,11 +64,10 @@ class PagamentosController < ApplicationController
     def set_pagamento
       @pagamento = Pagamento.find(params[:id])
       authorize @pagamento
-      @contrato = @pagamento.contrato
     end
 
     def pagamento_params
-      params.expect(pagamento: [ :valor, :data_vencimento, :data_pagamento, :observacoes ])
+      params.expect(pagamento: [ :contrato_id, :valor, :data_vencimento, :data_pagamento, :observacoes ])
     end
 
     def proxima_data_vencimento
