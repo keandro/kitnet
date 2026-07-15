@@ -6,13 +6,23 @@ class Contrato < ApplicationRecord
 
   has_many :contrato_fiadores, dependent: :destroy
   has_many :fiadores, through: :contrato_fiadores, source: :pessoa
+  has_many :pagamentos, dependent: :destroy
 
   validates :data_inicio, presence: true
   validates :valor_aluguel, numericality: { greater_than: 0 }
+  validates :dia_pagamento, presence: true, inclusion: { in: 1..31 }
   validate :pelo_menos_um_fiador
 
   after_save :sincronizar_status_da_unidade
   after_destroy :sincronizar_status_da_unidade
+
+  def ultimo_pagamento
+    pagamentos.order(:data_vencimento).last
+  end
+
+  def status_pagamento
+    ultimo_pagamento&.status || :sem_pagamento
+  end
 
   private
 

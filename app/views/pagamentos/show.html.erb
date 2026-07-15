@@ -1,0 +1,11 @@
+<% content_for :title, "Detalhes do pagamento" %>
+
+<div class="md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Detalhes do pagamento</h1>
+
+  <%= render @pagamento %>
+
+  <%= link_to "Editar pagamento", edit_pagamento_path(@pagamento), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to "Voltar para o contrato", contrato_path(@contrato), class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= button_to "Remover pagamento", @pagamento, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Tem certeza?" } %>
+</div>

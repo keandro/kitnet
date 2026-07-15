@@ -43,6 +43,12 @@
   </div>
 
   <div class="my-5">
+    <%= form.label :dia_pagamento, "Dia de pagamento" %>
+    <%= form.number_field :dia_pagamento, in: 1..31, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:dia_pagamento].none?, "border-red-400 focus:outline-red-600": contrato.errors[:dia_pagamento].any?}] %>
+    <p class="text-sm text-gray-500 mt-1">Dia do mês em que o aluguel vence (1 a 31).</p>
+  </div>
+
+  <div class="my-5">
     <%= form.label :status %>
     <%= form.select :status, Contrato.statuses.keys.map { |s| [t("contrato.status.#{s}"), s] }, {}, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contrato.errors[:status].none?, "border-red-400 focus:outline-red-600": contrato.errors[:status].any?}] %>
   </div>

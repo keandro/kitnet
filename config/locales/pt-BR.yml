@@ -7,8 +7,13 @@ pt-BR:
         data_inicio: Data de início
         data_fim: Data de fim
         valor_aluguel: Valor do aluguel
+        dia_pagamento: Dia de pagamento
       unidade:
         valor_base: Valor base
+      pagamento:
+        data_vencimento: Data de vencimento
+        data_pagamento: Data do pagamento
+        observacoes: Observações
 
   unidade:
     status:
@@ -28,3 +33,10 @@ pt-BR:
       fiador: Fiador
       ambos: Morador e fiador
       sem_contrato_ativo: Sem contrato ativo
+
+  pagamento:
+    status:
+      pago: Pago
+      vencido: Vencido
+      pendente: Pendente
+      sem_pagamento: Sem pagamento registrado

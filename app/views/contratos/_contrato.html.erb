@@ -24,7 +24,15 @@
     <%= number_to_currency(contrato.valor_aluguel) %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">Status:</strong>
+    <strong class="block font-medium mb-1">Dia de pagamento:</strong>
+    <%= contrato.dia_pagamento %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Status do contrato:</strong>
     <%= t("contrato.status.#{contrato.status}") %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Status de pagamento:</strong>
+    <%= status_pagamento_badge(contrato.status_pagamento) %>
   </div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_222113) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_224510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_222113) do
     t.datetime "created_at", null: false
     t.date "data_fim"
     t.date "data_inicio"
+    t.integer "dia_pagamento"
     t.bigint "morador_id", null: false
     t.integer "status"
     t.bigint "unidade_id", null: false
@@ -34,6 +35,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_222113) do
     t.decimal "valor_aluguel"
     t.index ["morador_id"], name: "index_contratos_on_morador_id"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
+  end
+
+  create_table "pagamentos", force: :cascade do |t|
+    t.bigint "contrato_id", null: false
+    t.datetime "created_at", null: false
+    t.date "data_pagamento"
+    t.date "data_vencimento"
+    t.text "observacoes"
+    t.datetime "updated_at", null: false
+    t.decimal "valor"
+    t.index ["contrato_id"], name: "index_pagamentos_on_contrato_id"
   end
 
   create_table "pessoas", force: :cascade do |t|
@@ -71,4 +83,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_222113) do
   add_foreign_key "contrato_fiadores", "pessoas"
   add_foreign_key "contratos", "pessoas", column: "morador_id"
   add_foreign_key "contratos", "unidades"
+  add_foreign_key "pagamentos", "contratos"
 end
