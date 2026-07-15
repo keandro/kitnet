@@ -11,3 +11,11 @@ Usuario.find_or_create_by!(email: admin_email) do |usuario|
 end
 
 puts "Usuario admin: #{admin_email} / senha: #{admin_password}"
+
+%w[001 002 003 004 101 102 103 104 201 202 203 204].each do |numero|
+  Unidade.find_or_create_by!(nome: numero) do |unidade|
+    unidade.status = :livre
+  end
+end
+
+puts "Unidades cadastradas: #{Unidade.count}"

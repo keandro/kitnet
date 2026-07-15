@@ -5,4 +5,12 @@ class Unidade < ApplicationRecord
 
   validates :nome, presence: true
   validates :valor_base, numericality: { greater_than: 0 }, allow_nil: true
+
+  def contrato_ativo
+    contratos.ativo.first
+  end
+
+  def morador_atual
+    contrato_ativo&.morador
+  end
 end
