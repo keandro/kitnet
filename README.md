@@ -4,7 +4,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 
 ![Ruby](https://img.shields.io/badge/Ruby-3.4.10-CC342D?logo=ruby&logoColor=white)
 ![Rails](https://img.shields.io/badge/Rails-8.1-D30001?logo=rubyonrails&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
 
 ## Índice
@@ -16,6 +16,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - [Começando](#começando)
 - [Uso](#uso)
 - [Qualidade e segurança](#qualidade-e-segurança)
+- [Backup](#backup)
 - [Deploy](#deploy)
 
 ## Funcionalidades
@@ -35,7 +36,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 | -------------- | ------------------------------------------- |
 | Linguagem      | Ruby 3.4.10                                 |
 | Framework      | Rails 8.1                                   |
-| Banco de dados | PostgreSQL                                  |
+| Banco de dados | SQLite                                      |
 | Frontend       | Hotwire (Turbo + Stimulus), Importmap       |
 | Estilo         | Tailwind CSS                                |
 | Autenticação   | Devise (+ devise-i18n)                      |
@@ -147,7 +148,7 @@ classDiagram
 ### Pré-requisitos
 
 - Ruby 3.4.10
-- PostgreSQL
+- SQLite 3
 - Bundler
 
 ### Instalação
@@ -209,6 +210,21 @@ bin/importmap audit  # vulnerabilidades em pacotes JS
 ```
 
 Esses mesmos passos rodam no GitHub Actions a cada push na `main` e em pull requests (`.github/workflows/ci.yml`).
+
+## Backup
+
+O banco de dados é um único arquivo SQLite dentro de `storage/`:
+
+| Ambiente        | Arquivo                         |
+| --------------- | ------------------------------- |
+| Desenvolvimento | `storage/development.sqlite3`   |
+| Produção        | `storage/production.sqlite3`    |
+
+Para fazer backup com segurança, mesmo com o app rodando:
+
+```bash
+sqlite3 storage/development.sqlite3 ".backup 'kitnet-$(date +%F).sqlite3'"
+```
 
 ## Deploy
 
