@@ -36,3 +36,15 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore test coverage reports.
+/coverage
+
+# Ignore editor and OS files.
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Ignore local Claude Code settings.
+.claude/settings.local.json
