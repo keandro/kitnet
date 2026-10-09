@@ -10,6 +10,11 @@ pt-BR:
         dia_pagamento: Dia de pagamento
       unidade:
         valor_base: Valor base
+      usuario:
+        email: E-mail
+        password: Nova senha
+        password_confirmation: Confirmação da nova senha
+        current_password: Senha atual
       pagamento:
         data_vencimento: Data de vencimento
         data_pagamento: Data do pagamento

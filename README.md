@@ -27,7 +27,8 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
 - **Contratos**: vínculo entre unidade, morador e um ou mais fiadores
 - **Pagamentos**: registro por contrato, com status `pago`, `pendente` ou `vencido`
-- **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit)
+- **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit), sem cadastro público
+- **Minha conta**: troca de e-mail e senha pelo próprio usuário, com login lembrado por 1 ano
 - Interface responsiva com modo escuro
 
 ## Tecnologias
@@ -178,7 +179,13 @@ bin/rails db:seed
 | `ADMIN_EMAIL`    | `admin@kitnet.local` |
 | `ADMIN_PASSWORD` | `senha123456`        |
 
-> Altere a senha padrão em qualquer ambiente que não seja de desenvolvimento.
+> Troque a senha padrão logo no primeiro acesso, em **Minha conta** (`/conta/edit`).
+
+Não existe cadastro público. Para criar outro usuário, use o console:
+
+```bash
+bin/rails runner 'Usuario.create!(email: "outro@exemplo.com", password: "uma-senha-forte")'
+```
 
 ## Uso
 
@@ -198,6 +205,7 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 | `/pessoas`    | Moradores e fiadores    |
 | `/contratos`  | Contratos               |
 | `/pagamentos` | Pagamentos              |
+| `/conta/edit` | Minha conta (e-mail e senha) |
 | `/up`         | Health check            |
 
 ## Qualidade e segurança
