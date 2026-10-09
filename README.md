@@ -153,7 +153,7 @@ classDiagram
 ### Instalação
 
 ```bash
-git clone <url-do-repositorio> kitnet
+git clone https://github.com/keandro/kitnet.git
 cd kitnet
 bin/setup
 ```
