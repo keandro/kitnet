@@ -1,9 +1,8 @@
 <% content_for :title, "Energia — #{nome_do_mes_energia(@conta)}" %>
 
-<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-wrap items-center justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Conta de energia do mês e o consumo de cada kitnet pelo medidor.</p>
   </div>
   <%= render "navegacao_mes", conta: @conta %>
 </div>
@@ -16,7 +15,6 @@
 <%# conta do mês %>
 <section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
   <h2 class="text-sm font-medium text-slate-900 dark:text-white">Conta do mês</h2>
-  <p class="text-xs text-slate-500 dark:text-slate-400">kWh total da conta e a tarifa cheia do kWh (sem o desconto da energia solar). O valor total é kWh × tarifa; o valor realmente pago fica em <%= link_to "Energia solar", energia_solar_path(ano: @conta.ano, mes: @conta.mes), class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %>.</p>
 
   <%= render "shared/error_summary", object: @conta %>
 
@@ -46,8 +44,7 @@
 <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   <%= render "shared/stat_tile", label: "Consumo das kitnets", value: "#{kwh(consumo_kitnets)} kWh", icon_name: :bolt, tone: :primary, value_class: "text-xl",
         sublabel: (@conta.kwh_total ? "de #{kwh(@conta.kwh_total)} kWh da conta" : "lance a conta do mês") %>
-  <%= render "shared/stat_tile", label: "Áreas comuns e perdas", value: (@conta.kwh_total ? "#{kwh(@conta.kwh_total - consumo_kitnets)} kWh" : "—"), icon_name: :building, tone: :info, value_class: "text-xl",
-        sublabel: "conta total − medidores das kitnets" %>
+  <%= render "shared/stat_tile", label: "Áreas comuns e perdas", value: (@conta.kwh_total ? "#{kwh(@conta.kwh_total - consumo_kitnets)} kWh" : "—"), icon_name: :building, tone: :info, value_class: "text-xl" %>
   <%= render "shared/stat_tile", label: "A cobrar das kitnets", value: number_to_currency(valor_kitnets), icon_name: :cash, tone: :primary, value_class: "text-xl",
         sublabel: (@conta.valor_total ? "de #{number_to_currency(@conta.valor_total)} da conta" : nil) %>
   <%= render "shared/stat_tile", label: "Já recebido", value: number_to_currency(valor_pago), icon_name: :check_circle, tone: :good, value_class: "text-xl",
@@ -59,7 +56,6 @@
   <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-white/10">
     <div>
       <h2 class="text-sm font-medium text-slate-900 dark:text-white">Por kitnet</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400">Consumo = leitura atual − leitura anterior. Valor = consumo × valor do kWh.</p>
     </div>
     <%= link_to editar_leituras_energia_path(ano: @conta.ano, mes: @conta.mes), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
       <%= icon :pencil, css_class: "size-4" %> Lançar leituras
@@ -125,7 +121,6 @@
 <section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
   <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês em <%= @conta.ano %></h2>
-    <p class="text-xs text-slate-500 dark:text-slate-400">Clique num mês para abrir a conta e as leituras dele.</p>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">

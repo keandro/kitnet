@@ -6,10 +6,9 @@
 <% recebido = @pagamentos.sum(&:valor) %>
 <% data_sugerida = @mes == Date.current.beginning_of_month ? Date.current : [ @mes.end_of_month, Date.current ].min %>
 
-<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-wrap items-center justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Pagamentos</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Aluguéis recebidos em <%= nome_mes %>.</p>
   </div>
   <div class="flex flex-wrap items-center gap-2">
     <%= render "energia/navegacao_mes", conta: Struct.new(:ano, :mes).new(@mes.year, @mes.month), rota: :root_path %>
@@ -22,8 +21,7 @@
 <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
   <%= render "shared/stat_tile", label: "Recebido no mês", value: number_to_currency(recebido), icon_name: :cash, tone: :good, value_class: "text-xl",
         sublabel: "#{@pagamentos.size} #{@pagamentos.size == 1 ? "pagamento" : "pagamentos"}" %>
-  <%= render "shared/stat_tile", label: "Kitnets que pagaram", value: "#{cobradas.size - faltam.size} de #{cobradas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl",
-        sublabel: "das que têm valor base" %>
+  <%= render "shared/stat_tile", label: "Kitnets que pagaram", value: "#{cobradas.size - faltam.size} de #{cobradas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl" %>
   <%= render "shared/stat_tile", label: "Faltam pagar", value: faltam.size, icon_name: :clock, tone: (faltam.any? ? :critical : :good), value_class: "text-xl",
         sublabel: (faltam.any? ? faltam.map(&:nome).join(", ") : "todas pagaram") %>
 </div>

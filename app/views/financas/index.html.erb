@@ -1,9 +1,8 @@
 <% content_for :title, "Finanças" %>
 
-<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-wrap items-center justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Finanças</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Resultado do ano de <%= @ano %>, mês a mês.</p>
   </div>
 
   <nav class="flex flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-slate-800/40" aria-label="Ano">
@@ -19,19 +18,15 @@
 <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   <%= render "shared/stat_tile", label: "Resultado em #{@ano}", value: number_to_currency(@totais[:resultado]), icon_name: :chart, tone: (@totais[:resultado].negative? ? :critical : :good), value_class: "text-xl",
         sublabel: (@meses_com_movimento.positive? ? "média de #{number_to_currency(@media_mensal)} por mês (#{pluralize(@meses_com_movimento, "mês", plural: "meses")})" : "sem movimento no ano") %>
-  <%= render "shared/stat_tile", label: "Recebido em #{@ano}", value: number_to_currency(@total_recebido), icon_name: :cash, tone: :primary, value_class: "text-xl",
-        sublabel: "aluguéis das kitnets" %>
-  <%= render "shared/stat_tile", label: "Custos em #{@ano}", value: number_to_currency(custos), icon_name: :exclamation_triangle, tone: :critical, value_class: "text-xl",
-        sublabel: "despesas gerais + água e esgoto" %>
-  <%= render "shared/stat_tile", label: "Energia solar em #{@ano}", value: valor_com_sinal(@totais[:energia_solar]).sub("—", number_to_currency(0)), icon_name: :sun, tone: :info, value_class: "text-xl",
-        sublabel: "lucro das kitnets" %>
+  <%= render "shared/stat_tile", label: "Recebido em #{@ano}", value: number_to_currency(@total_recebido), icon_name: :cash, tone: :primary, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Custos em #{@ano}", value: number_to_currency(custos), icon_name: :exclamation_triangle, tone: :critical, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Energia solar em #{@ano}", value: valor_com_sinal(@totais[:energia_solar]).sub("—", number_to_currency(0)), icon_name: :sun, tone: :info, value_class: "text-xl" %>
 </div>
 
 <% escala = escala_financas(@meses.map { |m| m[:resultado] }) %>
 <% zero = posicao_na_escala(0, escala) %>
 <section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
   <h2 class="text-sm font-medium text-slate-900 dark:text-white">Resultado por mês</h2>
-  <p class="text-xs text-slate-500 dark:text-slate-400">Recebido + energia solar − despesas gerais − água e esgoto.</p>
 
   <div class="mt-6 flex gap-2">
     <%# eixo y %>
@@ -88,7 +83,6 @@
 <section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
   <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês</h2>
-    <p class="text-xs text-slate-500 dark:text-slate-400">Resultado = recebido + energia solar − despesas gerais − água e esgoto. Clique num mês para ver os pagamentos dele; o lápis lança os custos.</p>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">

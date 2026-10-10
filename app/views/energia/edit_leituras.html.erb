@@ -5,9 +5,6 @@
 <% end %>
 
 <h1 class="mt-3 text-2xl font-semibold text-slate-900 dark:text-white">Leituras — <%= nome_do_mes_energia(@conta) %></h1>
-<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-  Anote a leitura de cada medidor. A leitura anterior já vem do mês passado; deixe a linha em branco para uma kitnet sem leitura.
-</p>
 
 <% com_erro = @leituras.values.select { |l| l.errors.any? } %>
 <% if com_erro.any? %>
