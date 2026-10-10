@@ -36,14 +36,11 @@
           </div>
 
           <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-            <%= sidebar_nav_link "Vencimentos", root_path, :home %>
+            <%= sidebar_nav_link "Pagamentos", root_path, :cash %>
             <%= sidebar_nav_link "Finanças", financas_path, :chart %>
             <%= sidebar_nav_link "Energia", energia_path, :bolt %>
             <%= sidebar_nav_link "Energia solar", energia_solar_path, :sun %>
-            <%= sidebar_nav_link "Kitnets", kitnets_path, :grid %>
-            <%= sidebar_nav_link "Pessoas", pessoas_path, :users %>
-            <%= sidebar_nav_link "Unidades", unidades_path, :building %>
-            <%= sidebar_nav_link "Contratos", contratos_path, :document %>
+            <%= sidebar_nav_link "Kitnets", unidades_path, :grid %>
           </nav>
 
           <div class="border-t border-slate-200 p-4 dark:border-white/10">

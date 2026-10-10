@@ -26,14 +26,7 @@ module ApplicationHelper
     end
   end
 
-  PAGAMENTO_TONES = { pago: :good, vencido: :critical, pendente: :warning, sem_pagamento: :neutral }.freeze
   UNIDADE_TONES = { livre: :good, ocupada: :info, manutencao: :warning }.freeze
-  CONTRATO_TONES = { ativo: :good, encerrado: :neutral, cancelado: :critical }.freeze
-  CATEGORIA_TONES = { morador: :info, fiador: :neutral, ambos: :good, sem_contrato_ativo: :neutral }.freeze
-
-  def status_pagamento_badge(status)
-    status_badge(t("pagamento.status.#{status}"), tone: PAGAMENTO_TONES.fetch(status.to_sym, :neutral))
-  end
 
   def unidade_status_badge(status)
     status_badge(t("unidade.status.#{status}"), tone: UNIDADE_TONES.fetch(status.to_sym, :neutral))
@@ -50,14 +43,6 @@ module ApplicationHelper
   def unidade_card_classes(status)
     tone = UNIDADE_TONES.fetch(status.to_sym, :neutral)
     CARD_ACCENT_CLASSES.fetch(tone, CARD_ACCENT_CLASSES[:neutral])
-  end
-
-  def contrato_status_badge(status)
-    status_badge(t("contrato.status.#{status}"), tone: CONTRATO_TONES.fetch(status.to_sym, :neutral))
-  end
-
-  def pessoa_categoria_badge(categoria)
-    status_badge(t("pessoa.categoria.#{categoria}"), tone: CATEGORIA_TONES.fetch(categoria.to_sym, :neutral))
   end
 
   ICON_CHIP_CLASSES = {
@@ -97,18 +82,6 @@ module ApplicationHelper
         form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: format_money(0, precision: decimais),
                         class: "#{field_classes(form.object, attribute)} pl-10",
                         data: { controller: "money", action: "input->money#format", money_decimais_value: decimais }.merge(data))
-    end
-  end
-
-  # Campo com máscara e verificação em tempo real (campo_validado_controller):
-  # tipo :cpf, :telefone ou :email.
-  def validated_field(form, attribute, tipo, value: form.object.public_send(attribute), **options)
-    field = tipo == :email ? :email_field : :text_field
-    tag.div(data: { controller: "campo-validado", campo_validado_tipo_value: tipo }) do
-      form.public_send(field, attribute, value: value, autocomplete: "off",
-                       class: "#{field_classes(form.object, attribute)} aria-invalid:border-rose-400 aria-invalid:focus:border-rose-500 aria-invalid:focus:ring-rose-500",
-                       data: { campo_validado_target: "input", action: "input->campo-validado#digitar blur->campo-validado#verificar" }, **options) +
-        tag.p(class: "mt-1 text-xs text-rose-600 dark:text-rose-400", hidden: true, data: { campo_validado_target: "erro" })
     end
   end
 

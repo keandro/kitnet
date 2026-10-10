@@ -2,13 +2,8 @@ Rails.application.routes.draw do
   devise_for :usuarios
   resource :conta, only: %i[edit update], controller: "contas"
 
-  resources :pessoas
-  resources :unidades
-  resources :contratos
-  resources :pagamentos, only: %i[edit update destroy] do
-    patch :pagar, on: :member
-  end
-  get "kitnets", to: "kitnets#index", as: :kitnets
+  resources :unidades, path: "kitnets", only: %i[index show edit update]
+  resources :pagamentos, except: %i[index show]
   get "financas", to: "financas#index", as: :financas
   get "energia", to: "energia#index", as: :energia
   get "energia-solar", to: "energia_solar#index", as: :energia_solar
@@ -28,5 +23,5 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "dashboard#index"
+  root "pagamentos#index"
 end

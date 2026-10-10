@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_021534) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_023336) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -19,31 +19,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_021534) do
     t.datetime "updated_at", null: false
     t.decimal "valor_kwh", precision: 10, scale: 4
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
-  end
-
-  create_table "contrato_fiadores", force: :cascade do |t|
-    t.integer "contrato_id", null: false
-    t.integer "pessoa_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contrato_id"], name: "index_contrato_fiadores_on_contrato_id"
-    t.index ["pessoa_id"], name: "index_contrato_fiadores_on_pessoa_id"
-  end
-
-  create_table "contratos", force: :cascade do |t|
-    t.integer "morador_id", null: false
-    t.integer "unidade_id", null: false
-    t.date "data_inicio"
-    t.date "data_fim"
-    t.decimal "valor_aluguel"
-    t.integer "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "dia_pagamento"
-    t.integer "duracao_meses"
-    t.boolean "sem_fiador", default: false, null: false
-    t.index ["morador_id"], name: "index_contratos_on_morador_id"
-    t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
 
   create_table "energia_solar_mensal", force: :cascade do |t|
@@ -81,24 +56,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_021534) do
   end
 
   create_table "pagamentos", force: :cascade do |t|
-    t.integer "contrato_id", null: false
-    t.decimal "valor"
-    t.date "data_vencimento"
-    t.date "data_pagamento"
+    t.integer "unidade_id", null: false
+    t.decimal "valor", precision: 10, scale: 2, null: false
+    t.date "data_pagamento", null: false
     t.text "observacoes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contrato_id"], name: "index_pagamentos_on_contrato_id"
-  end
-
-  create_table "pessoas", force: :cascade do |t|
-    t.string "nome"
-    t.string "cpf"
-    t.string "telefone"
-    t.string "email"
-    t.string "endereco"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["data_pagamento"], name: "index_pagamentos_on_data_pagamento"
+    t.index ["unidade_id"], name: "index_pagamentos_on_unidade_id"
   end
 
   create_table "unidades", force: :cascade do |t|
@@ -121,11 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_021534) do
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "contrato_fiadores", "contratos"
-  add_foreign_key "contrato_fiadores", "pessoas"
-  add_foreign_key "contratos", "pessoas", column: "morador_id"
-  add_foreign_key "contratos", "unidades"
   add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
   add_foreign_key "leituras_energia", "unidades"
-  add_foreign_key "pagamentos", "contratos"
+  add_foreign_key "pagamentos", "unidades"
 end

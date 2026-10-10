@@ -3,28 +3,20 @@
 
   <%= form_with(model: unidade, html: { autocomplete: "off" }) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-      <div class="sm:col-span-2">
-        <%= form.label :nome, class: label_classes %>
-        <%= form.text_field :nome, class: field_classes(unidade, :nome) %>
-      </div>
-
       <div>
         <%= form.label :valor_base, class: label_classes %>
         <%= money_field form, :valor_base %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Sugerido como valor de cada pagamento.</p>
       </div>
 
       <div>
         <%= form.label :status, class: label_classes %>
-        <% contrato_ativo = unidade.persisted? && unidade.contrato_ativo %>
-        <%= form.select :status, Unidade.statuses.keys.map { |s| [t("unidade.status.#{s}"), s] }, {}, class: "#{field_classes(unidade, :status)} disabled:cursor-not-allowed disabled:opacity-60", disabled: contrato_ativo.present? %>
-        <% if contrato_ativo %>
-          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Ocupada pelo contrato de <%= contrato_ativo.morador.nome %>. Encerre ou cancele o contrato para mudar o status.</p>
-        <% end %>
+        <%= form.select :status, Unidade.statuses.keys.map { |s| [t("unidade.status.#{s}"), s] }, {}, class: field_classes(unidade, :status) %>
       </div>
     </div>
 
     <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-5 dark:border-white/10">
-      <%= link_to "Cancelar", unidades_path, class: "rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" %>
+      <%= link_to "Cancelar", unidade, class: "rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" %>
       <%= form.submit "Salvar", class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
     </div>
   <% end %>

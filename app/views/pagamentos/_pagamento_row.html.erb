@@ -1,15 +1,14 @@
 <tr id="<%= dom_id pagamento %>" class="hover:bg-slate-50 dark:hover:bg-white/5">
-  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
-  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= l(pagamento.data_vencimento) %></td>
-  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= pagamento.data_pagamento ? l(pagamento.data_pagamento) : "—" %></td>
-  <td class="whitespace-nowrap px-4 py-3"><%= status_pagamento_badge(pagamento.status) %></td>
+  <% if mostrar_kitnet %>
+    <td class="whitespace-nowrap px-4 py-3 text-sm font-medium">
+      <%= link_to pagamento.unidade.nome, pagamento.unidade, class: "text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
+    </td>
+  <% end %>
+  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= l(pagamento.data_pagamento) %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
+  <td class="max-w-xs truncate px-4 py-3 text-sm text-slate-500 dark:text-slate-400" title="<%= pagamento.observacoes %>"><%= pagamento.observacoes.presence || "—" %></td>
   <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
-    <% if pagamento.data_pagamento.nil? %>
-      <%= button_to pagar_pagamento_path(pagamento), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10", data: { turbo_confirm: "Marcar o pagamento de #{l(pagamento.data_vencimento)} como pago hoje?" } do %>
-        <%= icon :check_circle, css_class: "size-4" %> Pago
-      <% end %>
-    <% end %>
     <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
-    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "inline-block", class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
+    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "inline-block", class: "inline-flex cursor-pointer p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(pagamento.valor)} da kitnet #{pagamento.unidade.nome}?" }, title: "Remover" %>
   </td>
 </tr>

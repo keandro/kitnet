@@ -1,36 +1,26 @@
-<% content_for :title, "Unidades" %>
+<% content_for :title, "Kitnets" %>
 
-<div class="flex items-center justify-between">
-  <div>
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Unidades</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Kitnets cadastradas e seu status de ocupação.</p>
+<h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Kitnets</h1>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">As kitnets por andar, com o valor base e o pagamento de <%= t("date.month_names")[Date.current.month] %>.</p>
+
+<% @grupos.each do |chave, unidades| %>
+  <div class="mt-8">
+    <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= andar_label(chave) %></h2>
+
+    <div class="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <% unidades.each do |unidade| %>
+        <%= link_to unidade, class: "block rounded-xl border bg-white p-5 transition hover:shadow-md dark:bg-slate-800/40 #{unidade_card_classes(unidade.status)}" do %>
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-2xl font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
+            <%= unidade_status_badge(unidade.status) %>
+          </div>
+
+          <p class="mt-4 text-sm tabular-nums text-slate-900 dark:text-white"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "Sem valor base" %></p>
+          <p class="mt-1 text-xs <%= @pagas_no_mes.include?(unidade.id) ? "text-emerald-700 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400" %>">
+            <%= @pagas_no_mes.include?(unidade.id) ? "✓ Pago este mês" : "Sem pagamento este mês" %>
+          </p>
+        <% end %>
+      <% end %>
+    </div>
   </div>
-  <%= link_to new_unidade_path, class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
-    <%= icon :plus, css_class: "size-4" %> Nova unidade
-  <% end %>
-</div>
-
-<div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <% if @unidades.any? %>
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-        <thead class="bg-slate-50 dark:bg-white/5">
-          <tr>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Nome</th>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor base</th>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</th>
-            <th class="px-4 py-3"></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100 dark:divide-white/5">
-          <%= render partial: "unidade_row", collection: @unidades, as: :unidade %>
-        </tbody>
-      </table>
-    </div>
-  <% else %>
-    <div class="px-4 py-12 text-center">
-      <%= icon :building, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
-      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhuma unidade cadastrada ainda.</p>
-    </div>
-  <% end %>
-</div>
+<% end %>

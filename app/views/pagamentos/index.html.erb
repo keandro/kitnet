@@ -1,0 +1,94 @@
+<% nome_mes = "#{t("date.month_names")[@mes.month]} de #{@mes.year}" %>
+<% content_for :title, "Pagamentos — #{nome_mes}" %>
+
+<% ocupadas = @unidades.select(&:ocupada?) %>
+<% faltam = ocupadas.reject { |u| @por_unidade.key?(u.id) } %>
+<% recebido = @pagamentos.sum(&:valor) %>
+<% data_sugerida = @mes == Date.current.beginning_of_month ? Date.current : [ @mes.end_of_month, Date.current ].min %>
+
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Pagamentos</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Aluguéis recebidos em <%= nome_mes %>.</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-2">
+    <%= render "energia/navegacao_mes", conta: Struct.new(:ano, :mes).new(@mes.year, @mes.month), rota: :root_path %>
+    <%= link_to new_pagamento_path(data: data_sugerida), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
+      <%= icon :plus, css_class: "size-4" %> Registrar pagamento
+    <% end %>
+  </div>
+</div>
+
+<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  <%= render "shared/stat_tile", label: "Recebido no mês", value: number_to_currency(recebido), icon_name: :cash, tone: :good, value_class: "text-xl",
+        sublabel: "#{@pagamentos.size} #{@pagamentos.size == 1 ? "pagamento" : "pagamentos"}" %>
+  <%= render "shared/stat_tile", label: "Kitnets ocupadas que pagaram", value: "#{ocupadas.size - faltam.size} de #{ocupadas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Faltam pagar", value: faltam.size, icon_name: :clock, tone: (faltam.any? ? :critical : :good), value_class: "text-xl",
+        sublabel: (faltam.any? ? faltam.map(&:nome).join(", ") : "todas as ocupadas pagaram") %>
+</div>
+
+<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Por kitnet</h2>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+      <thead class="bg-slate-50 dark:bg-white/5">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Kitnet</th>
+          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor base</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Pago no mês</th>
+          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Pagamento</th>
+          <th class="px-4 py-3"><span class="sr-only">Ações</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+        <% @unidades.each do |unidade| %>
+          <% pagos = @por_unidade[unidade.id] || [] %>
+          <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= unidade_path(unidade) %>" data-action="click->row-link#visit">
+            <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
+            <td class="whitespace-nowrap px-4 py-3"><%= unidade_status_badge(unidade.status) %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= pagos.any? ? number_to_currency(pagos.sum(&:valor)) : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm">
+              <% if pagos.any? %>
+                <%= status_badge("Pago em #{pagos.map { |p| l(p.data_pagamento, format: "%d/%m") }.join(", ")}", tone: :good, icon: :check_circle) %>
+              <% elsif unidade.ocupada? %>
+                <%= status_badge("Não pago", tone: :warning, icon: :clock) %>
+              <% else %>
+                <span class="text-slate-400 dark:text-slate-500">—</span>
+              <% end %>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+              <%= link_to new_pagamento_path(unidade_id: unidade.id, data: data_sugerida), class: "inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-400/10" do %>
+                <%= icon :plus, css_class: "size-4" %> Registrar
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Pagamentos de <%= nome_mes %></h2>
+  </div>
+  <% if @pagamentos.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+        <%= render "table_head", mostrar_kitnet: true %>
+        <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+          <%= render partial: "pagamento_row", collection: @pagamentos, as: :pagamento, locals: { mostrar_kitnet: true } %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-4 py-12 text-center">
+      <%= icon :cash, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhum pagamento em <%= nome_mes %>.</p>
+    </div>
+  <% end %>
+</section>

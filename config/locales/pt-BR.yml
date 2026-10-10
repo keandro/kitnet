@@ -1,19 +1,12 @@
 pt-BR:
   activerecord:
+    models:
+      unidade: Kitnet
     attributes:
-      pessoa:
-        cpf: CPF
-        email: E-mail
-        telefone: Telefone
-        endereco: Endereço
-      contrato:
-        data_inicio: Data de início
-        data_fim: Data de fim
-        duracao_meses: Duração (meses)
-        valor_aluguel: Valor do aluguel
-        dia_pagamento: Dia de pagamento
       unidade:
+        nome: Nome
         valor_base: Valor base
+        status: Status
       usuario:
         email: E-mail
         password: Senha
@@ -34,9 +27,9 @@ pt-BR:
       fechamento_mensal:
         despesas_gerais: Despesas gerais
         agua_esgoto: Água e esgoto
-        energia_solar: Energia solar
       pagamento:
-        data_vencimento: Data de vencimento
+        unidade: Kitnet
+        valor: Valor
         data_pagamento: Data do pagamento
         observacoes: Observações
 
@@ -45,23 +38,3 @@ pt-BR:
       livre: Livre
       ocupada: Ocupada
       manutencao: Manutenção
-
-  contrato:
-    status:
-      ativo: Ativo
-      encerrado: Encerrado
-      cancelado: Cancelado
-
-  pessoa:
-    categoria:
-      morador: Morador
-      fiador: Fiador
-      ambos: Morador e fiador
-      sem_contrato_ativo: Sem contrato ativo
-
-  pagamento:
-    status:
-      pago: Pago
-      vencido: Vencido
-      pendente: Pendente
-      sem_pagamento: Sem pagamento registrado

@@ -5,7 +5,6 @@ class EnergiaController < ApplicationController
   def index
     @unidades = Unidade.order(:nome)
     @leituras = @conta.leituras.includes(:unidade).index_by(&:unidade_id)
-    @moradores = Contrato.ativo.includes(:morador).to_h { |c| [ c.unidade_id, c.morador ] }
   end
 
   # PATCH /energia/2026/10
