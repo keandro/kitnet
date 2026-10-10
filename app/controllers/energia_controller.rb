@@ -5,6 +5,7 @@ class EnergiaController < ApplicationController
   def index
     @unidades = Unidade.do_mes(Date.new(@conta.ano, @conta.mes)).order(:nome)
     @leituras = @conta.leituras.includes(:unidade).index_by(&:unidade_id)
+    @contas_do_ano = ContaEnergia.where(ano: @conta.ano).includes(leituras: :conta_energia).index_by(&:mes)
   end
 
   # PATCH /energia/2026/10
