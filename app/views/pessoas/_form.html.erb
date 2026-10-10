@@ -10,17 +10,17 @@
 
       <div>
         <%= form.label :cpf, class: label_classes %>
-        <%= form.text_field :cpf, class: field_classes(pessoa, :cpf) %>
+        <%= validated_field form, :cpf, :cpf, value: pessoa.cpf_formatado, inputmode: "numeric", placeholder: "000.000.000-00" %>
       </div>
 
       <div>
         <%= form.label :telefone, class: label_classes %>
-        <%= form.text_field :telefone, class: field_classes(pessoa, :telefone) %>
+        <%= validated_field form, :telefone, :telefone, value: pessoa.telefone_formatado, inputmode: "tel", placeholder: "(00) 00000-0000" %>
       </div>
 
       <div>
         <%= form.label :email, class: label_classes %>
-        <%= form.email_field :email, class: field_classes(pessoa, :email) %>
+        <%= validated_field form, :email, :email, placeholder: "nome@exemplo.com" %>
       </div>
 
       <div>

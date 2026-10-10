@@ -3,6 +3,9 @@ pt-BR:
     attributes:
       pessoa:
         cpf: CPF
+        email: E-mail
+        telefone: Telefone
+        endereco: Endereço
       contrato:
         data_inicio: Data de início
         data_fim: Data de fim

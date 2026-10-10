@@ -100,6 +100,18 @@ module ApplicationHelper
     end
   end
 
+  # Campo com máscara e verificação em tempo real (campo_validado_controller):
+  # tipo :cpf, :telefone ou :email.
+  def validated_field(form, attribute, tipo, value: form.object.public_send(attribute), **options)
+    field = tipo == :email ? :email_field : :text_field
+    tag.div(data: { controller: "campo-validado", campo_validado_tipo_value: tipo }) do
+      form.public_send(field, attribute, value: value, autocomplete: "off",
+                       class: "#{field_classes(form.object, attribute)} aria-invalid:border-rose-400 aria-invalid:focus:border-rose-500 aria-invalid:focus:ring-rose-500",
+                       data: { campo_validado_target: "input", action: "input->campo-validado#digitar blur->campo-validado#verificar" }, **options) +
+        tag.p(class: "mt-1 text-xs text-rose-600 dark:text-rose-400", hidden: true, data: { campo_validado_target: "erro" })
+    end
+  end
+
   # 1234.5 -> "1.234,50" (sem o "R$"), o formato do money_field.
   def format_money(valor)
     number_with_precision(valor, precision: 2, delimiter: ".", separator: ",")
