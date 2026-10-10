@@ -88,15 +88,15 @@ module ApplicationHelper
 
   # Campo de dinheiro com "R$" à frente; o money_controller formata enquanto
   # digita (1.234,56) e o model converte de volta com ValorMonetario.
-  def money_field(form, attribute, data: {})
+  def money_field(form, attribute, data: {}, decimais: 2)
     valor = form.object.public_send(attribute)
-    valor = format_money(valor) if valor.is_a?(Numeric)
+    valor = format_money(valor, precision: decimais) if valor.is_a?(Numeric)
 
     tag.div(class: "relative") do
       tag.span("R$", class: "pointer-events-none absolute inset-y-0 left-3 mt-1 flex items-center text-sm text-slate-500 dark:text-slate-400") +
-        form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: "0,00",
+        form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: format_money(0, precision: decimais),
                         class: "#{field_classes(form.object, attribute)} pl-10",
-                        data: { controller: "money", action: "input->money#format" }.merge(data))
+                        data: { controller: "money", action: "input->money#format", money_decimais_value: decimais }.merge(data))
     end
   end
 
@@ -113,12 +113,12 @@ module ApplicationHelper
   end
 
   # 1234.5 -> "1.234,50" (sem o "R$"), o formato do money_field.
-  def format_money(valor)
-    number_with_precision(valor, precision: 2, delimiter: ".", separator: ",")
+  def format_money(valor, precision: 2)
+    number_with_precision(valor, precision: precision, delimiter: ".", separator: ",")
   end
 
   def sidebar_nav_link(label, path, icon_name)
-    active = current_page?(path) || (path != root_path && request.path.start_with?(path))
+    active = current_page?(path) || (path != root_path && request.path.start_with?("#{path}/"))
     classes = if active
       "bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400"
     else

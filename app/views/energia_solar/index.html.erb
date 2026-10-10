@@ -1,0 +1,115 @@
+<% a = @apuracao %>
+<% content_for :title, "Energia solar — #{nome_do_mes_energia(a)}" %>
+
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia solar</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Quanto a energia custaria sem os painéis, menos o que foi realmente pago: o lucro da energia solar.</p>
+  </div>
+  <%= render "energia/navegacao_mes", conta: a, rota: :energia_solar_path %>
+</div>
+
+<%= render "shared/error_summary", object: a %>
+
+<%= form_with(model: a, url: apuracao_energia_solar_path(ano: a.ano, mes: a.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-6") do |form| %>
+  <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+    <%# 1. valor sem solar %>
+    <section class="rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Sem a energia solar</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Quanto a energia consumida custaria pela tarifa cheia.</p>
+
+      <dl class="mt-4 space-y-4">
+        <div>
+          <dt class="<%= label_classes %>">Kitnets (conta inteira)</dt>
+          <dd class="mt-1 rounded-lg bg-slate-50 px-3 py-2 text-sm tabular-nums text-slate-900 dark:bg-white/5 dark:text-white">
+            <% if a.valor_kitnets %>
+              <%= number_to_currency(a.valor_kitnets) %>
+              <span class="text-xs text-slate-500 dark:text-slate-400">· <%= kwh(a.conta_energia.kwh_total) %> kWh × <%= number_to_currency(a.conta_energia.valor_kwh, precision: 4) %></span>
+            <% else %>
+              <span class="text-slate-500 dark:text-slate-400">Lance a conta em</span>
+              <%= link_to "Energia", energia_path(ano: a.ano, mes: a.mes), class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %>
+            <% end %>
+          </dd>
+        </div>
+        <div>
+          <%= form.label :valor_apartamento, class: label_classes %>
+          <%= money_field form, :valor_apartamento %>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 pt-3 text-sm dark:border-white/10">
+          <span class="text-slate-500 dark:text-slate-400">Total sem solar</span>
+          <span class="font-semibold tabular-nums text-slate-900 dark:text-white"><%= a.valor_sem_solar ? number_to_currency(a.valor_sem_solar) : "—" %></span>
+        </div>
+      </dl>
+    </section>
+
+    <%# 2. pago %>
+    <section class="rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Pago de verdade</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">O valor das contas que chegaram, já com o desconto da energia solar.</p>
+
+      <div class="mt-4 space-y-4">
+        <div>
+          <%= form.label :pago_apartamento, class: label_classes %>
+          <%= money_field form, :pago_apartamento %>
+        </div>
+        <div>
+          <%= form.label :pago_kitnets, class: label_classes %>
+          <%= money_field form, :pago_kitnets %>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 pt-3 text-sm dark:border-white/10">
+          <span class="text-slate-500 dark:text-slate-400">Total pago</span>
+          <span class="font-semibold tabular-nums text-slate-900 dark:text-white"><%= a.total_pago ? number_to_currency(a.total_pago) : "—" %></span>
+        </div>
+      </div>
+    </section>
+
+    <%# 3. lucro %>
+    <section class="flex flex-col rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro da energia solar</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Total sem solar − total pago. Entra em Finanças como “Energia solar”.</p>
+
+      <p class="mt-6 text-4xl font-semibold tabular-nums <%= a.lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
+        <%= a.lucro ? number_to_currency(a.lucro) : "—" %>
+      </p>
+      <% if a.lucro %>
+        <p class="mt-2 text-sm tabular-nums text-slate-500 dark:text-slate-400">
+          <%= number_to_currency(a.valor_sem_solar) %> − <%= number_to_currency(a.total_pago) %>
+        </p>
+      <% else %>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Preencha os valores ao lado para calcular.</p>
+      <% end %>
+
+      <div class="mt-auto pt-6">
+        <%= form.submit "Salvar", class: "w-full cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
+      </div>
+    </section>
+  </div>
+<% end %>
+
+<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro mês a mês em <%= a.ano %></h2>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+      <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+        <% (1..12).each do |mes| %>
+          <% lucro = @lucros[mes] %>
+          <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if mes == a.mes %>"
+              data-controller="row-link" data-row-link-url-value="<%= energia_solar_path(ano: a.ano, mes: mes) %>" data-action="click->row-link#visit">
+            <td class="whitespace-nowrap px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white"><%= t("date.month_names")[mes].capitalize %></td>
+            <td class="whitespace-nowrap px-4 py-2.5 text-right text-sm tabular-nums <%= lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
+              <%= lucro ? number_to_currency(lucro) : "—" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot class="bg-slate-50 dark:bg-white/5">
+        <tr>
+          <td class="px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Total <%= a.ano %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@lucros.values.sum) %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>

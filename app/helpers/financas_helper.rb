@@ -51,6 +51,13 @@ module FinancasHelper
     valor.to_d.zero? ? "—" : "#{sinal} #{number_to_currency(valor)}"
   end
 
+  # Valor que pode ser positivo ou negativo: "+ R$ 120,00" / "− R$ 30,00".
+  def valor_com_sinal(valor)
+    return "—" if valor.nil? || valor.to_d.zero?
+
+    "#{valor.negative? ? "−" : "+"} #{number_to_currency(valor.abs)}"
+  end
+
   def nome_mes(mes, abreviado: false)
     I18n.t(abreviado ? "date.abbr_month_names" : "date.month_names")[mes]
   end

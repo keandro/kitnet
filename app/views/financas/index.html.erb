@@ -78,8 +78,8 @@
                 <% if custos.positive? %>
                   <p class="tabular-nums text-slate-300">Custos: − <%= number_to_currency(custos) %></p>
                 <% end %>
-                <% if m[:energia_solar].to_d.positive? %>
-                  <p class="tabular-nums text-slate-300">Energia solar: + <%= number_to_currency(m[:energia_solar]) %></p>
+                <% unless m[:energia_solar].to_d.zero? %>
+                  <p class="tabular-nums text-slate-300">Energia solar: <%= valor_com_sinal(m[:energia_solar]) %></p>
                 <% end %>
               </div>
             </div>
@@ -129,7 +129,7 @@
             </td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= m[:energia_solar] ? valor_lancado(m[:energia_solar], sinal: "+") : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_com_sinal(m[:energia_solar]) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
               <%= link_to icon(:pencil, css_class: "size-4"), editar, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar custos de #{nome_mes(m[:mes])}" %>
@@ -145,7 +145,7 @@
           <td></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:despesas_gerais], sinal: "−") %></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:agua_esgoto], sinal: "−") %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= @totais[:energia_solar].positive? ? valor_lancado(@totais[:energia_solar], sinal: "+") : "—" %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_com_sinal(@totais[:energia_solar]) %></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums <%= @totais[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(@totais[:resultado]) %></td>
           <td></td>
         </tr>

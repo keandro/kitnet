@@ -22,11 +22,15 @@ pt-BR:
         remember_me: Lembrar de mim
       conta_energia:
         kwh_total: kWh total
-        valor_total: Valor total
+        valor_kwh: Valor do kWh
       leitura_energia:
         leitura_anterior: Leitura anterior
         leitura_atual: Leitura atual
         data_pagamento: Data do pagamento
+      energia_solar_mensal:
+        valor_apartamento: Energia do apartamento
+        pago_apartamento: Conta paga do apartamento
+        pago_kitnets: Conta paga das kitnets
       fechamento_mensal:
         despesas_gerais: Despesas gerais
         agua_esgoto: Água e esgoto

@@ -75,7 +75,7 @@ class EnergiaController < ApplicationController
     end
 
     def conta_params
-      params.expect(conta_energia: [ :kwh_total, :valor_total ])
+      params.expect(conta_energia: [ :kwh_total, :valor_kwh ])
     end
 
     # Uma leitura por kitnet; as novas já vêm com a leitura anterior igual à

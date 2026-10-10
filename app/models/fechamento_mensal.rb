@@ -1,6 +1,6 @@
 # Valores lançados à mão em cada mês da página Finanças: despesas gerais e
-# água e esgoto (saem do resultado) e energia solar (entra no resultado;
-# ainda não é editável, será calculada depois).
+# água e esgoto, que saem do resultado. A energia solar, que entra no
+# resultado, vem de EnergiaSolarMensal.
 class FechamentoMensal < ApplicationRecord
   self.table_name = "fechamentos_mensais"
 

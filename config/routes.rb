@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   get "kitnets", to: "kitnets#index", as: :kitnets
   get "financas", to: "financas#index", as: :financas
   get "energia", to: "energia#index", as: :energia
+  get "energia-solar", to: "energia_solar#index", as: :energia_solar
+  patch "energia-solar/:ano/:mes", to: "energia_solar#update", as: :apuracao_energia_solar, constraints: { ano: /\d{4}/, mes: /\d{1,2}/ }
   patch "energia/leituras/:id/pagar", to: "energia#pagar", as: :pagar_leitura_energia
   scope "energia/:ano/:mes", constraints: { ano: /\d{4}/, mes: /\d{1,2}/ } do
     patch "", to: "energia#update", as: :conta_energia

@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_015748) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_021534) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
     t.decimal "kwh_total", precision: 10, scale: 2
-    t.decimal "valor_total", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "valor_kwh", precision: 10, scale: 4
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
   end
 
@@ -46,12 +46,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_015748) do
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
 
+  create_table "energia_solar_mensal", force: :cascade do |t|
+    t.integer "ano", null: false
+    t.integer "mes", null: false
+    t.decimal "valor_apartamento", precision: 10, scale: 2
+    t.decimal "pago_apartamento", precision: 10, scale: 2
+    t.decimal "pago_kitnets", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ano", "mes"], name: "index_energia_solar_mensal_on_ano_and_mes", unique: true
+  end
+
   create_table "fechamentos_mensais", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
     t.decimal "despesas_gerais", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "agua_esgoto", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "energia_solar", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ano", "mes"], name: "index_fechamentos_mensais_on_ano_and_mes", unique: true
