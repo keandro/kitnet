@@ -1,12 +1,16 @@
 # As kitnets são fixas (criadas pelo seed): aqui só se consulta e se ajusta
 # o valor base e o status de cada uma.
 class UnidadesController < ApplicationController
+  include UnidadesHelper
+
   before_action :set_unidade, only: %i[ show edit update ]
 
   # GET /kitnets
   def index
     unidades = policy_scope(Unidade).order(:nome)
-    @grupos = unidades.group_by { |unidade| unidade.nome.to_s[0] }.sort.to_h
+    @grupos = unidades.reject(&:descontinuada?).group_by { |unidade| andar_label(unidade.nome.to_s[0]) }
+    descontinuadas = unidades.select(&:descontinuada?)
+    @grupos["Descontinuadas"] = descontinuadas if descontinuadas.any?
     @pagas_no_mes = Pagamento.do_mes(Date.current).distinct.pluck(:unidade_id).to_set
   end
 

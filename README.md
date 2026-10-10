@@ -22,7 +22,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 ## Funcionalidades
 
 - **Pagamentos** (página inicial): os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as ocupadas; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
-- **Kitnets**: as 12 kitnets fixas, por andar, com valor base, status (`livre`, `ocupada`, `manutenção`) e o histórico de pagamentos de cada uma
+- **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base, status (`livre`, `ocupada`, `manutenção`, `descontinuada`) e o histórico de pagamentos de cada uma
 - **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
@@ -132,7 +132,7 @@ classDiagram
 
 ## Regras de negócio
 
-- **Kitnets são fixas**: as 12 (`001`–`004`, `101`–`104`, `201`–`204`) vêm do seed; no app só se altera o valor base e o status, que é mudado à mão.
+- **Kitnets são fixas**: as 12 (`001`–`004`, `101`–`104`, `201`–`204`) e a **Antiga casa** vêm do seed; no app só se altera o valor base e o status, que é mudado à mão. A Antiga casa é `descontinuada`: não é mais alugada, mas aceita pagamentos com datas do passado e aparece separada no quadro.
 - **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e pode ser ajustado.
 - **Pagamentos do mês**: uma kitnet conta como paga no mês se tiver ao menos um pagamento com data naquele mês; "faltam pagar" lista as kitnets **ocupadas** sem pagamento.
 - **Energia**: a tarifa do kWh é digitada (sem o desconto da energia solar) e o valor total da conta = kWh total × tarifa; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
@@ -164,7 +164,7 @@ bin/setup --skip-server
 
 ### Dados iniciais
 
-O seed cria um usuário administrador e as 12 kitnets (`001`–`004`, `101`–`104`, `201`–`204`):
+O seed cria as 12 kitnets (`001`–`004`, `101`–`104`, `201`–`204`) e a Antiga casa e, se o banco ainda não tiver nenhum usuário, o administrador:
 
 ```bash
 bin/rails db:seed

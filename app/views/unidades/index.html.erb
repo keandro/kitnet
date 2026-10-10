@@ -3,22 +3,26 @@
 <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Kitnets</h1>
 <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">As kitnets por andar, com o valor base e o pagamento de <%= t("date.month_names")[Date.current.month] %>.</p>
 
-<% @grupos.each do |chave, unidades| %>
+<% @grupos.each do |titulo, unidades| %>
   <div class="mt-8">
-    <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= andar_label(chave) %></h2>
+    <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></h2>
 
     <div class="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
       <% unidades.each do |unidade| %>
         <%= link_to unidade, class: "block rounded-xl border bg-white p-5 transition hover:shadow-md dark:bg-slate-800/40 #{unidade_card_classes(unidade.status)}" do %>
-          <div class="flex items-start justify-between gap-2">
-            <span class="text-2xl font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
             <%= unidade_status_badge(unidade.status) %>
           </div>
 
           <p class="mt-4 text-sm tabular-nums text-slate-900 dark:text-white"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "Sem valor base" %></p>
-          <p class="mt-1 text-xs <%= @pagas_no_mes.include?(unidade.id) ? "text-emerald-700 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400" %>">
-            <%= @pagas_no_mes.include?(unidade.id) ? "✓ Pago este mês" : "Sem pagamento este mês" %>
-          </p>
+          <% if unidade.descontinuada? %>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400"><%= pluralize(unidade.pagamentos.size, "pagamento", plural: "pagamentos") %> no histórico</p>
+          <% else %>
+            <p class="mt-1 text-xs <%= @pagas_no_mes.include?(unidade.id) ? "text-emerald-700 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400" %>">
+              <%= @pagas_no_mes.include?(unidade.id) ? "✓ Pago este mês" : "Sem pagamento este mês" %>
+            </p>
+          <% end %>
         <% end %>
       <% end %>
     </div>

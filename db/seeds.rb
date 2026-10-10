@@ -5,17 +5,22 @@
 admin_email = ENV.fetch("ADMIN_EMAIL", "admin@kitnet.local")
 admin_password = ENV.fetch("ADMIN_PASSWORD", "senha123456")
 
-Usuario.find_or_create_by!(email: admin_email) do |usuario|
-  usuario.password = admin_password
-  usuario.password_confirmation = admin_password
+# Só cria o admin num banco sem usuários: depois que o e-mail é trocado em
+# "Minha conta", rodar o seed de novo não pode recriar o login padrão.
+if Usuario.none?
+  Usuario.create!(email: admin_email, password: admin_password, password_confirmation: admin_password)
+  puts "Usuario admin: #{admin_email} / senha: #{admin_password}"
 end
-
-puts "Usuario admin: #{admin_email} / senha: #{admin_password}"
 
 %w[001 002 003 004 101 102 103 104 201 202 203 204].each do |numero|
   Unidade.find_or_create_by!(nome: numero) do |unidade|
     unidade.status = :livre
   end
+end
+
+# Não é mais alugada, mas guarda pagamentos do passado.
+Unidade.find_or_create_by!(nome: "Antiga casa") do |unidade|
+  unidade.status = :descontinuada
 end
 
 puts "Unidades cadastradas: #{Unidade.count}"

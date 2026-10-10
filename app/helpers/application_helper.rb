@@ -26,7 +26,7 @@ module ApplicationHelper
     end
   end
 
-  UNIDADE_TONES = { livre: :good, ocupada: :info, manutencao: :warning }.freeze
+  UNIDADE_TONES = { livre: :good, ocupada: :info, manutencao: :warning, descontinuada: :neutral }.freeze
 
   def unidade_status_badge(status)
     status_badge(t("unidade.status.#{status}"), tone: UNIDADE_TONES.fetch(status.to_sym, :neutral))
