@@ -9,7 +9,7 @@ class PagamentosController < ApplicationController
     raise ActionController::RoutingError, "Mês inválido" unless ano.between?(2000, 2100) && mes.between?(1, 12)
 
     @mes = Date.new(ano, mes)
-    @unidades = policy_scope(Unidade).order(:nome)
+    @unidades = policy_scope(Unidade).do_mes(@mes).order(:nome)
     @pagamentos = policy_scope(Pagamento).do_mes(@mes).includes(:unidade).order(:data_pagamento, :id)
     @por_unidade = @pagamentos.group_by(&:unidade_id)
   end

@@ -3,7 +3,7 @@ class EnergiaController < ApplicationController
 
   # GET /energia?ano=2026&mes=10
   def index
-    @unidades = Unidade.order(:nome)
+    @unidades = Unidade.do_mes(Date.new(@conta.ano, @conta.mes)).order(:nome)
     @leituras = @conta.leituras.includes(:unidade).index_by(&:unidade_id)
   end
 
@@ -19,13 +19,13 @@ class EnergiaController < ApplicationController
 
   # GET /energia/2026/10/leituras
   def edit_leituras
-    @unidades = Unidade.order(:nome)
+    @unidades = Unidade.do_mes(Date.new(@conta.ano, @conta.mes)).order(:nome)
     @leituras = leituras_para_formulario
   end
 
   # PATCH /energia/2026/10/leituras
   def update_leituras
-    @unidades = Unidade.order(:nome)
+    @unidades = Unidade.do_mes(Date.new(@conta.ano, @conta.mes)).order(:nome)
     @leituras = leituras_para_formulario
     salvo = false
 
