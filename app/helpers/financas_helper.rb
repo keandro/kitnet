@@ -32,20 +32,6 @@ module FinancasHelper
     end
   end
 
-  # Variação em relação ao mês anterior, com seta e texto (nunca só cor).
-  def variacao_mensal(atual, anterior, rotulo_anterior, vazio: "sem recebimentos")
-    return tag.span("#{vazio} em #{rotulo_anterior}", class: "text-slate-500 dark:text-slate-400") if anterior.to_d.zero?
-
-    pct = ((atual - anterior) / anterior.abs * 100).round
-    if pct.positive?
-      tag.span("▲ +#{pct}% vs #{rotulo_anterior}", class: "font-medium text-emerald-700 dark:text-emerald-400")
-    elsif pct.negative?
-      tag.span("▼ #{pct}% vs #{rotulo_anterior}", class: "font-medium text-rose-700 dark:text-rose-400")
-    else
-      tag.span("= igual a #{rotulo_anterior}", class: "text-slate-500 dark:text-slate-400")
-    end
-  end
-
   # Custos e créditos do mês: "— " quando zerado, senão "− R$ 120,00".
   def valor_lancado(valor, sinal:)
     valor.to_d.zero? ? "—" : "#{sinal} #{number_to_currency(valor)}"

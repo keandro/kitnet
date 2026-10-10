@@ -24,17 +24,13 @@ class FinancasController < ApplicationController
       linha[:resultado] = linha[:recebido] + linha[:energia_solar].to_d - linha[:despesas_gerais] - linha[:agua_esgoto]
       linha
     end
-    @meses.each_cons(2) do |anterior, atual|
-      atual[:resultado_anterior] = anterior[:resultado]
-    end
-
-    # Mês de referência: o atual no ano corrente, dezembro nos anos passados.
-    @mes_referencia = @ano == hoje.year ? hoje.month : (@ano < hoje.year ? 12 : 1)
-    @referencia = @meses[@mes_referencia - 1]
     @total_recebido = @meses.sum { |m| m[:recebido] }
     @totais = %i[despesas_gerais agua_esgoto resultado].index_with { |campo| @meses.sum { |m| m[campo] } }
     @totais[:energia_solar] = @meses.sum { |m| m[:energia_solar].to_d }
-    @media_mensal = @total_recebido / @mes_referencia
+    # Média do resultado nos meses do ano que tiveram algum movimento.
+    meses_com_movimento = @meses.count { |m| m[:recebido].nonzero? || m[:despesas_gerais].nonzero? || m[:agua_esgoto].nonzero? || m[:energia_solar] }
+    @media_mensal = meses_com_movimento.zero? ? 0 : @totais[:resultado] / meses_com_movimento
+    @meses_com_movimento = meses_com_movimento
   end
 
   private
