@@ -1,5 +1,5 @@
 # As kitnets são fixas (criadas pelo seed): aqui só se consulta e se ajusta
-# o valor base e o status de cada uma.
+# o valor base de cada uma.
 class UnidadesController < ApplicationController
   include UnidadesHelper
 
@@ -39,6 +39,6 @@ class UnidadesController < ApplicationController
     end
 
     def unidade_params
-      params.expect(unidade: [ :valor_base, :status ])
+      params.expect(unidade: [ :valor_base ])
     end
 end

@@ -9,11 +9,8 @@
 
     <div class="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
       <% unidades.each do |unidade| %>
-        <%= link_to unidade, class: "block rounded-xl border bg-white p-5 transition hover:shadow-md dark:bg-slate-800/40 #{unidade_card_classes(unidade.status)}" do %>
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
-            <%= unidade_status_badge(unidade.status) %>
-          </div>
+        <%= link_to unidade, class: "block rounded-xl border bg-white p-5 transition hover:shadow-md dark:bg-slate-800/40 border-slate-200 dark:border-white/10" do %>
+          <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
 
           <p class="mt-4 text-sm tabular-nums text-slate-900 dark:text-white"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "Sem valor base" %></p>
           <% if unidade.descontinuada? %>

@@ -70,7 +70,7 @@
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
       <thead class="bg-slate-50 dark:bg-white/5">
         <tr>
-          <% [ [ "Kitnet", "left" ], [ "Status", "left" ], [ "Leitura anterior", "right" ], [ "Leitura atual", "right" ], [ "Consumo", "right" ], [ "Valor", "right" ], [ "Pagamento", "left" ] ].each do |titulo, lado| %>
+          <% [ [ "Kitnet", "left" ], [ "Leitura anterior", "right" ], [ "Leitura atual", "right" ], [ "Consumo", "right" ], [ "Valor", "right" ], [ "Pagamento", "left" ] ].each do |titulo, lado| %>
             <th class="px-4 py-3 text-<%= lado %> text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></th>
           <% end %>
           <th class="px-4 py-3"><span class="sr-only">Ações</span></th>
@@ -81,7 +81,6 @@
           <% leitura = @leituras[unidade.id] %>
           <tr>
             <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
-            <td class="whitespace-nowrap px-4 py-3"><%= unidade_status_badge(unidade.status) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_anterior) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_atual) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= leitura&.consumo ? "#{kwh(leitura.consumo)} kWh" : "—" %></td>

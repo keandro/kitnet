@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_025556) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_030336) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -69,9 +69,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_025556) do
   create_table "unidades", force: :cascade do |t|
     t.string "nome"
     t.decimal "valor_base"
-    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "descontinuada", default: false, null: false
   end
 
   create_table "usuarios", force: :cascade do |t|

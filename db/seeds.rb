@@ -13,14 +13,12 @@ if Usuario.none?
 end
 
 %w[001 002 003 004 101 102 103 104 201 202 203 204].each do |numero|
-  Unidade.find_or_create_by!(nome: numero) do |unidade|
-    unidade.status = :livre
-  end
+  Unidade.find_or_create_by!(nome: numero)
 end
 
 # Não é mais alugada, mas guarda pagamentos do passado.
 Unidade.find_or_create_by!(nome: "Antiga casa") do |unidade|
-  unidade.status = :descontinuada
+  unidade.descontinuada = true
 end
 
 puts "Unidades cadastradas: #{Unidade.count}"

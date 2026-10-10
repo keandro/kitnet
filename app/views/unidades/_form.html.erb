@@ -6,12 +6,7 @@
       <div>
         <%= form.label :valor_base, class: label_classes %>
         <%= money_field form, :valor_base %>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Sugerido como valor de cada pagamento.</p>
-      </div>
-
-      <div>
-        <%= form.label :status, class: label_classes %>
-        <%= form.select :status, Unidade.statuses.keys.map { |s| [t("unidade.status.#{s}"), s] }, {}, class: field_classes(unidade, :status) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Sugerido como valor de cada pagamento. Deixe em branco para uma kitnet que não está sendo cobrada.</p>
       </div>
     </div>
 

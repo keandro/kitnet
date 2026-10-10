@@ -1,14 +1,12 @@
 # Uma das kitnets (fixas; criadas pelo seed). Guarda o valor base do aluguel,
-# que sugere o valor de cada pagamento, e um status mudado à mão.
-# "Descontinuada" é para unidades que não são mais alugadas (a antiga casa),
+# que sugere o valor de cada pagamento; kitnet sem valor base não é cobrada.
+# "Descontinuada" marca unidades que não são mais alugadas (a antiga casa),
 # mas que guardam pagamentos do passado.
 class Unidade < ApplicationRecord
   include ValorMonetario
   valor_monetario :valor_base
 
-  enum :status, { livre: 0, ocupada: 1, manutencao: 2, descontinuada: 3 }
-
-  scope :em_uso, -> { where.not(status: :descontinuada) }
+  scope :em_uso, -> { where(descontinuada: false) }
 
   # Unidades que aparecem nas telas de um mês: as em uso e as descontinuadas
   # até o mês do último pagamento delas.

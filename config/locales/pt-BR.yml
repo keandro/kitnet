@@ -6,7 +6,6 @@ pt-BR:
       unidade:
         nome: Nome
         valor_base: Valor base
-        status: Status
       usuario:
         email: E-mail
         password: Senha
@@ -32,10 +31,3 @@ pt-BR:
         valor: Valor
         data_pagamento: Data do pagamento
         observacoes: Observações
-
-  unidade:
-    status:
-      livre: Livre
-      ocupada: Ocupada
-      manutencao: Manutenção
-      descontinuada: Descontinuada

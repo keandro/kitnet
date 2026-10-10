@@ -26,24 +26,6 @@ module ApplicationHelper
     end
   end
 
-  UNIDADE_TONES = { livre: :good, ocupada: :info, manutencao: :warning, descontinuada: :neutral }.freeze
-
-  def unidade_status_badge(status)
-    status_badge(t("unidade.status.#{status}"), tone: UNIDADE_TONES.fetch(status.to_sym, :neutral))
-  end
-
-  CARD_ACCENT_CLASSES = {
-    good: "border-emerald-200 dark:border-emerald-400/20",
-    warning: "border-amber-200 dark:border-amber-400/20",
-    critical: "border-rose-200 dark:border-rose-400/20",
-    info: "border-blue-200 dark:border-blue-400/20",
-    neutral: "border-slate-200 dark:border-white/10"
-  }.freeze
-
-  def unidade_card_classes(status)
-    tone = UNIDADE_TONES.fetch(status.to_sym, :neutral)
-    CARD_ACCENT_CLASSES.fetch(tone, CARD_ACCENT_CLASSES[:neutral])
-  end
 
   ICON_CHIP_CLASSES = {
     primary: "bg-indigo-50 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400",
