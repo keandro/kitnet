@@ -1,21 +1,21 @@
 <div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
   <%= render "shared/error_summary", object: pagamento %>
 
-  <%= form_with(model: pagamento) do |form| %>
+  <%= form_with(model: pagamento, data: (pagamento.new_record? ? { controller: "pagamento-form" } : {})) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div class="sm:col-span-2">
         <%= form.label :contrato_id, "Contrato", class: label_classes %>
-        <%= form.collection_select :contrato_id, Contrato.includes(:morador, :unidade).order(:id), :id, ->(c) { "#{c.morador.nome} — #{c.unidade.nome}" }, { prompt: "Selecione o contrato" }, class: field_classes(pagamento, :contrato_id) %>
+        <%= form.select :contrato_id, contrato_options_for_pagamento(pagamento), { prompt: "Selecione o contrato" }, class: field_classes(pagamento, :contrato_id), data: { pagamento_form_target: "contrato", action: "pagamento-form#preencher" } %>
       </div>
 
       <div>
         <%= form.label :valor, class: label_classes %>
-        <%= form.text_field :valor, class: field_classes(pagamento, :valor) %>
+        <%= form.text_field :valor, class: field_classes(pagamento, :valor), data: { pagamento_form_target: "valor" } %>
       </div>
 
       <div>
         <%= form.label :data_vencimento, class: label_classes %>
-        <%= form.date_field :data_vencimento, class: field_classes(pagamento, :data_vencimento) %>
+        <%= form.date_field :data_vencimento, class: field_classes(pagamento, :data_vencimento), data: { pagamento_form_target: "vencimento" } %>
       </div>
 
       <div class="sm:col-span-2">

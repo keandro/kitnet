@@ -19,7 +19,7 @@ class PagamentosController < ApplicationController
     @pagamento = Pagamento.new(
       contrato_id: params[:contrato_id],
       valor: @contrato&.valor_aluguel,
-      data_vencimento: @contrato ? proxima_data_vencimento : nil
+      data_vencimento: @contrato&.proxima_data_vencimento
     )
     authorize @pagamento
   end
@@ -68,12 +68,5 @@ class PagamentosController < ApplicationController
 
     def pagamento_params
       params.expect(pagamento: [ :contrato_id, :valor, :data_vencimento, :data_pagamento, :observacoes ])
-    end
-
-    def proxima_data_vencimento
-      hoje = Date.current
-      dia = @contrato.dia_pagamento || hoje.day
-      mes_referencia = hoje.day > dia ? hoje.next_month : hoje
-      Date.new(mes_referencia.year, mes_referencia.month, [ dia, Date.new(mes_referencia.year, mes_referencia.month, -1).day ].min)
     end
 end

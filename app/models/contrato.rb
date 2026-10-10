@@ -24,7 +24,25 @@ class Contrato < ApplicationRecord
     ultimo_pagamento&.status || :sem_pagamento
   end
 
+  # Próximo vencimento ainda sem pagamento lançado: o mês seguinte ao último
+  # lançado ou, se não houver nenhum, o primeiro vencimento a partir do início
+  # do contrato.
+  def proxima_data_vencimento
+    ultimo = pagamentos.loaded? ? pagamentos.filter_map(&:data_vencimento).max : pagamentos.maximum(:data_vencimento)
+    return vencimento_no_mes(ultimo.next_month) if ultimo
+
+    inicio = data_inicio || Date.current
+    primeiro = vencimento_no_mes(inicio)
+    primeiro < inicio ? vencimento_no_mes(inicio.next_month) : primeiro
+  end
+
   private
+
+  # Dia de pagamento dentro do mês de `data`, limitado ao último dia do mês
+  # (dia 31 vira 28/29 em fevereiro, 30 em abril etc.).
+  def vencimento_no_mes(data)
+    data.change(day: [ dia_pagamento || data.day, data.end_of_month.day ].min)
+  end
 
   def pelo_menos_um_fiador
     errors.add(:fiadores, "deve ter pelo menos um fiador") if fiadores.empty?
