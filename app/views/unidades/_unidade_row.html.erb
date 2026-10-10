@@ -1,4 +1,4 @@
-<tr id="<%= dom_id unidade %>" class="hover:bg-slate-50 dark:hover:bg-white/5">
+<tr id="<%= dom_id unidade %>" class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= unidade_path(unidade) %>" data-action="click->row-link#visit">
   <td class="whitespace-nowrap px-4 py-3">
     <%= link_to unidade.nome, unidade, class: "font-medium text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
   </td>
@@ -7,6 +7,6 @@
   <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
     <%= link_to icon(:eye, css_class: "size-4"), unidade, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Ver" %>
     <%= link_to icon(:pencil, css_class: "size-4"), edit_unidade_path(unidade), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
-    <%= button_to icon(:trash, css_class: "size-4"), unidade, method: :delete, class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
+    <%= button_to icon(:trash, css_class: "size-4"), unidade, method: :delete, form_class: "inline-block", class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
   </td>
 </tr>
