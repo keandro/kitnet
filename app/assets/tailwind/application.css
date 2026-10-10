@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+/* Caixas com rolagem horizontal (tabelas) passam a conter os elementos
+   absolutos de dentro, como os rótulos .sr-only dos cabeçalhos; sem isso eles
+   "escapam" da caixa e alargam a página no celular. */
+@layer utilities {
+  .overflow-x-auto {
+    position: relative;
+  }
+}

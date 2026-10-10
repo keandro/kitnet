@@ -1,13 +1,13 @@
-<tr id="<%= dom_id pagamento %>" class="hover:bg-slate-50 dark:hover:bg-white/5">
+<tr id="<%= dom_id pagamento %>" class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= edit_pagamento_path(pagamento) %>" data-action="click->row-link#visit">
   <% if mostrar_kitnet %>
-    <td class="whitespace-nowrap px-4 py-3 text-sm font-medium">
+    <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium">
       <%= link_to pagamento.unidade.nome, pagamento.unidade, class: "text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
     </td>
   <% end %>
-  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= l(pagamento.data_pagamento) %></td>
-  <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
-  <td class="max-w-xs truncate px-4 py-3 text-sm text-slate-500 dark:text-slate-400" title="<%= pagamento.observacoes %>"><%= pagamento.observacoes.presence || "—" %></td>
-  <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+  <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-500 dark:text-slate-400"><span class="sm:hidden"><%= l(pagamento.data_pagamento, format: "%d/%m") %></span><span class="hidden sm:inline"><%= l(pagamento.data_pagamento) %></span></td>
+  <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
+  <td class="hidden sm:table-cell max-w-xs truncate px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-500 dark:text-slate-400" title="<%= pagamento.observacoes %>"><%= pagamento.observacoes.presence || "—" %></td>
+  <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
     <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
     <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "inline-block", class: "inline-flex cursor-pointer p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(pagamento.valor)} da kitnet #{pagamento.unidade.nome}?" }, title: "Remover" %>
   </td>

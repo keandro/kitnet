@@ -88,13 +88,13 @@
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
       <thead class="bg-slate-50 dark:bg-white/5">
         <tr>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Mês</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Recebido</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Resultado</th>
-          <th class="px-4 py-3"><span class="sr-only">Editar</span></th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Mês</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Recebido</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Resultado</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Editar</span></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100 dark:divide-white/5">
@@ -102,13 +102,13 @@
           <% editar = editar_fechamento_mensal_path(ano: @ano, mes: m[:mes]) %>
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5"
               data-controller="row-link" data-row-link-url-value="<%= root_path(ano: @ano, mes: m[:mes]) %>" data-action="click->row-link#visit">
-            <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= nome_mes(m[:mes]).capitalize %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(m[:recebido]) %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_com_sinal(m[:energia_solar]) %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %></td>
-            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+            <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= nome_mes(m[:mes]).capitalize %></td>
+            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(m[:recebido]) %></td>
+            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
+            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
+            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_com_sinal(m[:energia_solar]) %></td>
+            <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %><span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">recebido <%= number_to_currency(m[:recebido]) %></span></td>
+            <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
               <%= link_to icon(:pencil, css_class: "size-4"), editar, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar custos de #{nome_mes(m[:mes])}" %>
             </td>
           </tr>
@@ -116,12 +116,12 @@
       </tbody>
       <tfoot class="bg-slate-50 dark:bg-white/5">
         <tr>
-          <td class="px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Total <%= @ano %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@total_recebido) %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:despesas_gerais], sinal: "−") %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:agua_esgoto], sinal: "−") %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_com_sinal(@totais[:energia_solar]) %></td>
-          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums <%= @totais[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(@totais[:resultado]) %></td>
+          <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-semibold text-slate-900 dark:text-white">Total <%= @ano %></td>
+          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@total_recebido) %></td>
+          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:despesas_gerais], sinal: "−") %></td>
+          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:agua_esgoto], sinal: "−") %></td>
+          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_com_sinal(@totais[:energia_solar]) %></td>
+          <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums <%= @totais[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(@totais[:resultado]) %></td>
           <td></td>
         </tr>
       </tfoot>
