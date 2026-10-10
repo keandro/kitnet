@@ -25,9 +25,9 @@
     <% if @pagamentos.any? %>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-          <%= render "pagamentos/table_head", show_contrato: false %>
+          <%= render "pagamentos/table_head" %>
           <tbody class="divide-y divide-slate-100 dark:divide-white/5">
-            <%= render partial: "pagamentos/pagamento_row", collection: @pagamentos, as: :pagamento, locals: { show_contrato: false } %>
+            <%= render partial: "pagamentos/pagamento_row", collection: @pagamentos, as: :pagamento %>
           </tbody>
         </table>
       </div>

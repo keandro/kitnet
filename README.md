@@ -26,7 +26,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
 - **Contratos**: vínculo entre unidade, morador e um ou mais fiadores
-- **Ordens de pagamento**: geradas automaticamente ao criar o contrato (uma por mês), editáveis para incluir juros ou multa e quitadas com um clique; status `pago`, `pendente` ou `vencido`
+- **Ordens de pagamento**: geradas automaticamente ao criar o contrato (uma por mês), editáveis para incluir juros ou multa e quitadas com um clique na página do contrato; status `pago`, `pendente` ou `vencido`
 - **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit), sem cadastro público
 - **Minha conta**: troca de e-mail e senha pelo próprio usuário, com login lembrado por 1 ano
 - Interface responsiva com modo escuro
@@ -211,7 +211,6 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 | `/unidades`   | Gestão de unidades      |
 | `/pessoas`    | Moradores e fiadores    |
 | `/contratos`  | Contratos               |
-| `/pagamentos` | Ordens de pagamento     |
 | `/conta/edit` | Minha conta (e-mail e senha) |
 | `/up`         | Health check            |
 

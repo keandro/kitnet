@@ -1,19 +1,8 @@
 class PagamentosController < ApplicationController
-  # As ordens de pagamento são criadas pelo Contrato (uma por mês); aqui elas
-  # só são consultadas, editadas (juros, multa, observações) e quitadas.
-  before_action :set_contrato, only: %i[ index ], if: -> { params[:contrato_id].present? }
-  before_action :set_pagamento, only: %i[ show edit update destroy pagar ]
-
-  # GET /pagamentos
-  # GET /pagamentos?contrato_id=1
-  def index
-    scope = @contrato ? @contrato.pagamentos : Pagamento.all
-    @pagamentos = policy_scope(scope).includes(contrato: [ :morador, :unidade ]).order(:data_vencimento)
-  end
-
-  # GET /pagamentos/1
-  def show
-  end
+  # As ordens de pagamento são criadas pelo Contrato (uma por mês) e listadas
+  # na página dele; aqui elas só são editadas (juros, multa, observações),
+  # quitadas ou removidas.
+  before_action :set_pagamento
 
   # GET /pagamentos/1/edit
   def edit
@@ -42,10 +31,6 @@ class PagamentosController < ApplicationController
   end
 
   private
-    def set_contrato
-      @contrato = Contrato.find(params[:contrato_id])
-    end
-
     def set_pagamento
       @pagamento = Pagamento.find(params[:id])
       authorize @pagamento

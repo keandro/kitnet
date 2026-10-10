@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :pessoas
   resources :unidades
   resources :contratos
-  resources :pagamentos, except: %i[new create] do
+  resources :pagamentos, only: %i[edit update destroy] do
     patch :pagar, on: :member
   end
   get "kitnets", to: "kitnets#index", as: :kitnets
