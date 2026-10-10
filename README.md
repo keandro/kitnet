@@ -21,7 +21,8 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 
 ## Funcionalidades
 
-- **Dashboard** com visão geral de ocupação e situação dos pagamentos
+- **Vencimentos**: painel com ocupação, pagamentos vencidos e os que vencem no próximo mês
+- **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores e com o previsto
 - **Quadro de kitnets** mostrando cada unidade, seu status e morador atual
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
@@ -208,7 +209,8 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 
 | Rota          | Descrição               |
 | ------------- | ----------------------- |
-| `/`           | Dashboard               |
+| `/`           | Vencimentos             |
+| `/financas`   | Finanças por ano        |
 | `/kitnets`    | Quadro de unidades      |
 | `/unidades`   | Gestão de unidades      |
 | `/pessoas`    | Moradores e fiadores    |

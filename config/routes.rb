@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     patch :pagar, on: :member
   end
   get "kitnets", to: "kitnets#index", as: :kitnets
+  get "financas", to: "financas#index", as: :financas
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
