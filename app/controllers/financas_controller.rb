@@ -25,7 +25,6 @@ class FinancasController < ApplicationController
       linha
     end
     @meses.each_cons(2) do |anterior, atual|
-      atual[:anterior] = anterior[:recebido]
       atual[:resultado_anterior] = anterior[:resultado]
     end
 
