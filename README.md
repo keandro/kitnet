@@ -25,7 +25,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Quadro de kitnets** mostrando cada unidade, seu status e morador atual
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
-- **Contratos**: vínculo entre unidade, morador e um ou mais fiadores
+- **Contratos**: vínculo entre unidade, morador e um ou mais fiadores (ou sem fiador)
 - **Ordens de pagamento**: geradas automaticamente ao criar o contrato (uma por mês), editáveis para incluir juros ou multa e quitadas com um clique na página do contrato; status `pago`, `pendente` ou `vencido`
 - **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit), sem cadastro público
 - **Minha conta**: troca de e-mail e senha pelo próprio usuário, com login lembrado por 1 ano
@@ -79,6 +79,7 @@ classDiagram
         +bigint morador_id
         +date data_inicio
         +integer duracao_meses
+        +boolean sem_fiador
         +date data_fim
         +decimal valor_aluguel
         +integer dia_pagamento
@@ -128,7 +129,7 @@ classDiagram
 
     Unidade "1" --> "0..*" Contrato : possui
     Pessoa "1" --> "0..*" Contrato : morador
-    Contrato "1" --> "1..*" ContratoFiador : fiadores
+    Contrato "1" --> "0..*" ContratoFiador : fiadores
     Pessoa "1" --> "0..*" ContratoFiador : é fiador em
     Contrato "1" --> "0..*" Pagamento : gera
     Unidade ..> StatusUnidade
@@ -139,7 +140,7 @@ classDiagram
 
 ## Regras de negócio
 
-- **Contrato** exige data de início, duração em meses (1 a 120), valor de aluguel maior que zero, dia de pagamento entre 1 e 31 e **pelo menos um fiador**. A data de fim é calculada a partir do início e da duração.
+- **Contrato** exige data de início, duração em meses (1 a 120), valor de aluguel maior que zero, dia de pagamento entre 1 e 31 e **pelo menos um fiador**, a menos que seja marcado como **sem fiador**. A data de fim é calculada a partir do início e da duração.
 - **Ordens de pagamento** são criadas junto com o contrato: uma por mês, a partir do mês de início, no dia de pagamento (limitado ao último dia em meses curtos). Ordens já pagas nunca são alteradas automaticamente. Ao editar o contrato:
   - mudar a **duração** cria ou remove ordens em aberto;
   - mudar o **dia de pagamento** move as ordens em aberto para o novo dia;

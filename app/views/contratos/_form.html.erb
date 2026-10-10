@@ -14,10 +14,18 @@
         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Kitnets com contrato ativo não podem receber outro.</p>
       </div>
 
-      <div class="sm:col-span-2">
-        <%= form.label :fiador_ids, "Fiadores", class: label_classes %>
-        <%= form.collection_select :fiador_ids, Pessoa.order(:nome), :id, :nome, {}, multiple: true, class: "#{field_classes(contrato, :fiadores)} h-32" %>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Segure Ctrl (ou Cmd) para selecionar mais de um fiador.</p>
+      <div class="sm:col-span-2" data-controller="sem-fiador">
+        <div class="flex items-center justify-between gap-4">
+          <%= form.label :fiador_ids, "Fiadores", class: label_classes %>
+          <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+            <%= form.check_box :sem_fiador, class: "rounded border-slate-300 text-indigo-600 focus:ring-indigo-500", data: { sem_fiador_target: "checkbox", action: "sem-fiador#toggle" } %>
+            Sem fiador
+          </label>
+        </div>
+        <div data-sem-fiador-target="campo">
+          <%= form.collection_select :fiador_ids, Pessoa.order(:nome), :id, :nome, {}, multiple: true, class: "#{field_classes(contrato, :fiadores)} h-32", data: { sem_fiador_target: "select" } %>
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Segure Ctrl (ou Cmd) para selecionar mais de um fiador.</p>
+        </div>
       </div>
 
       <div>

@@ -15,10 +15,11 @@ class Contrato < ApplicationRecord
   validates :duracao_meses, numericality: { only_integer: true, in: 1..120 }
   validates :valor_aluguel, numericality: { greater_than: 0 }
   validates :dia_pagamento, presence: true, inclusion: { in: 1..31 }
-  validate :pelo_menos_um_fiador
+  validate :pelo_menos_um_fiador, unless: :sem_fiador?
   validate :unidade_sem_outro_contrato_ativo, if: :ativo?
 
   before_validation :calcular_data_fim
+  before_validation :remover_fiadores, if: :sem_fiador?
 
   after_save :sincronizar_status_da_unidade
   after_save :sincronizar_ordens_de_pagamento
@@ -57,7 +58,11 @@ class Contrato < ApplicationRecord
   end
 
   def pelo_menos_um_fiador
-    errors.add(:fiadores, "deve ter pelo menos um fiador") if fiadores.empty?
+    errors.add(:fiadores, "deve ter pelo menos um fiador (ou marque \"Sem fiador\")") if fiadores.empty?
+  end
+
+  def remover_fiadores
+    self.fiadores = []
   end
 
   # Uma kitnet só pode ter um contrato ativo por vez.

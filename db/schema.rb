@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_005619) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_011626) do
   create_table "contrato_fiadores", force: :cascade do |t|
     t.integer "contrato_id", null: false
     t.integer "pessoa_id", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_005619) do
     t.datetime "updated_at", null: false
     t.integer "dia_pagamento"
     t.integer "duracao_meses"
+    t.boolean "sem_fiador", default: false, null: false
     t.index ["morador_id"], name: "index_contratos_on_morador_id"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end

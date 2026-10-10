@@ -69,6 +69,6 @@ class ContratosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def contrato_params
-      params.expect(contrato: [ :morador_id, :unidade_id, :data_inicio, :duracao_meses, :valor_aluguel, :dia_pagamento, :status, fiador_ids: [] ])
+      params.expect(contrato: [ :morador_id, :unidade_id, :data_inicio, :duracao_meses, :valor_aluguel, :dia_pagamento, :status, :sem_fiador, fiador_ids: [] ])
     end
 end
