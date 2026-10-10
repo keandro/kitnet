@@ -7,6 +7,12 @@ class FechamentoMensal < ApplicationRecord
   include ValorMonetario
   valor_monetario :despesas_gerais, :agua_esgoto
 
+  # Campo de custo apagado no formulário vale R$ 0,00.
+  before_validation do
+    self.despesas_gerais ||= 0
+    self.agua_esgoto ||= 0
+  end
+
   validates :ano, numericality: { only_integer: true, in: 2000..2100 }
   validates :mes, numericality: { only_integer: true, in: 1..12 }, uniqueness: { scope: :ano }
   validates :despesas_gerais, :agua_esgoto, numericality: { greater_than_or_equal_to: 0 }

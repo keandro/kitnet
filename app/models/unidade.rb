@@ -13,6 +13,9 @@ class Unidade < ApplicationRecord
   has_many :pagamentos, dependent: :restrict_with_error
   has_many :leituras_energia, class_name: "LeituraEnergia", dependent: :restrict_with_error
 
+  # Valor base zerado é o mesmo que não ter valor base.
+  before_validation { self.valor_base = nil if valor_base&.zero? }
+
   validates :nome, presence: true
   validates :valor_base, numericality: { greater_than: 0 }, allow_nil: true
 end

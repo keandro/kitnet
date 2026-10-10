@@ -11,7 +11,8 @@ export default class extends Controller {
 
   format() {
     const casas = this.decimaisValue
-    const digitos = this.element.value.replace(/\D/g, "").replace(/^0+(?=\d)/, "")
+    // Só zeros (ex.: apagando "0,01") esvazia o campo, para dar para limpá-lo.
+    const digitos = this.element.value.replace(/\D/g, "").replace(/^0+/, "")
     if (!digitos) {
       this.element.value = ""
       return
