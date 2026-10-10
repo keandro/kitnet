@@ -26,10 +26,10 @@
       </div>
 
       <div class="sm:col-span-2">
-        <% lucro_solar = EnergiaSolarMensal.lucros_do_ano(@fechamento.ano)[@fechamento.mes] %>
+        <% lucro_solar = EnergiaSolarMensal.lucros_do_ano(@fechamento.ano, tipo: :lucro_kitnets)[@fechamento.mes] %>
         <p class="<%= label_classes %>">Energia solar</p>
         <p class="mt-1 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400">
-          <%= lucro_solar ? "Lucro de #{number_to_currency(lucro_solar)}, somado ao resultado." : "Ainda não apurada para este mês." %>
+          <%= lucro_solar ? "Lucro das kitnets de #{number_to_currency(lucro_solar)}, somado ao resultado." : "Ainda não apurada para este mês." %>
           <%= link_to "Abrir energia solar", energia_solar_path(ano: @fechamento.ano, mes: @fechamento.mes), class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %>
         </p>
       </div>

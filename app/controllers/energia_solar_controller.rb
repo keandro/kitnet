@@ -4,6 +4,7 @@ class EnergiaSolarController < ApplicationController
   # GET /energia-solar?ano=2026&mes=10
   def index
     @lucros = EnergiaSolarMensal.lucros_do_ano(@apuracao.ano)
+    @lucros_kitnets = EnergiaSolarMensal.lucros_do_ano(@apuracao.ano, tipo: :lucro_kitnets)
   end
 
   # PATCH /energia-solar/2026/10

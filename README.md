@@ -25,7 +25,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores e com o previsto; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Quadro de kitnets** mostrando cada unidade, seu status e morador atual
 - **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
-- **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; o resultado é o lucro da energia solar do mês
+- **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
 - **Contratos**: vínculo entre unidade, morador e um ou mais fiadores (ou sem fiador)
@@ -133,6 +133,7 @@ classDiagram
         +valor_sem_solar()
         +total_pago()
         +lucro()
+        +lucro_kitnets()
     }
 
     class ContaEnergia {
@@ -192,7 +193,8 @@ classDiagram
   - **encerrar ou cancelar** remove as ordens futuras em aberto; as vencidas continuam como dívida.
 - **Excluir um contrato** exclui todas as suas ordens de pagamento.
 - **Energia**: a tarifa do kWh é digitada (sem o desconto da energia solar) e o valor total da conta = kWh total × tarifa; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
-- **Lucro da energia solar** = (conta das kitnets pela tarifa + energia do apartamento) − (conta paga do apartamento + conta paga das kitnets). Entra em Finanças na coluna Energia solar.
+- **Lucro total da energia solar** = (conta das kitnets pela tarifa + energia do apartamento) − (conta paga do apartamento + conta paga das kitnets).
+- **Lucro da energia solar das kitnets** = conta das kitnets pela tarifa − conta paga das kitnets. É este valor que entra em Finanças na coluna Energia solar.
 - **Resultado do mês** (Finanças) = recebido + energia solar − despesas gerais − água e esgoto. Os custos não podem ser negativos.
 - **Uma kitnet só pode ter um contrato ativo por vez.** Para criar (ou reativar) um contrato numa kitnet ocupada, encerre ou cancele antes o contrato atual. No formulário, as kitnets ocupadas aparecem desabilitadas.
 - **O status de uma kitnet com contrato ativo não pode ser alterado à mão**: ela fica `ocupada` até o contrato ser encerrado, cancelado ou excluído.

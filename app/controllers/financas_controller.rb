@@ -10,7 +10,7 @@ class FinancasController < ApplicationController
     previsto = Pagamento.where(data_vencimento: periodo).group("strftime('%m', data_vencimento)").sum(:valor)
 
     fechamentos = FechamentoMensal.do_ano(@ano)
-    lucros_solar = EnergiaSolarMensal.lucros_do_ano(@ano)
+    lucros_solar = EnergiaSolarMensal.lucros_do_ano(@ano, tipo: :lucro_kitnets)
 
     @meses = (1..12).map do |mes|
       chave = format("%02d", mes)

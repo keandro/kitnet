@@ -4,8 +4,9 @@
 #                     + energia do apartamento
 #   pago            = conta paga do apartamento + conta paga das kitnets
 #   lucro           = valor sem solar − pago
+#   lucro_kitnets   = conta das kitnets − conta paga das kitnets
 #
-# O lucro entra na coluna "Energia solar" da página Finanças.
+# O lucro das kitnets é o que entra na coluna "Energia solar" de Finanças.
 class EnergiaSolarMensal < ApplicationRecord
   self.table_name = "energia_solar_mensal"
 
@@ -21,11 +22,13 @@ class EnergiaSolarMensal < ApplicationRecord
   end
 
   # Lucro de cada mês do ano, { mes => valor }, só dos meses apurados.
-  def self.lucros_do_ano(ano)
+  # tipo: :lucro (total) ou :lucro_kitnets.
+  def self.lucros_do_ano(ano, tipo: :lucro)
     contas = ContaEnergia.where(ano: ano).index_by(&:mes)
     where(ano: ano).each_with_object({}) do |apuracao, lucros|
       apuracao.conta_energia = contas[apuracao.mes]
-      lucros[apuracao.mes] = apuracao.lucro if apuracao.lucro
+      valor = apuracao.public_send(tipo)
+      lucros[apuracao.mes] = valor if valor
     end
   end
 
@@ -51,5 +54,9 @@ class EnergiaSolarMensal < ApplicationRecord
 
   def lucro
     valor_sem_solar - total_pago if valor_sem_solar && total_pago
+  end
+
+  def lucro_kitnets
+    valor_kitnets - pago_kitnets if valor_kitnets && pago_kitnets
   end
 end

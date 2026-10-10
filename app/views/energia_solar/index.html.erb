@@ -4,7 +4,7 @@
 <div class="flex flex-wrap items-end justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia solar</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Quanto a energia custaria sem os painéis, menos o que foi realmente pago: o lucro da energia solar.</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Quanto a energia custaria sem os painéis, menos o que foi realmente pago: o lucro da energia solar das kitnets e o total.</p>
   </div>
   <%= render "energia/navegacao_mes", conta: a, rota: :energia_solar_path %>
 </div>
@@ -65,19 +65,26 @@
 
     <%# 3. lucro %>
     <section class="flex flex-col rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
-      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro da energia solar</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400">Total sem solar − total pago. Entra em Finanças como “Energia solar”.</p>
+      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro das kitnets</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Conta das kitnets − conta paga das kitnets. É este valor que entra em Finanças como “Energia solar”.</p>
 
-      <p class="mt-6 text-4xl font-semibold tabular-nums <%= a.lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
-        <%= a.lucro ? number_to_currency(a.lucro) : "—" %>
+      <p class="mt-4 text-4xl font-semibold tabular-nums <%= a.lucro_kitnets&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
+        <%= a.lucro_kitnets ? number_to_currency(a.lucro_kitnets) : "—" %>
       </p>
-      <% if a.lucro %>
-        <p class="mt-2 text-sm tabular-nums text-slate-500 dark:text-slate-400">
-          <%= number_to_currency(a.valor_sem_solar) %> − <%= number_to_currency(a.total_pago) %>
+      <p class="mt-1 text-sm tabular-nums text-slate-500 dark:text-slate-400">
+        <%= a.lucro_kitnets ? "#{number_to_currency(a.valor_kitnets)} − #{number_to_currency(a.pago_kitnets)}" : "Preencha a conta paga das kitnets." %>
+      </p>
+
+      <div class="mt-5 border-t border-slate-200 pt-4 dark:border-white/10">
+        <h3 class="text-sm font-medium text-slate-900 dark:text-white">Lucro total</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Kitnets + apartamento: total sem solar − total pago.</p>
+        <p class="mt-2 text-2xl font-semibold tabular-nums <%= a.lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
+          <%= a.lucro ? number_to_currency(a.lucro) : "—" %>
         </p>
-      <% else %>
-        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Preencha os valores ao lado para calcular.</p>
-      <% end %>
+        <% if a.lucro %>
+          <p class="mt-1 text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= number_to_currency(a.valor_sem_solar) %> − <%= number_to_currency(a.total_pago) %></p>
+        <% end %>
+      </div>
 
       <div class="mt-auto pt-6">
         <%= form.submit "Salvar", class: "w-full cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
@@ -92,21 +99,30 @@
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+      <thead class="bg-slate-50 dark:bg-white/5">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Mês</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Lucro das kitnets</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Lucro total</th>
+        </tr>
+      </thead>
       <tbody class="divide-y divide-slate-100 dark:divide-white/5">
         <% (1..12).each do |mes| %>
-          <% lucro = @lucros[mes] %>
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if mes == a.mes %>"
               data-controller="row-link" data-row-link-url-value="<%= energia_solar_path(ano: a.ano, mes: mes) %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white"><%= t("date.month_names")[mes].capitalize %></td>
-            <td class="whitespace-nowrap px-4 py-2.5 text-right text-sm tabular-nums <%= lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
-              <%= lucro ? number_to_currency(lucro) : "—" %>
-            </td>
+            <% [ @lucros_kitnets[mes], @lucros[mes] ].each do |lucro| %>
+              <td class="whitespace-nowrap px-4 py-2.5 text-right text-sm tabular-nums <%= lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
+                <%= lucro ? number_to_currency(lucro) : "—" %>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
       <tfoot class="bg-slate-50 dark:bg-white/5">
         <tr>
           <td class="px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Total <%= a.ano %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@lucros_kitnets.values.sum) %></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@lucros.values.sum) %></td>
         </tr>
       </tfoot>
