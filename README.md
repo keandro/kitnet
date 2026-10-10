@@ -16,6 +16,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 - [Começando](#começando)
 - [Uso](#uso)
 - [Qualidade e segurança](#qualidade-e-segurança)
+- [App Android](#app-android)
 - [Backup](#backup)
 - [Deploy](#deploy)
 
@@ -167,6 +168,15 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 | `/energia`       | Conta de energia e medidores      |
 | `/energia-solar` | Lucro da energia solar            |
 | `/up`            | Health check                      |
+
+## App Android
+
+A pasta `android/` tem um app Android (WebView) que abre o sistema com o mesmo layout do navegador do celular, em tela cheia, com ícone próprio. Ele não guarda dados: só funciona com o servidor rodando no computador e o celular no mesmo Wi-Fi.
+
+- **Endereço do servidor:** começa em `http://192.168.18.204:3000`. Se o servidor não responder, o app mostra uma tela para corrigir o endereço, que fica salvo no celular.
+- **Gerar o APK:** o workflow `.github/workflows/android.yml` compila e assina o APK a cada push que mexe em `android/` (ou manualmente, em *Actions → Android APK → Run workflow*). O APK fica nos artifacts da execução (`lf-kitnets-apk`).
+- **Assinatura:** a chave fica fora do repositório (`~/.config/lf-kitnets/`) e no GitHub como os segredos `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. Guarde uma cópia dela: sem a mesma chave, o celular não aceita atualizar o app (seria preciso desinstalar e instalar de novo).
+- **Instalar:** copie o `.apk` para o celular e permita "instalar apps desconhecidos".
 
 ## Qualidade e segurança
 

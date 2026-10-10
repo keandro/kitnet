@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LF Kitnets</string>
+    <string name="endereco_padrao">http://192.168.18.204:3000</string>
+    <string name="erro_titulo">Não consegui abrir o LF Kitnets</string>
+    <string name="erro_texto">Confira se o computador está ligado e se o celular está no mesmo Wi-Fi. Se o endereço do computador mudou, corrija abaixo.</string>
+    <string name="endereco_rotulo">Endereço do servidor</string>
+    <string name="tentar">Tentar de novo</string>
+</resources>

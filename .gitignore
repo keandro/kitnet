@@ -48,3 +48,12 @@
 
 # Ignore local Claude Code settings.
 .claude/settings.local.json
+
+# Android (pasta android/): saídas de build e chaves de assinatura.
+/android/.gradle
+/android/build
+/android/app/build
+/android/local.properties
+*.p12
+*.jks
+*.keystore

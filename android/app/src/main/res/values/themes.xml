@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DayNight: a página segue o modo claro/escuro do celular (prefers-color-scheme). -->
+    <style name="Tema" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/indigo</item>
+        <item name="colorAccent">@color/indigo</item>
+        <item name="android:windowBackground">@color/fundo</item>
+        <item name="android:statusBarColor">@color/barra</item>
+        <item name="android:navigationBarColor">@color/fundo</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
