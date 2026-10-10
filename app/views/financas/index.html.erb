@@ -99,7 +99,7 @@
 <section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
   <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês</h2>
-    <p class="text-xs text-slate-500 dark:text-slate-400">Resultado = recebido + energia solar − despesas gerais − água e esgoto. Clique num mês para lançar os custos.</p>
+    <p class="text-xs text-slate-500 dark:text-slate-400">Resultado = recebido + energia solar − despesas gerais − água e esgoto. Clique num mês para ver os pagamentos dele; o lápis lança os custos.</p>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
@@ -119,7 +119,7 @@
         <% @meses.each do |m| %>
           <% editar = editar_fechamento_mensal_path(ano: @ano, mes: m[:mes]) %>
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if m[:mes] == @mes_referencia %>"
-              data-controller="row-link" data-row-link-url-value="<%= editar %>" data-action="click->row-link#visit">
+              data-controller="row-link" data-row-link-url-value="<%= root_path(ano: @ano, mes: m[:mes]) %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= nome_mes(m[:mes]).capitalize %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(m[:recebido]) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-xs">
