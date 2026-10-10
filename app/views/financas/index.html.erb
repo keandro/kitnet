@@ -3,7 +3,7 @@
 <div class="flex flex-wrap items-end justify-between gap-4">
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Finanças</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Quanto foi recebido em cada mês de <%= @ano %>.</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Resultado e recebimentos de cada mês de <%= @ano %>.</p>
   </div>
 
   <nav class="flex flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-slate-800/40" aria-label="Ano">
@@ -18,8 +18,9 @@
 <% mes_ref = nome_mes(@mes_referencia) %>
 <% anterior_ref = @mes_referencia > 1 ? nome_mes(@mes_referencia - 1) : nil %>
 <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  <%= render "shared/stat_tile", label: "Recebido em #{mes_ref}", value: number_to_currency(@referencia[:recebido]), icon_name: :cash, tone: :good, value_class: "text-xl",
-        sublabel: (anterior_ref ? variacao_mensal(@referencia[:recebido], @referencia[:anterior], anterior_ref) : "primeiro mês do ano") %>
+  <%= render "shared/stat_tile", label: "Resultado de #{mes_ref}", value: number_to_currency(@referencia[:resultado]), icon_name: :cash, tone: :good, value_class: "text-xl",
+        sublabel: safe_join([ "Recebido #{number_to_currency(@referencia[:recebido])}",
+                              (variacao_mensal(@referencia[:resultado], @referencia[:resultado_anterior], anterior_ref, vazio: "sem resultado") if anterior_ref) ].compact, tag.br) %>
   <%= render "shared/stat_tile", label: "Recebido em #{@ano}", value: number_to_currency(@total_recebido), icon_name: :chart, tone: :primary, value_class: "text-xl",
         sublabel: "de #{number_to_currency(@total_previsto)} previstos no ano" %>
   <%= render "shared/stat_tile", label: "Média mensal", value: number_to_currency(@media_mensal), icon_name: :clock, tone: :info, value_class: "text-xl",
@@ -28,43 +29,58 @@
         sublabel: "vencidos e não pagos" %>
 </div>
 
-<% ticks = ticks_financas(@meses.map { |m| m[:recebido] }.max) %>
-<% topo = ticks.last.to_f %>
+<% escala = escala_financas(@meses.map { |m| m[:resultado] }) %>
+<% zero = posicao_na_escala(0, escala) %>
 <section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
-  <h2 class="text-sm font-medium text-slate-900 dark:text-white">Recebido por mês</h2>
-  <p class="text-xs text-slate-500 dark:text-slate-400">Pagamentos pela data em que foram pagos. Em destaque: <%= mes_ref %>.</p>
+  <h2 class="text-sm font-medium text-slate-900 dark:text-white">Resultado por mês</h2>
+  <p class="text-xs text-slate-500 dark:text-slate-400">Recebido + energia solar − despesas gerais − água e esgoto. Em destaque: <%= mes_ref %>.</p>
 
   <div class="mt-6 flex gap-2">
     <%# eixo y %>
     <div class="relative h-56 w-16 shrink-0 text-right text-xs tabular-nums text-slate-500 dark:text-slate-400" aria-hidden="true">
-      <% ticks.each do |tick| %>
-        <span class="absolute right-0 translate-y-1/2" style="bottom: <%= tick / topo * 100 %>%"><%= dinheiro_compacto(tick) %></span>
+      <% escala[:ticks].each do |tick| %>
+        <span class="absolute right-0 translate-y-1/2" style="bottom: <%= posicao_na_escala(tick, escala) %>%"><%= dinheiro_compacto(tick) %></span>
       <% end %>
     </div>
 
     <div class="min-w-0 flex-1">
       <div class="relative h-56">
-        <% ticks.each do |tick| %>
-          <div class="absolute inset-x-0 border-t border-slate-100 dark:border-white/5" style="bottom: <%= tick / topo * 100 %>%"></div>
+        <% escala[:ticks].each do |tick| %>
+          <div class="absolute inset-x-0 border-t <%= tick.zero? ? "border-slate-300 dark:border-white/20" : "border-slate-100 dark:border-white/5" %>" style="bottom: <%= posicao_na_escala(tick, escala) %>%"></div>
         <% end %>
 
         <div class="absolute inset-0 flex gap-0.5">
           <% @meses.each do |m| %>
             <% destaque = m[:mes] == @mes_referencia %>
-            <% altura = topo.zero? ? 0 : m[:recebido].to_f / topo * 100 %>
-            <div class="group relative flex h-full flex-1 items-end justify-center" tabindex="0"
-                 aria-label="<%= nome_mes(m[:mes]) %>: recebido <%= number_to_currency(m[:recebido]) %>, previsto <%= number_to_currency(m[:previsto]) %>">
+            <% valor = m[:resultado] %>
+            <% topo_barra = posicao_na_escala(valor, escala) %>
+            <% base, altura = valor.negative? ? [ topo_barra, zero - topo_barra ] : [ zero, topo_barra - zero ] %>
+            <div class="group relative flex h-full flex-1 justify-center" tabindex="0"
+                 aria-label="<%= nome_mes(m[:mes]) %>: resultado <%= number_to_currency(valor) %>, recebido <%= number_to_currency(m[:recebido]) %>">
               <% if altura.positive? %>
-                <div class="w-full max-w-6 rounded-t-[4px] <%= destaque ? "bg-indigo-600 dark:bg-indigo-500" : "bg-indigo-200 dark:bg-indigo-500/35" %>" style="height: <%= altura %>%"></div>
-              <% end %>
-              <% if destaque && altura.positive? %>
-                <span class="pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap pb-1 text-xs font-medium text-slate-900 dark:text-white" style="bottom: <%= altura %>%"><%= dinheiro_compacto(m[:recebido]) %></span>
+                <% cor = if valor.negative?
+                           destaque ? "bg-rose-600 dark:bg-rose-500" : "bg-rose-200 dark:bg-rose-500/35"
+                         else
+                           destaque ? "bg-indigo-600 dark:bg-indigo-500" : "bg-indigo-200 dark:bg-indigo-500/35"
+                         end %>
+                <div class="absolute w-full max-w-6 <%= valor.negative? ? "rounded-b-[4px]" : "rounded-t-[4px]" %> <%= cor %>" style="bottom: <%= base %>%; height: <%= altura %>%"></div>
+                <% if destaque %>
+                  <span class="pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-medium text-slate-900 dark:text-white <%= valor.negative? ? "pt-1" : "pb-1" %>"
+                        style="<%= valor.negative? ? "top: #{100 - base}%" : "bottom: #{base + altura}%" %>"><%= dinheiro_compacto(valor) %></span>
+                <% end %>
               <% end %>
 
               <div class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg group-hover:block group-focus:block dark:bg-slate-700">
                 <p class="font-medium"><%= nome_mes(m[:mes]).capitalize %> de <%= @ano %></p>
-                <p class="mt-1 tabular-nums">Recebido: <%= number_to_currency(m[:recebido]) %></p>
-                <p class="tabular-nums text-slate-300">Previsto: <%= number_to_currency(m[:previsto]) %></p>
+                <p class="mt-1 tabular-nums">Resultado: <%= number_to_currency(valor) %></p>
+                <p class="tabular-nums text-slate-300">Recebido: <%= number_to_currency(m[:recebido]) %></p>
+                <% custos = m[:despesas_gerais] + m[:agua_esgoto] %>
+                <% if custos.positive? %>
+                  <p class="tabular-nums text-slate-300">Custos: − <%= number_to_currency(custos) %></p>
+                <% end %>
+                <% if m[:energia_solar].to_d.positive? %>
+                  <p class="tabular-nums text-slate-300">Energia solar: + <%= number_to_currency(m[:energia_solar]) %></p>
+                <% end %>
               </div>
             </div>
           <% end %>

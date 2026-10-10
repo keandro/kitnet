@@ -25,7 +25,10 @@ class FinancasController < ApplicationController
       linha[:resultado] = linha[:recebido] + linha[:energia_solar].to_d - linha[:despesas_gerais] - linha[:agua_esgoto]
       linha
     end
-    @meses.each_cons(2) { |anterior, atual| atual[:anterior] = anterior[:recebido] }
+    @meses.each_cons(2) do |anterior, atual|
+      atual[:anterior] = anterior[:recebido]
+      atual[:resultado_anterior] = anterior[:resultado]
+    end
 
     # Mês de referência: o atual no ano corrente, dezembro nos anos passados.
     @mes_referencia = @ano == hoje.year ? hoje.month : (@ano < hoje.year ? 12 : 1)
