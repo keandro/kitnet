@@ -1,43 +1,22 @@
 class PagamentosController < ApplicationController
-  before_action :set_contrato, only: %i[ index new ], if: -> { params[:contrato_id].present? }
-  before_action :set_pagamento, only: %i[ show edit update destroy ]
+  # As ordens de pagamento são criadas pelo Contrato (uma por mês); aqui elas
+  # só são consultadas, editadas (juros, multa, observações) e quitadas.
+  before_action :set_contrato, only: %i[ index ], if: -> { params[:contrato_id].present? }
+  before_action :set_pagamento, only: %i[ show edit update destroy pagar ]
 
   # GET /pagamentos
   # GET /pagamentos?contrato_id=1
   def index
     scope = @contrato ? @contrato.pagamentos : Pagamento.all
-    @pagamentos = policy_scope(scope).includes(contrato: :morador).order(data_vencimento: :desc)
+    @pagamentos = policy_scope(scope).includes(contrato: [ :morador, :unidade ]).order(:data_vencimento)
   end
 
   # GET /pagamentos/1
   def show
   end
 
-  # GET /pagamentos/new
-  # GET /pagamentos/new?contrato_id=1
-  def new
-    @pagamento = Pagamento.new(
-      contrato_id: params[:contrato_id],
-      valor: @contrato&.valor_aluguel,
-      data_vencimento: @contrato&.proxima_data_vencimento
-    )
-    authorize @pagamento
-  end
-
   # GET /pagamentos/1/edit
   def edit
-  end
-
-  # POST /pagamentos
-  def create
-    @pagamento = Pagamento.new(pagamento_params)
-    authorize @pagamento
-
-    if @pagamento.save
-      redirect_to contrato_path(@pagamento.contrato), notice: "Pagamento registrado com sucesso."
-    else
-      render :new, status: :unprocessable_content
-    end
   end
 
   # PATCH/PUT /pagamentos/1
@@ -47,6 +26,12 @@ class PagamentosController < ApplicationController
     else
       render :edit, status: :unprocessable_content
     end
+  end
+
+  # PATCH /pagamentos/1/pagar
+  def pagar
+    @pagamento.update!(data_pagamento: Date.current)
+    redirect_back_or_to contrato_path(@pagamento.contrato), notice: "Pagamento de #{l(@pagamento.data_vencimento)} marcado como pago.", status: :see_other
   end
 
   # DELETE /pagamentos/1
@@ -67,6 +52,6 @@ class PagamentosController < ApplicationController
     end
 
     def pagamento_params
-      params.expect(pagamento: [ :contrato_id, :valor, :data_vencimento, :data_pagamento, :observacoes ])
+      params.expect(pagamento: [ :valor, :data_vencimento, :data_pagamento, :observacoes ])
     end
 end

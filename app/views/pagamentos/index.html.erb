@@ -4,12 +4,9 @@
   <div>
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Pagamentos<%= " — #{@contrato.morador.nome}" if @contrato %></h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-      <%= @contrato ? @contrato.unidade.nome : "Histórico de pagamentos de todos os contratos." %>
+      <%= @contrato ? @contrato.unidade.nome : "Ordens de pagamento de todos os contratos. Elas são criadas automaticamente junto com o contrato." %>
     </p>
   </div>
-  <%= link_to new_pagamento_path(contrato_id: @contrato&.id), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
-    <%= icon :plus, css_class: "size-4" %> Novo pagamento
-  <% end %>
 </div>
 
 <% if @contrato %>
@@ -22,18 +19,7 @@
   <% if @pagamentos.any? %>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-        <thead class="bg-slate-50 dark:bg-white/5">
-          <tr>
-            <% if @contrato.nil? %>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Contrato</th>
-            <% end %>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor</th>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Vencimento</th>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Pago em</th>
-            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</th>
-            <th class="px-4 py-3"></th>
-          </tr>
-        </thead>
+        <%= render "table_head", show_contrato: @contrato.nil? %>
         <tbody class="divide-y divide-slate-100 dark:divide-white/5">
           <%= render partial: "pagamento_row", collection: @pagamentos, as: :pagamento, locals: { show_contrato: @contrato.nil? } %>
         </tbody>
@@ -42,7 +28,7 @@
   <% else %>
     <div class="px-4 py-12 text-center">
       <%= icon :cash, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
-      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhum pagamento registrado.</p>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhuma ordem de pagamento.</p>
     </div>
   <% end %>
 </div>

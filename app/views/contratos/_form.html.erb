@@ -25,8 +25,15 @@
       </div>
 
       <div>
-        <%= form.label :data_fim, class: label_classes %>
-        <%= form.date_field :data_fim, class: field_classes(contrato, :data_fim) %>
+        <%= form.label :duracao_meses, class: label_classes %>
+        <%= form.number_field :duracao_meses, in: 1..120, class: field_classes(contrato, :duracao_meses) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          <% if contrato.new_record? %>
+            Uma ordem de pagamento é criada para cada mês, a partir do mês de início.
+          <% else %>
+            Ao mudar a duração, ordens em aberto são criadas ou removidas; as já pagas não mudam.
+          <% end %>
+        </p>
       </div>
 
       <div>

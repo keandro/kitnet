@@ -26,6 +26,10 @@
       <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= l(contrato.data_inicio) if contrato.data_inicio %></dd>
     </div>
     <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Duração</dt>
+      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= pluralize(contrato.duracao_meses, "mês", plural: "meses") if contrato.duracao_meses %></dd>
+    </div>
+    <div>
       <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Data de fim</dt>
       <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= contrato.data_fim ? l(contrato.data_fim) : "—" %></dd>
     </div>

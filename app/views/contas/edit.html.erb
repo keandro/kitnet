@@ -14,13 +14,13 @@
       </div>
 
       <div>
-        <%= form.label :password, class: label_classes %>
+        <%= form.label :password, "Nova senha", class: label_classes %>
         <%= form.password_field :password, autocomplete: "new-password", class: field_classes(@usuario, :password) %>
         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Deixe em branco para manter a senha atual. Mínimo de 6 caracteres.</p>
       </div>
 
       <div>
-        <%= form.label :password_confirmation, class: label_classes %>
+        <%= form.label :password_confirmation, "Confirmação da nova senha", class: label_classes %>
         <%= form.password_field :password_confirmation, autocomplete: "new-password", class: field_classes(@usuario, :password_confirmation) %>
       </div>
 

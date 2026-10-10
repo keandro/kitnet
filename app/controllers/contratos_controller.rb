@@ -8,6 +8,7 @@ class ContratosController < ApplicationController
 
   # GET /contratos/1 or /contratos/1.json
   def show
+    @pagamentos = @contrato.pagamentos.order(:data_vencimento)
   end
 
   # GET /contratos/new
@@ -27,7 +28,7 @@ class ContratosController < ApplicationController
 
     respond_to do |format|
       if @contrato.save
-        format.html { redirect_to @contrato, notice: "Contrato criado com sucesso." }
+        format.html { redirect_to @contrato, notice: "Contrato criado com #{@contrato.pagamentos.size} ordens de pagamento." }
         format.json { render :show, status: :created, location: @contrato }
       else
         format.html { render :new, status: :unprocessable_content }
@@ -68,6 +69,6 @@ class ContratosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def contrato_params
-      params.expect(contrato: [ :morador_id, :unidade_id, :data_inicio, :data_fim, :valor_aluguel, :dia_pagamento, :status, fiador_ids: [] ])
+      params.expect(contrato: [ :morador_id, :unidade_id, :data_inicio, :duracao_meses, :valor_aluguel, :dia_pagamento, :status, fiador_ids: [] ])
     end
 end

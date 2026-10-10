@@ -10,67 +10,68 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_224510) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_005619) do
   create_table "contrato_fiadores", force: :cascade do |t|
     t.integer "contrato_id", null: false
-    t.datetime "created_at", null: false
     t.integer "pessoa_id", null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contrato_id"], name: "index_contrato_fiadores_on_contrato_id"
     t.index ["pessoa_id"], name: "index_contrato_fiadores_on_pessoa_id"
   end
 
   create_table "contratos", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.date "data_fim"
-    t.date "data_inicio"
-    t.integer "dia_pagamento"
     t.integer "morador_id", null: false
-    t.integer "status"
     t.integer "unidade_id", null: false
-    t.datetime "updated_at", null: false
+    t.date "data_inicio"
+    t.date "data_fim"
     t.decimal "valor_aluguel"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "dia_pagamento"
+    t.integer "duracao_meses"
     t.index ["morador_id"], name: "index_contratos_on_morador_id"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
 
   create_table "pagamentos", force: :cascade do |t|
     t.integer "contrato_id", null: false
-    t.datetime "created_at", null: false
-    t.date "data_pagamento"
-    t.date "data_vencimento"
-    t.text "observacoes"
-    t.datetime "updated_at", null: false
     t.decimal "valor"
+    t.date "data_vencimento"
+    t.date "data_pagamento"
+    t.text "observacoes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contrato_id"], name: "index_pagamentos_on_contrato_id"
   end
 
   create_table "pessoas", force: :cascade do |t|
+    t.string "nome"
     t.string "cpf"
-    t.datetime "created_at", null: false
+    t.string "telefone"
     t.string "email"
     t.string "endereco"
-    t.string "nome"
-    t.string "telefone"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "unidades", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "endereco"
     t.string "nome"
-    t.integer "status"
-    t.datetime "updated_at", null: false
+    t.string "endereco"
     t.decimal "valor_base"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "usuarios", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.datetime "remember_created_at"
-    t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_usuarios_on_email", unique: true
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true

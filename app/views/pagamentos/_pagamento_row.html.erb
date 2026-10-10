@@ -10,7 +10,12 @@
   <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= pagamento.data_pagamento ? l(pagamento.data_pagamento) : "—" %></td>
   <td class="whitespace-nowrap px-4 py-3"><%= status_pagamento_badge(pagamento.status) %></td>
   <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+    <% if pagamento.data_pagamento.nil? %>
+      <%= button_to pagar_pagamento_path(pagamento), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10", data: { turbo_confirm: "Marcar o pagamento de #{l(pagamento.data_vencimento)} como pago hoje?" } do %>
+        <%= icon :check_circle, css_class: "size-4" %> Pago
+      <% end %>
+    <% end %>
     <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
-    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
+    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "inline-block", class: "inline-flex p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Tem certeza?" }, title: "Remover" %>
   </td>
 </tr>

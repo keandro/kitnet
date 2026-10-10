@@ -26,7 +26,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
 - **Contratos**: vínculo entre unidade, morador e um ou mais fiadores
-- **Pagamentos**: registro por contrato, com status `pago`, `pendente` ou `vencido`
+- **Ordens de pagamento**: geradas automaticamente ao criar o contrato (uma por mês), editáveis para incluir juros ou multa e quitadas com um clique; status `pago`, `pendente` ou `vencido`
 - **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit), sem cadastro público
 - **Minha conta**: troca de e-mail e senha pelo próprio usuário, com login lembrado por 1 ano
 - Interface responsiva com modo escuro
@@ -78,12 +78,13 @@ classDiagram
         +bigint unidade_id
         +bigint morador_id
         +date data_inicio
+        +integer duracao_meses
         +date data_fim
         +decimal valor_aluguel
         +integer dia_pagamento
         +enum status
-        +ultimo_pagamento()
         +status_pagamento()
+        +vencimentos_previstos()
     }
 
     class ContratoFiador {
@@ -138,7 +139,13 @@ classDiagram
 
 ## Regras de negócio
 
-- **Contrato** exige data de início, valor de aluguel maior que zero, dia de pagamento entre 1 e 31 e **pelo menos um fiador**.
+- **Contrato** exige data de início, duração em meses (1 a 120), valor de aluguel maior que zero, dia de pagamento entre 1 e 31 e **pelo menos um fiador**. A data de fim é calculada a partir do início e da duração.
+- **Ordens de pagamento** são criadas junto com o contrato: uma por mês, a partir do mês de início, no dia de pagamento (limitado ao último dia em meses curtos). Ordens já pagas nunca são alteradas automaticamente. Ao editar o contrato:
+  - mudar a **duração** cria ou remove ordens em aberto;
+  - mudar o **dia de pagamento** move as ordens em aberto para o novo dia;
+  - mudar o **valor do aluguel** atualiza as ordens futuras em aberto que ainda têm o valor antigo (as editadas à mão, com juros, ficam como estão);
+  - **encerrar ou cancelar** remove as ordens futuras em aberto; as vencidas continuam como dívida.
+- **Excluir um contrato** exclui todas as suas ordens de pagamento.
 - **Status da unidade** é sincronizado automaticamente com os contratos: fica `ocupada` quando há contrato ativo e volta a `livre` quando o último contrato ativo é encerrado, cancelado ou excluído. Unidades em `manutencao` não são alteradas automaticamente.
 - **Pagamento** é `pago` quando tem data de pagamento, `vencido` quando passou do vencimento sem pagamento e `pendente` nos demais casos. A data de pagamento não pode ser futura.
 - **Pessoa** tem CPF único com 11 dígitos (a máscara é removida automaticamente) e é classificada como `morador`, `fiador`, `ambos` ou `sem_contrato_ativo`.
@@ -204,7 +211,7 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 | `/unidades`   | Gestão de unidades      |
 | `/pessoas`    | Moradores e fiadores    |
 | `/contratos`  | Contratos               |
-| `/pagamentos` | Pagamentos              |
+| `/pagamentos` | Ordens de pagamento     |
 | `/conta/edit` | Minha conta (e-mail e senha) |
 | `/up`         | Health check            |
 

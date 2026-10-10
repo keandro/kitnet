@@ -6,15 +6,17 @@ pt-BR:
       contrato:
         data_inicio: Data de início
         data_fim: Data de fim
+        duracao_meses: Duração (meses)
         valor_aluguel: Valor do aluguel
         dia_pagamento: Dia de pagamento
       unidade:
         valor_base: Valor base
       usuario:
         email: E-mail
-        password: Nova senha
-        password_confirmation: Confirmação da nova senha
+        password: Senha
+        password_confirmation: Confirmação da senha
         current_password: Senha atual
+        remember_me: Lembrar de mim
       pagamento:
         data_vencimento: Data de vencimento
         data_pagamento: Data do pagamento

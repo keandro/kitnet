@@ -5,20 +5,37 @@
 <% end %>
 
 <div class="mt-4 flex flex-wrap items-center justify-end gap-2">
-  <%= link_to new_pagamento_path(contrato_id: @contrato.id), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
-    <%= icon :plus, css_class: "size-4" %> Registrar pagamento
-  <% end %>
-  <%= link_to pagamentos_path(contrato_id: @contrato.id), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" do %>
-    <%= icon :cash, css_class: "size-4" %> Ver pagamentos
-  <% end %>
   <%= link_to edit_contrato_path(@contrato), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" do %>
     <%= icon :pencil, css_class: "size-4" %> Editar
   <% end %>
-  <%= button_to @contrato, method: :delete, form_class: "inline-block", class: "inline-flex items-center gap-1.5 rounded-lg border border-rose-200 px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-400/20 dark:text-rose-400 dark:hover:bg-rose-400/10 cursor-pointer", data: { turbo_confirm: "Tem certeza?" } do %>
+  <%= button_to @contrato, method: :delete, form_class: "inline-block", class: "inline-flex items-center gap-1.5 rounded-lg border border-rose-200 px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-400/20 dark:text-rose-400 dark:hover:bg-rose-400/10 cursor-pointer", data: { turbo_confirm: "Remover este contrato e todas as suas #{@contrato.pagamentos.size} ordens de pagamento (inclusive as pagas)?" } do %>
     <%= icon :trash, css_class: "size-4" %> Remover
   <% end %>
 </div>
 
 <div class="mt-4">
   <%= render @contrato %>
+</div>
+
+<div class="mt-8">
+  <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Ordens de pagamento</h2>
+  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Edite uma ordem para acrescentar juros ou multa em caso de atraso.</p>
+
+  <div class="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+    <% if @pagamentos.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+          <%= render "pagamentos/table_head", show_contrato: false %>
+          <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+            <%= render partial: "pagamentos/pagamento_row", collection: @pagamentos, as: :pagamento, locals: { show_contrato: false } %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-4 py-12 text-center">
+        <%= icon :cash, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhuma ordem de pagamento.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

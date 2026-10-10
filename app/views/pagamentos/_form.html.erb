@@ -1,21 +1,22 @@
 <div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
   <%= render "shared/error_summary", object: pagamento %>
 
-  <%= form_with(model: pagamento, data: (pagamento.new_record? ? { controller: "pagamento-form" } : {})) do |form| %>
+  <%= form_with(model: pagamento) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div class="sm:col-span-2">
-        <%= form.label :contrato_id, "Contrato", class: label_classes %>
-        <%= form.select :contrato_id, contrato_options_for_pagamento(pagamento), { prompt: "Selecione o contrato" }, class: field_classes(pagamento, :contrato_id), data: { pagamento_form_target: "contrato", action: "pagamento-form#preencher" } %>
+        <p class="<%= label_classes %>">Contrato</p>
+        <p class="mt-1 text-sm text-slate-900 dark:text-white"><%= pagamento.contrato.morador.nome %> — <%= pagamento.contrato.unidade.nome %> · aluguel de <%= number_to_currency(pagamento.contrato.valor_aluguel) %></p>
       </div>
 
       <div>
         <%= form.label :valor, class: label_classes %>
-        <%= form.text_field :valor, class: field_classes(pagamento, :valor), data: { pagamento_form_target: "valor" } %>
+        <%= form.text_field :valor, class: field_classes(pagamento, :valor) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Em caso de atraso, acrescente aqui os juros ou a multa.</p>
       </div>
 
       <div>
         <%= form.label :data_vencimento, class: label_classes %>
-        <%= form.date_field :data_vencimento, class: field_classes(pagamento, :data_vencimento), data: { pagamento_form_target: "vencimento" } %>
+        <%= form.date_field :data_vencimento, class: field_classes(pagamento, :data_vencimento) %>
       </div>
 
       <div class="sm:col-span-2">
@@ -31,7 +32,7 @@
     </div>
 
     <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-5 dark:border-white/10">
-      <%= link_to "Cancelar", (pagamento.contrato_id.present? ? pagamento.contrato : pagamentos_path), class: "rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" %>
+      <%= link_to "Cancelar", pagamento.contrato, class: "rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5" %>
       <%= form.submit "Salvar", class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
     </div>
   <% end %>
