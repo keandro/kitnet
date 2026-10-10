@@ -1,0 +1,118 @@
+<% content_for :title, "Energia — #{nome_do_mes_energia(@conta)}" %>
+
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Conta de energia do mês e o consumo de cada kitnet pelo medidor.</p>
+  </div>
+  <%= render "navegacao_mes", conta: @conta %>
+</div>
+
+<% leituras = @leituras.values %>
+<% consumo_kitnets = leituras.filter_map(&:consumo).sum %>
+<% valor_kitnets = leituras.filter_map(&:valor).sum %>
+<% valor_pago = leituras.select(&:pago?).filter_map(&:valor).sum %>
+
+<%# conta do mês %>
+<section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+  <h2 class="text-sm font-medium text-slate-900 dark:text-white">Conta do mês</h2>
+  <p class="text-xs text-slate-500 dark:text-slate-400">Os valores da conta de energia total. O valor do kWh é calculado: valor total ÷ kWh total.</p>
+
+  <%= render "shared/error_summary", object: @conta %>
+
+  <%= form_with(model: @conta, url: conta_energia_path(ano: @conta.ano, mes: @conta.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-4") do |form| %>
+    <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <%= form.label :kwh_total, "Energia total (kWh)", class: label_classes %>
+        <%= form.number_field :kwh_total, value: numero_para_campo(@conta.kwh_total), step: "any", min: 0, inputmode: "decimal", placeholder: "0", class: field_classes(@conta, :kwh_total) %>
+      </div>
+      <div>
+        <%= form.label :valor_total, class: label_classes %>
+        <%= money_field form, :valor_total %>
+      </div>
+      <div>
+        <p class="<%= label_classes %>">Valor do kWh</p>
+        <p class="mt-1 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white">
+          <%= @conta.valor_kwh ? number_to_currency(@conta.valor_kwh, precision: 4) : "—" %>
+        </p>
+      </div>
+      <div>
+        <%= form.submit "Salvar conta", class: "w-full cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <%= render "shared/stat_tile", label: "Consumo das kitnets", value: "#{kwh(consumo_kitnets)} kWh", icon_name: :bolt, tone: :primary, value_class: "text-xl",
+        sublabel: (@conta.kwh_total ? "de #{kwh(@conta.kwh_total)} kWh da conta" : "lance a conta do mês") %>
+  <%= render "shared/stat_tile", label: "Áreas comuns e perdas", value: (@conta.kwh_total ? "#{kwh(@conta.kwh_total - consumo_kitnets)} kWh" : "—"), icon_name: :building, tone: :info, value_class: "text-xl",
+        sublabel: "conta total − medidores das kitnets" %>
+  <%= render "shared/stat_tile", label: "A cobrar das kitnets", value: number_to_currency(valor_kitnets), icon_name: :cash, tone: :primary, value_class: "text-xl",
+        sublabel: (@conta.valor_total ? "de #{number_to_currency(@conta.valor_total)} da conta" : nil) %>
+  <%= render "shared/stat_tile", label: "Já recebido", value: number_to_currency(valor_pago), icon_name: :check_circle, tone: :good, value_class: "text-xl",
+        sublabel: "#{leituras.count(&:pago?)} de #{leituras.count { |l| l.valor.present? }} kitnets pagas" %>
+</div>
+
+<%# kitnets %>
+<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-white/10">
+    <div>
+      <h2 class="text-sm font-medium text-slate-900 dark:text-white">Por kitnet</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Consumo = leitura atual − leitura anterior. Valor = consumo × valor do kWh.</p>
+    </div>
+    <%= link_to editar_leituras_energia_path(ano: @conta.ano, mes: @conta.mes), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
+      <%= icon :pencil, css_class: "size-4" %> Lançar leituras
+    <% end %>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+      <thead class="bg-slate-50 dark:bg-white/5">
+        <tr>
+          <% [ [ "Kitnet", "left" ], [ "Morador", "left" ], [ "Leitura anterior", "right" ], [ "Leitura atual", "right" ], [ "Consumo", "right" ], [ "Valor", "right" ], [ "Pagamento", "left" ] ].each do |titulo, lado| %>
+            <th class="px-4 py-3 text-<%= lado %> text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></th>
+          <% end %>
+          <th class="px-4 py-3"><span class="sr-only">Ações</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+        <% @unidades.each do |unidade| %>
+          <% leitura = @leituras[unidade.id] %>
+          <tr>
+            <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= @moradores[unidade.id]&.nome || "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_anterior) %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_atual) %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= leitura&.consumo ? "#{kwh(leitura.consumo)} kWh" : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= leitura&.valor ? number_to_currency(leitura.valor) : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm">
+              <% if leitura&.pago? %>
+                <%= status_badge("Pago em #{l(leitura.data_pagamento, format: "%d/%m/%Y")}", tone: :good, icon: :check_circle) %>
+              <% elsif leitura&.valor %>
+                <%= status_badge("Em aberto", tone: :warning, icon: :clock) %>
+              <% else %>
+                <span class="text-slate-400 dark:text-slate-500">—</span>
+              <% end %>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+              <% if leitura&.valor && !leitura.pago? %>
+                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?" } do %>
+                  <%= icon :check_circle, css_class: "size-4" %> Pago
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot class="bg-slate-50 dark:bg-white/5">
+        <tr>
+          <td colspan="4" class="px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Total das kitnets</td>
+          <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= kwh(consumo_kitnets) %> kWh</td>
+          <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(valor_kitnets) %></td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>

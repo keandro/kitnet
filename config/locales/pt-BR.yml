@@ -20,6 +20,13 @@ pt-BR:
         password_confirmation: Confirmação da senha
         current_password: Senha atual
         remember_me: Lembrar de mim
+      conta_energia:
+        kwh_total: kWh total
+        valor_total: Valor total
+      leitura_energia:
+        leitura_anterior: Leitura anterior
+        leitura_atual: Leitura atual
+        data_pagamento: Data do pagamento
       fechamento_mensal:
         despesas_gerais: Despesas gerais
         agua_esgoto: Água e esgoto

@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_014800) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_015748) do
+  create_table "contas_energia", force: :cascade do |t|
+    t.integer "ano", null: false
+    t.integer "mes", null: false
+    t.decimal "kwh_total", precision: 10, scale: 2
+    t.decimal "valor_total", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
+  end
+
   create_table "contrato_fiadores", force: :cascade do |t|
     t.integer "contrato_id", null: false
     t.integer "pessoa_id", null: false
@@ -45,6 +55,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_014800) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ano", "mes"], name: "index_fechamentos_mensais_on_ano_and_mes", unique: true
+  end
+
+  create_table "leituras_energia", force: :cascade do |t|
+    t.integer "conta_energia_id", null: false
+    t.integer "unidade_id", null: false
+    t.decimal "leitura_anterior", precision: 12, scale: 2
+    t.decimal "leitura_atual", precision: 12, scale: 2
+    t.date "data_pagamento"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conta_energia_id", "unidade_id"], name: "index_leituras_energia_on_conta_energia_id_and_unidade_id", unique: true
+    t.index ["conta_energia_id"], name: "index_leituras_energia_on_conta_energia_id"
+    t.index ["unidade_id"], name: "index_leituras_energia_on_unidade_id"
   end
 
   create_table "pagamentos", force: :cascade do |t|
@@ -92,5 +115,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_014800) do
   add_foreign_key "contrato_fiadores", "pessoas"
   add_foreign_key "contratos", "pessoas", column: "morador_id"
   add_foreign_key "contratos", "unidades"
+  add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
+  add_foreign_key "leituras_energia", "unidades"
   add_foreign_key "pagamentos", "contratos"
 end

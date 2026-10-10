@@ -24,6 +24,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 - **Vencimentos**: painel com ocupação, pagamentos vencidos e os que vencem no próximo mês
 - **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores e com o previsto; por mês, lança despesas gerais e água e esgoto (e, em breve, energia solar) para chegar ao resultado
 - **Quadro de kitnets** mostrando cada unidade, seu status e morador atual
+- **Energia**: conta de energia do mês (kWh total, valor total e valor do kWh) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
 - **Contratos**: vínculo entre unidade, morador e um ou mais fiadores (ou sem fiador)
@@ -122,6 +123,26 @@ classDiagram
         +decimal energia_solar
     }
 
+    class ContaEnergia {
+        +bigint id
+        +integer ano
+        +integer mes
+        +decimal kwh_total
+        +decimal valor_total
+        +valor_kwh()
+    }
+
+    class LeituraEnergia {
+        +bigint id
+        +bigint conta_energia_id
+        +bigint unidade_id
+        +decimal leitura_anterior
+        +decimal leitura_atual
+        +date data_pagamento
+        +consumo()
+        +valor()
+    }
+
     class StatusUnidade {
         <<enumeration>>
         livre
@@ -141,6 +162,8 @@ classDiagram
     Contrato "1" --> "0..*" ContratoFiador : fiadores
     Pessoa "1" --> "0..*" ContratoFiador : é fiador em
     Contrato "1" --> "0..*" Pagamento : gera
+    ContaEnergia "1" --> "0..*" LeituraEnergia : rateia
+    Unidade "1" --> "0..*" LeituraEnergia : medidor
     Unidade ..> StatusUnidade
     Contrato ..> StatusContrato
 ```
@@ -156,6 +179,7 @@ classDiagram
   - mudar o **valor do aluguel** atualiza as ordens futuras em aberto que ainda têm o valor antigo (as editadas à mão, com juros, ficam como estão);
   - **encerrar ou cancelar** remove as ordens futuras em aberto; as vencidas continuam como dívida.
 - **Excluir um contrato** exclui todas as suas ordens de pagamento.
+- **Energia**: valor do kWh = valor total ÷ kWh total da conta; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
 - **Resultado do mês** (Finanças) = recebido + energia solar − despesas gerais − água e esgoto. Os custos não podem ser negativos.
 - **Uma kitnet só pode ter um contrato ativo por vez.** Para criar (ou reativar) um contrato numa kitnet ocupada, encerre ou cancele antes o contrato atual. No formulário, as kitnets ocupadas aparecem desabilitadas.
 - **O status de uma kitnet com contrato ativo não pode ser alterado à mão**: ela fica `ocupada` até o contrato ser encerrado, cancelado ou excluído.
@@ -221,6 +245,7 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 | ------------- | ----------------------- |
 | `/`           | Vencimentos             |
 | `/financas`   | Finanças por ano        |
+| `/energia`    | Conta de energia e medidores |
 | `/kitnets`    | Quadro de unidades      |
 | `/unidades`   | Gestão de unidades      |
 | `/pessoas`    | Moradores e fiadores    |
