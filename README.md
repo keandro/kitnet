@@ -22,7 +22,7 @@ Sistema web para gestão de kitnets de aluguel: cadastro de unidades, pessoas (m
 ## Funcionalidades
 
 - **Vencimentos**: painel com ocupação, pagamentos vencidos e os que vencem no próximo mês
-- **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores e com o previsto
+- **Finanças**: quanto foi recebido em cada mês do ano escolhido, comparado com os meses anteriores e com o previsto; por mês, lança despesas gerais e água e esgoto (e, em breve, energia solar) para chegar ao resultado
 - **Quadro de kitnets** mostrando cada unidade, seu status e morador atual
 - **Unidades**: cadastro com valor base e status (`livre`, `ocupada`, `manutenção`)
 - **Pessoas**: cadastro de moradores e fiadores com validação de CPF
@@ -113,6 +113,15 @@ classDiagram
         +datetime remember_created_at
     }
 
+    class FechamentoMensal {
+        +bigint id
+        +integer ano
+        +integer mes
+        +decimal despesas_gerais
+        +decimal agua_esgoto
+        +decimal energia_solar
+    }
+
     class StatusUnidade {
         <<enumeration>>
         livre
@@ -136,7 +145,7 @@ classDiagram
     Contrato ..> StatusContrato
 ```
 
-> Todas as tabelas também possuem `created_at` e `updated_at`. `Usuario` é independente das demais entidades e serve apenas para autenticação.
+> Todas as tabelas também possuem `created_at` e `updated_at`. `Usuario` é independente das demais entidades e serve apenas para autenticação. `FechamentoMensal` guarda os custos lançados em cada mês da página Finanças (um registro por ano e mês).
 
 ## Regras de negócio
 
@@ -147,6 +156,7 @@ classDiagram
   - mudar o **valor do aluguel** atualiza as ordens futuras em aberto que ainda têm o valor antigo (as editadas à mão, com juros, ficam como estão);
   - **encerrar ou cancelar** remove as ordens futuras em aberto; as vencidas continuam como dívida.
 - **Excluir um contrato** exclui todas as suas ordens de pagamento.
+- **Resultado do mês** (Finanças) = recebido + energia solar − despesas gerais − água e esgoto. Os custos não podem ser negativos.
 - **Uma kitnet só pode ter um contrato ativo por vez.** Para criar (ou reativar) um contrato numa kitnet ocupada, encerre ou cancele antes o contrato atual. No formulário, as kitnets ocupadas aparecem desabilitadas.
 - **O status de uma kitnet com contrato ativo não pode ser alterado à mão**: ela fica `ocupada` até o contrato ser encerrado, cancelado ou excluído.
 - **Status da unidade** é sincronizado automaticamente com os contratos: fica `ocupada` quando há contrato ativo e volta a `livre` quando o último contrato ativo é encerrado, cancelado ou excluído. Unidades em `manutencao` não são alteradas automaticamente.

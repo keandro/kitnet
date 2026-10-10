@@ -81,6 +81,10 @@
 </section>
 
 <section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
+  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês</h2>
+    <p class="text-xs text-slate-500 dark:text-slate-400">Resultado = recebido + energia solar − despesas gerais − água e esgoto. Clique num mês para lançar os custos.</p>
+  </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
       <thead class="bg-slate-50 dark:bg-white/5">
@@ -89,16 +93,30 @@
           <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Previsto</th>
           <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Recebido</th>
           <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Vs mês anterior</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
+          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Resultado</th>
+          <th class="px-4 py-3"><span class="sr-only">Editar</span></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100 dark:divide-white/5">
         <% @meses.each do |m| %>
-          <tr class="<%= "bg-indigo-50/60 dark:bg-indigo-400/5" if m[:mes] == @mes_referencia %>">
+          <% editar = editar_fechamento_mensal_path(ano: @ano, mes: m[:mes]) %>
+          <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if m[:mes] == @mes_referencia %>"
+              data-controller="row-link" data-row-link-url-value="<%= editar %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-white"><%= nome_mes(m[:mes]).capitalize %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= number_to_currency(m[:previsto]) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(m[:recebido]) %></td>
             <td class="whitespace-nowrap px-4 py-3 text-right text-xs">
               <%= m[:mes] > 1 ? variacao_mensal(m[:recebido], m[:anterior], nome_mes(m[:mes] - 1, abreviado: true)) : "—" %>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= m[:energia_solar] ? valor_lancado(m[:energia_solar], sinal: "+") : "—" %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %></td>
+            <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
+              <%= link_to icon(:pencil, css_class: "size-4"), editar, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar custos de #{nome_mes(m[:mes])}" %>
             </td>
           </tr>
         <% end %>
@@ -108,6 +126,11 @@
           <td class="px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Total <%= @ano %></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@total_previsto) %></td>
           <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@total_recebido) %></td>
+          <td></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:despesas_gerais], sinal: "−") %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@totais[:agua_esgoto], sinal: "−") %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= @totais[:energia_solar].positive? ? valor_lancado(@totais[:energia_solar], sinal: "+") : "—" %></td>
+          <td class="px-4 py-3 text-right text-sm font-semibold tabular-nums <%= @totais[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(@totais[:resultado]) %></td>
           <td></td>
         </tr>
       </tfoot>

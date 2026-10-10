@@ -32,6 +32,11 @@ module FinancasHelper
     end
   end
 
+  # Custos e créditos do mês: "— " quando zerado, senão "− R$ 120,00".
+  def valor_lancado(valor, sinal:)
+    valor.to_d.zero? ? "—" : "#{sinal} #{number_to_currency(valor)}"
+  end
+
   def nome_mes(mes, abreviado: false)
     I18n.t(abreviado ? "date.abbr_month_names" : "date.month_names")[mes]
   end

@@ -20,6 +20,10 @@ pt-BR:
         password_confirmation: Confirmação da senha
         current_password: Senha atual
         remember_me: Lembrar de mim
+      fechamento_mensal:
+        despesas_gerais: Despesas gerais
+        agua_esgoto: Água e esgoto
+        energia_solar: Energia solar
       pagamento:
         data_vencimento: Data de vencimento
         data_pagamento: Data do pagamento
