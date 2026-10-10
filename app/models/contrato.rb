@@ -13,6 +13,7 @@ class Contrato < ApplicationRecord
   validates :valor_aluguel, numericality: { greater_than: 0 }
   validates :dia_pagamento, presence: true, inclusion: { in: 1..31 }
   validate :pelo_menos_um_fiador
+  validate :unidade_sem_outro_contrato_ativo, if: :ativo?
 
   before_validation :calcular_data_fim
 
@@ -54,6 +55,14 @@ class Contrato < ApplicationRecord
 
   def pelo_menos_um_fiador
     errors.add(:fiadores, "deve ter pelo menos um fiador") if fiadores.empty?
+  end
+
+  # Uma kitnet só pode ter um contrato ativo por vez.
+  def unidade_sem_outro_contrato_ativo
+    return unless unidade
+
+    outro = unidade.contratos.ativo.where.not(id: id).includes(:morador).first
+    errors.add(:unidade, "#{unidade.nome} já tem um contrato ativo (#{outro.morador.nome})") if outro
   end
 
   # A unidade fica ocupada enquanto tiver algum contrato ativo, e volta a

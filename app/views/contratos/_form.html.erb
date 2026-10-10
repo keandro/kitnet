@@ -10,7 +10,8 @@
 
       <div>
         <%= form.label :unidade_id, "Unidade", class: label_classes %>
-        <%= form.collection_select :unidade_id, Unidade.order(:nome), :id, :nome, { prompt: "Selecione a unidade" }, class: field_classes(contrato, :unidade_id) %>
+        <%= form.select :unidade_id, unidade_options_for_contrato(contrato), { prompt: "Selecione a unidade" }, class: field_classes(contrato, :unidade) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Kitnets com contrato ativo não podem receber outro.</p>
       </div>
 
       <div class="sm:col-span-2">

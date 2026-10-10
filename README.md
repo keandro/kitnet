@@ -146,6 +146,7 @@ classDiagram
   - mudar o **valor do aluguel** atualiza as ordens futuras em aberto que ainda têm o valor antigo (as editadas à mão, com juros, ficam como estão);
   - **encerrar ou cancelar** remove as ordens futuras em aberto; as vencidas continuam como dívida.
 - **Excluir um contrato** exclui todas as suas ordens de pagamento.
+- **Uma kitnet só pode ter um contrato ativo por vez.** Para criar (ou reativar) um contrato numa kitnet ocupada, encerre ou cancele antes o contrato atual. No formulário, as kitnets ocupadas aparecem desabilitadas.
 - **Status da unidade** é sincronizado automaticamente com os contratos: fica `ocupada` quando há contrato ativo e volta a `livre` quando o último contrato ativo é encerrado, cancelado ou excluído. Unidades em `manutencao` não são alteradas automaticamente.
 - **Pagamento** é `pago` quando tem data de pagamento, `vencido` quando passou do vencimento sem pagamento e `pendente` nos demais casos. A data de pagamento não pode ser futura.
 - **Pessoa** tem CPF único com 11 dígitos (a máscara é removida automaticamente) e é classificada como `morador`, `fiador`, `ambos` ou `sem_contrato_ativo`.
