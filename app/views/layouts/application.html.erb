@@ -25,7 +25,6 @@
   </head>
 
   <body class="h-full bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100">
-    <% if usuario_signed_in? %>
       <div class="flex h-full" data-controller="sidebar">
         <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-20 hidden bg-slate-900/30 lg:hidden"></div>
 
@@ -43,15 +42,6 @@
             <%= sidebar_nav_link "Kitnets", unidades_path, :grid %>
           </nav>
 
-          <div class="border-t border-slate-200 p-4 dark:border-white/10">
-            <p class="truncate text-sm font-medium text-slate-700 dark:text-slate-200"><%= current_usuario.email %></p>
-            <%= link_to edit_conta_path, class: "mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white" do %>
-              <%= icon :identification, css_class: "size-4" %> Minha conta
-            <% end %>
-            <%= button_to destroy_usuario_session_path, method: :delete, class: "mt-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white" do %>
-              <%= icon :logout, css_class: "size-4" %> Sair
-            <% end %>
-          </div>
         </aside>
 
         <div class="flex min-w-0 flex-1 flex-col">
@@ -80,18 +70,5 @@
           </main>
         </div>
       </div>
-    <% else %>
-      <main class="flex min-h-full items-center justify-center px-4 py-12">
-        <div class="w-full max-w-sm">
-          <% if notice.present? %>
-            <div class="mb-6 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20"><%= notice %></div>
-          <% end %>
-          <% if alert.present? %>
-            <div class="mb-6 rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 ring-1 ring-inset ring-rose-600/20"><%= alert %></div>
-          <% end %>
-          <%= yield %>
-        </div>
-      </main>
-    <% end %>
   </body>
 </html>

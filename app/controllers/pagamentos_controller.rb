@@ -9,8 +9,8 @@ class PagamentosController < ApplicationController
     raise ActionController::RoutingError, "Mês inválido" unless ano.between?(2000, 2100) && mes.between?(1, 12)
 
     @mes = Date.new(ano, mes)
-    @unidades = policy_scope(Unidade).do_mes(@mes).order(:nome)
-    @pagamentos = policy_scope(Pagamento).do_mes(@mes).includes(:unidade).order(:data_pagamento, :id)
+    @unidades = Unidade.do_mes(@mes).order(:nome)
+    @pagamentos = Pagamento.do_mes(@mes).includes(:unidade).order(:data_pagamento, :id)
     @por_unidade = @pagamentos.group_by(&:unidade_id)
   end
 
@@ -19,7 +19,6 @@ class PagamentosController < ApplicationController
     unidade = Unidade.find_by(id: params[:unidade_id])
     data = Date.parse(params[:data].to_s) rescue nil
     @pagamento = Pagamento.new(unidade: unidade, valor: unidade&.valor_base, data_pagamento: [ data || Date.current, Date.current ].min)
-    authorize @pagamento
   end
 
   # GET /pagamentos/1/edit
@@ -29,7 +28,6 @@ class PagamentosController < ApplicationController
   # POST /pagamentos
   def create
     @pagamento = Pagamento.new(pagamento_params)
-    authorize @pagamento
 
     if @pagamento.save
       redirect_to mes_do(@pagamento), notice: "Pagamento da kitnet #{@pagamento.unidade.nome} registrado.", status: :see_other
@@ -56,8 +54,7 @@ class PagamentosController < ApplicationController
   private
     def set_pagamento
       @pagamento = Pagamento.find(params.expect(:id))
-      authorize @pagamento
-    end
+      end
 
     def pagamento_params
       params.expect(pagamento: [ :unidade_id, :valor, :data_pagamento, :observacoes ])

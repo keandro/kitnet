@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  devise_for :usuarios
-  resource :conta, only: %i[edit update], controller: "contas"
-
   resources :unidades, path: "kitnets", only: %i[index show edit update]
   resources :pagamentos, except: %i[index show]
   get "financas", to: "financas#index", as: :financas

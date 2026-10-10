@@ -7,7 +7,7 @@ class UnidadesController < ApplicationController
 
   # GET /kitnets
   def index
-    unidades = policy_scope(Unidade).order(:nome)
+    unidades = Unidade.order(:nome)
     @grupos = unidades.reject(&:descontinuada?).group_by { |unidade| andar_label(unidade.nome.to_s[0]) }
     descontinuadas = unidades.select(&:descontinuada?)
     @grupos["Descontinuadas"] = descontinuadas if descontinuadas.any?
@@ -35,7 +35,6 @@ class UnidadesController < ApplicationController
   private
     def set_unidade
       @unidade = Unidade.find(params.expect(:id))
-      authorize @unidade
     end
 
     def unidade_params

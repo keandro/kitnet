@@ -26,8 +26,6 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 - **Finanças**: visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
-- **Autenticação** de usuários (Devise) e **autorização** por políticas (Pundit), sem cadastro público
-- **Minha conta**: troca de e-mail e senha pelo próprio usuário, com login lembrado por 1 ano
 - Interface responsiva com modo escuro
 
 ## Tecnologias
@@ -39,8 +37,6 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 | Banco de dados | SQLite                                      |
 | Frontend       | Hotwire (Turbo + Stimulus), Importmap       |
 | Estilo         | Tailwind CSS                                |
-| Autenticação   | Devise (+ devise-i18n)                      |
-| Autorização    | Pundit                                      |
 | Infra Rails    | Solid Queue, Solid Cache, Solid Cable       |
 | Deploy         | Kamal + Thruster (Docker)                   |
 
@@ -63,15 +59,6 @@ classDiagram
         +decimal valor
         +date data_pagamento
         +text observacoes
-    }
-
-    class Usuario {
-        +bigint id
-        +string email
-        +string encrypted_password
-        +string reset_password_token
-        +datetime reset_password_sent_at
-        +datetime remember_created_at
     }
 
     class FechamentoMensal {
@@ -120,7 +107,7 @@ classDiagram
     Unidade "1" --> "0..*" LeituraEnergia : medidor
 ```
 
-> Todas as tabelas também possuem `created_at` e `updated_at`. `Usuario` é independente das demais entidades e serve apenas para autenticação. `FechamentoMensal` guarda os custos lançados em cada mês da página Finanças, e `ContaEnergia` e `EnergiaSolarMensal` os valores de energia; todos têm um registro por ano e mês.
+> Todas as tabelas também possuem `created_at` e `updated_at`. `FechamentoMensal` guarda os custos lançados em cada mês da página Finanças, e `ContaEnergia` e `EnergiaSolarMensal` os valores de energia; todos têm um registro por ano e mês.
 
 ## Regras de negócio
 
@@ -156,23 +143,10 @@ bin/setup --skip-server
 
 ### Dados iniciais
 
-O seed cria as 12 kitnets (`001`–`004`, `101`–`104`, `201`–`204`) e a Antiga casa e, se o banco ainda não tiver nenhum usuário, o administrador:
+O seed cria as 12 kitnets (`001`–`004`, `101`–`104`, `201`–`204`) e a Antiga casa:
 
 ```bash
 bin/rails db:seed
-```
-
-| Variável         | Padrão               |
-| ---------------- | -------------------- |
-| `ADMIN_EMAIL`    | `admin@kitnet.local` |
-| `ADMIN_PASSWORD` | `senha123456`        |
-
-> Troque a senha padrão logo no primeiro acesso, em **Minha conta** (`/conta/edit`).
-
-Não existe cadastro público. Para criar outro usuário, use o console:
-
-```bash
-bin/rails runner 'Usuario.create!(email: "outro@exemplo.com", password: "uma-senha-forte")'
 ```
 
 ## Uso
@@ -183,7 +157,7 @@ Inicie o servidor de desenvolvimento (Rails + watcher do Tailwind):
 bin/dev
 ```
 
-Acesse <http://localhost:3000> e entre com o usuário administrador.
+Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal na rede de casa, e qualquer aparelho na mesma rede consegue abri-lo.
 
 | Rota             | Descrição                         |
 | ---------------- | --------------------------------- |
@@ -192,7 +166,6 @@ Acesse <http://localhost:3000> e entre com o usuário administrador.
 | `/financas`      | Finanças por ano                  |
 | `/energia`       | Conta de energia e medidores      |
 | `/energia-solar` | Lucro da energia solar            |
-| `/conta/edit`    | Minha conta (e-mail e senha)      |
 | `/up`            | Health check                      |
 
 ## Qualidade e segurança
