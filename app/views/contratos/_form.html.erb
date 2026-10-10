@@ -1,7 +1,7 @@
 <div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
   <%= render "shared/error_summary", object: contrato %>
 
-  <%= form_with(model: contrato, html: { autocomplete: "off" }) do |form| %>
+  <%= form_with(model: contrato, html: { autocomplete: "off" }, data: (contrato.new_record? ? { controller: "contrato-form" } : {})) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :morador_id, "Morador", class: label_classes %>
@@ -10,7 +10,7 @@
 
       <div>
         <%= form.label :unidade_id, "Unidade", class: label_classes %>
-        <%= form.select :unidade_id, unidade_options_for_contrato(contrato), { prompt: "Selecione a unidade" }, class: field_classes(contrato, :unidade) %>
+        <%= form.select :unidade_id, unidade_options_for_contrato(contrato), { prompt: "Selecione a unidade" }, class: field_classes(contrato, :unidade), data: { contrato_form_target: "unidade", action: "contrato-form#preencherAluguel" } %>
         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Kitnets com contrato ativo não podem receber outro.</p>
       </div>
 
@@ -47,7 +47,7 @@
 
       <div>
         <%= form.label :valor_aluguel, class: label_classes %>
-        <%= money_field form, :valor_aluguel %>
+        <%= money_field form, :valor_aluguel, data: { contrato_form_target: "aluguel" } %>
       </div>
 
       <div>

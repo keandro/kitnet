@@ -88,16 +88,21 @@ module ApplicationHelper
 
   # Campo de dinheiro com "R$" à frente; o money_controller formata enquanto
   # digita (1.234,56) e o model converte de volta com ValorMonetario.
-  def money_field(form, attribute)
+  def money_field(form, attribute, data: {})
     valor = form.object.public_send(attribute)
-    valor = number_with_precision(valor, precision: 2, delimiter: ".", separator: ",") if valor.is_a?(Numeric)
+    valor = format_money(valor) if valor.is_a?(Numeric)
 
     tag.div(class: "relative") do
       tag.span("R$", class: "pointer-events-none absolute inset-y-0 left-3 mt-1 flex items-center text-sm text-slate-500 dark:text-slate-400") +
         form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: "0,00",
                         class: "#{field_classes(form.object, attribute)} pl-10",
-                        data: { controller: "money", action: "input->money#format" })
+                        data: { controller: "money", action: "input->money#format" }.merge(data))
     end
+  end
+
+  # 1234.5 -> "1.234,50" (sem o "R$"), o formato do money_field.
+  def format_money(valor)
+    number_with_precision(valor, precision: 2, delimiter: ".", separator: ",")
   end
 
   def sidebar_nav_link(label, path, icon_name)
