@@ -1,7 +1,7 @@
 <div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
   <%= render "shared/error_summary", object: unidade %>
 
-  <%= form_with(model: unidade) do |form| %>
+  <%= form_with(model: unidade, html: { autocomplete: "off" }) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div class="sm:col-span-2">
         <%= form.label :nome, class: label_classes %>
@@ -15,7 +15,7 @@
 
       <div>
         <%= form.label :valor_base, class: label_classes %>
-        <%= form.text_field :valor_base, class: field_classes(unidade, :valor_base) %>
+        <%= money_field form, :valor_base %>
       </div>
 
       <div>

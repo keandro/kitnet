@@ -1,4 +1,7 @@
 class Contrato < ApplicationRecord
+  include ValorMonetario
+  valor_monetario :valor_aluguel
+
   enum :status, { ativo: 0, encerrado: 1, cancelado: 2 }
 
   belongs_to :morador, class_name: "Pessoa"

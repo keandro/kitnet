@@ -1,4 +1,7 @@
 class Unidade < ApplicationRecord
+  include ValorMonetario
+  valor_monetario :valor_base
+
   enum :status, { livre: 0, ocupada: 1, manutencao: 2 }
 
   has_many :contratos, dependent: :restrict_with_error

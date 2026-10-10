@@ -1,4 +1,7 @@
 class Pagamento < ApplicationRecord
+  include ValorMonetario
+  valor_monetario :valor
+
   belongs_to :contrato
 
   validates :valor, numericality: { greater_than: 0 }

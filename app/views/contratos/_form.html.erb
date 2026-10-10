@@ -1,7 +1,7 @@
 <div class="rounded-xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-800/40">
   <%= render "shared/error_summary", object: contrato %>
 
-  <%= form_with(model: contrato) do |form| %>
+  <%= form_with(model: contrato, html: { autocomplete: "off" }) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :morador_id, "Morador", class: label_classes %>
@@ -39,7 +39,7 @@
 
       <div>
         <%= form.label :valor_aluguel, class: label_classes %>
-        <%= form.text_field :valor_aluguel, class: field_classes(contrato, :valor_aluguel) %>
+        <%= money_field form, :valor_aluguel %>
       </div>
 
       <div>
