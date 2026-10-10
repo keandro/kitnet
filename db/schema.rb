@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_011626) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_012159) do
   create_table "contrato_fiadores", force: :cascade do |t|
     t.integer "contrato_id", null: false
     t.integer "pessoa_id", null: false
@@ -59,7 +59,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_011626) do
 
   create_table "unidades", force: :cascade do |t|
     t.string "nome"
-    t.string "endereco"
     t.decimal "valor_base"
     t.integer "status"
     t.datetime "created_at", null: false

@@ -8,11 +8,6 @@
         <%= form.text_field :nome, class: field_classes(unidade, :nome) %>
       </div>
 
-      <div class="sm:col-span-2">
-        <%= form.label :endereco, class: label_classes %>
-        <%= form.text_field :endereco, class: field_classes(unidade, :endereco) %>
-      </div>
-
       <div>
         <%= form.label :valor_base, class: label_classes %>
         <%= money_field form, :valor_base %>

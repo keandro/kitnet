@@ -54,7 +54,6 @@ classDiagram
     class Unidade {
         +bigint id
         +string nome
-        +string endereco
         +decimal valor_base
         +enum status
         +contrato_ativo()

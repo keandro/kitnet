@@ -11,10 +11,6 @@
 
   <dl class="grid grid-cols-1 gap-x-6 gap-y-5 p-6 sm:grid-cols-2">
     <div>
-      <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Endereço</dt>
-      <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= unidade.endereco.presence || "—" %></dd>
-    </div>
-    <div>
       <dt class="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor base</dt>
       <dd class="mt-1 text-sm text-slate-900 dark:text-white"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "—" %></dd>
     </div>

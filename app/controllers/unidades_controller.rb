@@ -68,6 +68,6 @@ class UnidadesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def unidade_params
-      params.expect(unidade: [ :nome, :endereco, :valor_base, :status ])
+      params.expect(unidade: [ :nome, :valor_base, :status ])
     end
 end

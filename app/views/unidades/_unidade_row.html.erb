@@ -2,7 +2,6 @@
   <td class="whitespace-nowrap px-4 py-3">
     <%= link_to unidade.nome, unidade, class: "font-medium text-slate-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400" %>
   </td>
-  <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= unidade.endereco.presence || "—" %></td>
   <td class="whitespace-nowrap px-4 py-3 text-sm text-slate-500 dark:text-slate-400"><%= number_to_currency(unidade.valor_base) if unidade.valor_base %></td>
   <td class="whitespace-nowrap px-4 py-3"><%= unidade_status_badge(unidade.status) %></td>
   <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
