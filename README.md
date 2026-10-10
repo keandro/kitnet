@@ -173,10 +173,38 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 
 A pasta `android/` tem um app Android (WebView) que abre o sistema com o mesmo layout do navegador do celular, em tela cheia, com ícone próprio. Ele não guarda dados: só funciona com o servidor rodando no computador e o celular no mesmo Wi-Fi.
 
-- **Endereço do servidor:** começa em `http://192.168.18.204:3000`. Se o servidor não responder, o app mostra uma tela para corrigir o endereço, que fica salvo no celular.
-- **Gerar o APK:** o workflow `.github/workflows/android.yml` compila e assina o APK a cada push que mexe em `android/` (ou manualmente, em *Actions → Android APK → Run workflow*). O APK fica nos artifacts da execução (`lf-kitnets-apk`).
+### Como baixar o APK
+
+O APK é gerado pelo GitHub Actions e fica disponível por 30 dias em cada execução.
+
+**Pelo site do GitHub** (precisa estar logado):
+
+1. Abra a aba [**Actions**](https://github.com/keandro/kitnet/actions/workflows/android.yml) do repositório, no workflow **Android APK**.
+2. Clique na execução mais recente com ✓ verde.
+3. No fim da página, em **Artifacts**, baixe **lf-kitnets-apk**. Vem um `.zip`; dentro dele está o `app-release.apk`.
+
+**Pelo terminal**, com o [GitHub CLI](https://cli.github.com/):
+
+```bash
+gh run download -R keandro/kitnet -n lf-kitnets-apk -D ~/Downloads/lf-kitnets-apk
+```
+
+Se a última execução já passou dos 30 dias, gere um APK novo em *Actions → Android APK → Run workflow*.
+
+### Como instalar no celular
+
+1. Passe o `app-release.apk` para o celular (cabo USB, Google Drive, WhatsApp para você mesmo…).
+2. Toque no arquivo no celular. O Android pede para permitir **instalar apps desconhecidos** a partir do app que abriu o arquivo; permita.
+3. Confirme a instalação. O app **LF Kitnets** aparece com o ícone da casinha.
+
+Para atualizar, instale o APK novo por cima: o endereço do servidor salvo continua.
+
+### Como funciona
+
+- **Endereço do servidor:** começa em `http://192.168.18.204:3000`. Se o servidor não responder (computador desligado, celular fora do Wi-Fi de casa ou IP do computador mudou), o app mostra uma tela para corrigir o endereço, que fica salvo no celular. Fixe o IP do computador no roteador para não precisar mudar.
+- **Navegação:** o botão voltar do Android volta de página, puxar para baixo no topo da página atualiza e o modo claro/escuro segue o celular.
+- **Gerar o APK:** o workflow `.github/workflows/android.yml` compila e assina o APK a cada push que mexe em `android/`, ou manualmente em *Actions → Android APK → Run workflow*.
 - **Assinatura:** a chave fica fora do repositório (`~/.config/lf-kitnets/`) e no GitHub como os segredos `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. Guarde uma cópia dela: sem a mesma chave, o celular não aceita atualizar o app (seria preciso desinstalar e instalar de novo).
-- **Instalar:** copie o `.apk` para o celular e permita "instalar apps desconhecidos".
 
 ## Qualidade e segurança
 
