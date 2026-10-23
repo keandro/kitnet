@@ -40,7 +40,6 @@ class ContratoPdf
     end
 
     assinaturas pdf
-    rodape pdf
     pdf.render
   end
 
@@ -98,7 +97,7 @@ class ContratoPdf
   end
 
   def assinaturas(pdf)
-    data = "_____ de ______________ de ________"
+    data = I18n.l(Date.current, format: "%d de %B de %Y")
     pessoas = [ [ "LOCADOR", @cfg.locador_nome ], [ "LOCATÁRIO", @c.inquilino ] ]
     pessoas << [ "FIADOR", @c.fiador ] if com_fiador?
 
@@ -120,14 +119,5 @@ class ContratoPdf
       pdf.move_down 24
       pdf.text "#{n}. ________________________________________   CPF: ____________________"
     end
-  end
-
-  def rodape(pdf)
-    pdf.repeat(:all) do
-      pdf.bounding_box([ 0, -18 ], width: pdf.bounds.width, height: 20) do
-        pdf.font_size(9) { pdf.text "Rubricas: ______  ______  ______", align: :right, color: "666666" }
-      end
-    end
-    pdf.number_pages "Página <page> de <total>", at: [ 0, -20 ], size: 9, color: "666666"
   end
 end
