@@ -1,5 +1,5 @@
 class EnergiaController < ApplicationController
-  before_action :set_conta, except: :pagar
+  before_action :set_conta, except: %i[ pagar desfazer_pagamento ]
 
   # GET /energia?ano=2026&mes=10
   def index
@@ -63,6 +63,14 @@ class EnergiaController < ApplicationController
     leitura.update!(data_pagamento: Date.current)
     redirect_to energia_path(ano: leitura.conta_energia.ano, mes: leitura.conta_energia.mes),
                 notice: "Energia da kitnet #{leitura.unidade.nome} marcada como paga.", status: :see_other
+  end
+
+  # PATCH /energia/leituras/1/desfazer-pagamento — para quando marcou "Pago" por engano.
+  def desfazer_pagamento
+    leitura = LeituraEnergia.find(params[:id])
+    leitura.update!(data_pagamento: nil)
+    redirect_to energia_path(ano: leitura.conta_energia.ano, mes: leitura.conta_energia.mes),
+                notice: "Pagamento da energia da kitnet #{leitura.unidade.nome} desfeito; ela voltou para em aberto.", status: :see_other
   end
 
   private
