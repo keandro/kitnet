@@ -51,6 +51,27 @@
       </div>
 
       <div class="sm:col-span-2">
+        <%= form.label :arquivo_pdf, "Contrato em PDF", class: label_classes %>
+        <% if (doc = contrato.documento_info) %>
+          <div class="mt-1.5 flex flex-wrap items-center gap-3 rounded-lg bg-slate-50 px-3 py-2.5 ring-1 ring-slate-200 ring-inset dark:bg-white/5 dark:ring-white/10">
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-600 dark:bg-rose-400/10 dark:text-rose-400"><%= icon :document, css_class: "size-5" %></span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-medium text-slate-900 dark:text-white"><%= doc.nome %></p>
+              <p class="text-xs text-slate-500 dark:text-slate-400"><%= number_to_human_size(doc.tamanho) %> · enviado em <%= l(doc.updated_at.to_date) %></p>
+            </div>
+            <%= link_to "Ver", pdf_contrato_path(contrato), target: "_blank", rel: "noopener", data: { turbo: false }, class: "btn btn-secondary px-3 py-1.5 text-xs" %>
+            <label class="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
+              <%= form.check_box :remover_pdf, class: "rounded border-slate-300 text-rose-600 focus:ring-rose-500" %> remover
+            </label>
+          </div>
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Para trocar, escolha outro arquivo:</p>
+        <% end %>
+        <%= form.file_field :arquivo_pdf, accept: "application/pdf,.pdf",
+              class: "mt-1.5 block w-full min-w-0 rounded-lg bg-white text-sm text-slate-700 ring-1 ring-inset #{contrato.errors[:arquivo_pdf].any? ? "ring-rose-400" : "ring-slate-300 dark:ring-white/10"} file:mr-3 file:cursor-pointer file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 dark:bg-white/5 dark:text-slate-300 dark:file:bg-white/10 dark:file:text-slate-200" %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">PDF de até <%= ContratoDocumento::TAMANHO_MAXIMO / 1.megabyte %> MB. Se o formulário voltar com erro, escolha o arquivo de novo.</p>
+      </div>
+
+      <div class="sm:col-span-2">
         <%= form.label :observacoes, class: label_classes %>
         <%= form.text_area :observacoes, rows: 3, class: field_classes(contrato, :observacoes) %>
       </div>

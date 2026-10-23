@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.webkit.JavascriptInterface
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -14,6 +15,7 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -35,6 +37,13 @@ class MainActivity : AppCompatActivity() {
     @Volatile private var conteudoRolado = false
 
     private val preferencias by lazy { getSharedPreferences("config", MODE_PRIVATE) }
+
+    // <input type="file"> do site (PDF do contrato, importar backup).
+    private var arquivosEscolhidos: ValueCallback<Array<Uri>>? = null
+    private val escolherArquivo = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { resultado ->
+        arquivosEscolhidos?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultado.resultCode, resultado.data))
+        arquivosEscolhidos = null
+    }
 
     private var endereco: String
         get() = preferencias.getString("endereco", null) ?: getString(R.string.endereco_padrao)
@@ -60,8 +69,10 @@ class MainActivity : AppCompatActivity() {
         web.settings.javaScriptEnabled = true
         web.settings.domStorageEnabled = true
         web.addJavascriptInterface(Ponte(), "LFKitnets")
-        web.webChromeClient = WebChromeClient() // mostra os confirm() do site ("Tem certeza?")
+        web.webChromeClient = Janelas()
         web.webViewClient = Navegacao()
+        // A WebView não baixa arquivos (backup) nem mostra PDF: entrega ao navegador do celular.
+        web.setDownloadListener { url, _, _, _, _ -> abrirFora(Uri.parse(url)) }
 
         atualizar.setColorSchemeResources(R.color.indigo)
         atualizar.setOnChildScrollUpCallback { _, _ -> conteudoRolado || web.canScrollVertically(-1) }
@@ -98,12 +109,36 @@ class MainActivity : AppCompatActivity() {
         erro.visibility = View.VISIBLE
     }
 
+    private fun abrirFora(destino: Uri) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, destino))
+        } catch (e: android.content.ActivityNotFoundException) {
+            android.widget.Toast.makeText(this, "Nenhum app para abrir este link.", android.widget.Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Mostra os confirm() do site ("Tem certeza?") e o seletor de arquivos.
+    private inner class Janelas : WebChromeClient() {
+        override fun onShowFileChooser(view: WebView, callback: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {
+            arquivosEscolhidos?.onReceiveValue(null)
+            arquivosEscolhidos = callback
+            return try {
+                escolherArquivo.launch(params.createIntent())
+                true
+            } catch (e: android.content.ActivityNotFoundException) {
+                arquivosEscolhidos = null
+                false
+            }
+        }
+    }
+
     private inner class Navegacao : WebViewClient() {
-        // Páginas do próprio sistema abrem no app; links de fora, no navegador.
+        // Páginas do próprio sistema abrem no app; links de fora e PDFs, em outro app.
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val destino = request.url
-            if (destino.host == Uri.parse(endereco).host) return false
-            startActivity(Intent(Intent.ACTION_VIEW, destino))
+            val doSistema = destino.host == Uri.parse(endereco).host
+            if (doSistema && destino.path?.endsWith(".pdf") != true) return false
+            abrirFora(destino)
             return true
         }
 

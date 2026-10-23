@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_200825) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_201818) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -19,6 +19,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_200825) do
     t.datetime "updated_at", null: false
     t.decimal "valor_kwh", precision: 12, scale: 6
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
+  end
+
+  create_table "contrato_documentos", force: :cascade do |t|
+    t.integer "contrato_id", null: false
+    t.string "nome", null: false
+    t.integer "tamanho", null: false
+    t.binary "dados", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contrato_id"], name: "index_contrato_documentos_on_contrato_id", unique: true
   end
 
   create_table "contratos", force: :cascade do |t|
@@ -90,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_200825) do
     t.boolean "descontinuada", default: false, null: false
   end
 
+  add_foreign_key "contrato_documentos", "contratos"
   add_foreign_key "contratos", "unidades"
   add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
   add_foreign_key "leituras_energia", "unidades"

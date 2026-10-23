@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :contratos, except: %i[show] do
     patch :finalizar, on: :member
   end
+  get "contratos/:id/contrato.pdf", to: "contratos#pdf", as: :pdf_contrato, format: false
   get "ocupacao", to: "ocupacao#index", as: :ocupacao
   get "mais", to: "mais#index", as: :mais
   get "financas", to: "financas#index", as: :financas

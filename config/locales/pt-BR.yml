@@ -30,6 +30,7 @@ pt-BR:
         data_inicio: Início
         status: Situação
         observacoes: Observações
+        arquivo_pdf: PDF do contrato
       pagamento:
         unidade: Kitnet
         valor: Valor

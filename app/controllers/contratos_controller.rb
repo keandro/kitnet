@@ -1,6 +1,6 @@
 # Contratos de aluguel. Ficam separados dos pagamentos: não geram cobranças.
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: %i[ edit update destroy finalizar ]
+  before_action :set_contrato, only: %i[ edit update destroy finalizar pdf ]
 
   # GET /contratos?situacao=ativo|finalizado|todos
   def index
@@ -8,6 +8,15 @@ class ContratosController < ApplicationController
     escopo = Contrato.includes(:unidade).recentes
     @contratos = @situacao == "todos" ? escopo : escopo.where(status: @situacao)
     @totais = Contrato.group(:status).count
+    @com_pdf = ContratoDocumento.pluck(:contrato_id).to_set
+  end
+
+  # GET /contratos/1/contrato.pdf — abre o PDF no navegador.
+  def pdf
+    documento = @contrato.documento
+    return head(:not_found) unless documento
+
+    send_data documento.dados, filename: documento.nome, type: "application/pdf", disposition: "inline"
   end
 
   # GET /contratos/new?unidade_id=1
@@ -57,6 +66,6 @@ class ContratosController < ApplicationController
     end
 
     def contrato_params
-      params.expect(contrato: [ :unidade_id, :inquilino, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes ])
+      params.expect(contrato: [ :unidade_id, :inquilino, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf ])
     end
 end

@@ -5,7 +5,7 @@ module BancoBackup
   MANTER_AUTOMATICOS = 15
   CABECALHO_SQLITE = "SQLite format 3\x00".b
   TABELAS_OBRIGATORIAS = %w[schema_migrations unidades pagamentos].freeze
-  TAMANHO_MAXIMO = 50.megabytes
+  TAMANHO_MAXIMO = 500.megabytes # os PDFs dos contratos ficam dentro do banco
 
   class ArquivoInvalido < StandardError; end
 
@@ -58,6 +58,7 @@ module BancoBackup
       "kitnets" => Unidade.count,
       "pagamentos" => Pagamento.count,
       "contratos" => Contrato.count,
+      "PDFs de contrato" => ContratoDocumento.count,
       "contas de energia" => ContaEnergia.count,
       "leituras" => LeituraEnergia.count,
       "meses de energia solar" => EnergiaSolarMensal.count,

@@ -23,7 +23,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 ## Funcionalidades
 
 - **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
-- **Contratos**: quem aluga cada kitnet — inquilino, fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional) e situação `ativo` ou `finalizado`. Independentes dos pagamentos: não geram cobranças
+- **Contratos**: quem aluga cada kitnet — inquilino, fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado` e o contrato em PDF (opcional, até 20 MB). Independentes dos pagamentos: não geram cobranças
 - **Ocupação**: as kitnets ocupadas (com inquilino, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
@@ -67,6 +67,14 @@ classDiagram
         +date data_inicio
         +enum status
         +data_fim()
+    }
+
+    class ContratoDocumento {
+        +bigint id
+        +bigint contrato_id
+        +string nome
+        +integer tamanho
+        +binary dados
     }
 
     class Pagamento {
@@ -120,6 +128,7 @@ classDiagram
 
     Unidade "1" --> "0..*" Pagamento : recebe
     Unidade "1" --> "0..*" Contrato : alugada em
+    Contrato "1" --> "0..1" ContratoDocumento : PDF
     ContaEnergia "1" --> "0..*" LeituraEnergia : rateia
     Unidade "1" --> "0..*" LeituraEnergia : medidor
 ```
@@ -129,7 +138,7 @@ classDiagram
 ## Regras de negócio
 
 - **Kitnets são fixas**: as 12 (`001`–`004`, `101`–`104`, `201`–`204`) e a **Antiga casa** vêm do seed; no app só se altera o valor base. A Antiga casa é `descontinuada`: não é mais alugada, aceita pagamentos com datas do passado, aparece separada no quadro e some das telas mensais depois do mês do último pagamento.
-- **Contrato** exige inquilino, kitnet, valor maior que zero, duração de 1 a 120 meses e dia de vencimento de 1 a 31; fiador e início são opcionais (com início, o fim é calculado). **Cada kitnet só pode ter um contrato ativo**; finalizar o contrato deixa a kitnet livre na Ocupação. Contratos não criam nem alteram pagamentos.
+- **Contrato** exige inquilino, kitnet, valor maior que zero, duração de 1 a 120 meses e dia de vencimento de 1 a 31; fiador e início são opcionais (com início, o fim é calculado). **Cada kitnet só pode ter um contrato ativo**; finalizar o contrato deixa a kitnet livre na Ocupação. Contratos não criam nem alteram pagamentos. O PDF do contrato fica guardado no próprio banco (`ContratoDocumento`), então entra no backup; só são aceitos arquivos que realmente são PDF.
 - **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e pode ser ajustado.
 - **Pagamentos do mês**: uma kitnet conta como paga no mês se tiver ao menos um pagamento com data naquele mês; "faltam pagar" lista as kitnets **com valor base** sem pagamento (kitnet sem valor base não é cobrada).
 - **Energia**: a tarifa do kWh é digitada (sem o desconto da energia solar) e o valor total da conta = kWh total × tarifa; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
@@ -223,6 +232,7 @@ Para atualizar, instale o APK novo por cima: o endereço do servidor salvo conti
 ### Como funciona
 
 - **Endereço do servidor:** começa em `http://192.168.18.204:3000`. Se o servidor não responder (computador desligado, celular fora do Wi-Fi de casa ou IP do computador mudou), o app mostra uma tela para corrigir o endereço, que fica salvo no celular. Fixe o IP do computador no roteador para não precisar mudar.
+- **Arquivos:** o botão de escolher arquivo abre o seletor do Android (PDF do contrato, importar backup); PDFs e backups baixados abrem no leitor de PDF ou no navegador do celular.
 - **Navegação:** o botão voltar do Android volta de página, puxar para baixo no topo da página atualiza e o modo claro/escuro segue o celular.
 - **Gerar o APK:** o workflow `.github/workflows/android.yml` compila e assina o APK a cada push que mexe em `android/`, ou manualmente em *Actions → Android APK → Run workflow*.
 - **Assinatura:** a chave fica fora do repositório (`~/.config/lf-kitnets/`) e no GitHub como os segredos `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. Guarde uma cópia dela: sem a mesma chave, o celular não aceita atualizar o app (seria preciso desinstalar e instalar de novo).
@@ -242,7 +252,7 @@ Esses mesmos passos rodam no GitHub Actions a cada push na `main` e em pull requ
 
 Todos os dados ficam num único arquivo SQLite (`storage/development.sqlite3`). A página **Backup** (`/backup`) cuida das cópias:
 
-- **Exportar:** baixa uma cópia completa e consistente do banco, feita com o app rodando. Guarde num pendrive ou na nuvem.
+- **Exportar:** baixa uma cópia completa e consistente do banco, incluindo os PDFs dos contratos, feita com o app rodando. Guarde num pendrive ou na nuvem.
 - **Importar:** restaura um backup exportado antes e **substitui todos os dados atuais**. Antes de trocar, o sistema guarda uma cópia do banco atual (`antes-importacao-…`). Só aceita bancos do LF Kitnets; backups de versões anteriores do app são atualizados (as migrações que faltam rodam na importação).
 - **Cópias guardadas no computador:** ficam em `storage/backups/` (fora do git). Um backup automático (`auto-AAAA-MM-DD`) é feito por dia, no primeiro acesso, e os últimos 15 ficam guardados. Cada cópia pode ser baixada pela página.
 

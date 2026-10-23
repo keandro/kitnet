@@ -24,35 +24,43 @@
       <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
         <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
           <tr>
-            <th class="px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Inquilino</th>
-            <th class="px-3 py-3 sm:px-4 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor</th>
-            <th class="hidden sm:table-cell px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Vencimento</th>
-            <th class="hidden md:table-cell px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Período</th>
-            <th class="px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Situação</th>
-            <th class="hidden sm:table-cell px-3 py-3 sm:px-4"><span class="sr-only">Ações</span></th>
+            <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Inquilino</th>
+            <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor</th>
+            <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Vencimento</th>
+            <th class="hidden md:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Período</th>
+            <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Situação</th>
+            <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 dark:divide-white/5">
           <% @contratos.each do |contrato| %>
             <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= edit_contrato_path(contrato) %>" data-action="click->row-link#visit">
-              <td class="px-3 py-3 sm:px-4">
-                <p class="text-sm font-medium text-slate-900 dark:text-white"><%= contrato.inquilino %></p>
+              <td class="px-3 py-3 sm:px-4 max-[359px]:px-2">
+                <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium text-slate-900 dark:text-white">
+                  <%= contrato.inquilino %>
+                  <% if @com_pdf.include?(contrato.id) %>
+                    <%= link_to pdf_contrato_path(contrato), target: "_blank", rel: "noopener", data: { turbo: false }, title: "Abrir o contrato em PDF",
+                                class: "inline-flex items-center gap-0.5 rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-semibold text-rose-700 ring-1 ring-rose-600/20 ring-inset hover:bg-rose-100 dark:bg-rose-400/10 dark:text-rose-300 dark:ring-rose-400/20" do %>
+                      <%= icon :document, css_class: "size-3" %> PDF
+                    <% end %>
+                  <% end %>
+                </p>
                 <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                   Kitnet <%= contrato.unidade.nome %> · <%= contrato.fiador ? "fiador: #{contrato.fiador}" : "sem fiador" %>
                 </p>
               </td>
-              <td class="whitespace-nowrap px-3 py-3 sm:px-4 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
+              <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
                 <%= number_to_currency(contrato.valor) %>
                 <span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">dia <%= contrato.dia_vencimento %></span>
               </td>
-              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-sm text-slate-700 dark:text-slate-300">todo dia <%= contrato.dia_vencimento %></td>
-              <td class="hidden md:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-sm text-slate-700 dark:text-slate-300">
+              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-700 dark:text-slate-300">todo dia <%= contrato.dia_vencimento %></td>
+              <td class="hidden md:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-700 dark:text-slate-300">
                 <%= pluralize(contrato.duracao_meses, "mês", plural: "meses") %>
                 <% if contrato.data_inicio %>
                   <span class="block text-xs text-slate-500 dark:text-slate-400"><%= l(contrato.data_inicio) %> a <%= l(contrato.data_fim) %></span>
                 <% end %>
               </td>
-              <td class="whitespace-nowrap px-3 py-3 sm:px-4">
+              <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2">
                 <% if contrato.ativo? %>
                   <%= status_badge("Ativo", tone: :good) %>
                   <% if contrato.meses_restantes&.<=(1) %>
@@ -62,7 +70,7 @@
                   <%= status_badge("Finalizado", tone: :neutral, icon: :check_circle) %>
                 <% end %>
               </td>
-              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-right">
+              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right">
                 <% if contrato.ativo? %>
                   <%= button_to finalizar_contrato_path(contrato), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5", data: { turbo_confirm: "Finalizar o contrato de #{contrato.inquilino}? A kitnet #{contrato.unidade.nome} fica livre." } do %>
                     <%= icon :check_circle, css_class: "size-4" %> Finalizar
