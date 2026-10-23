@@ -42,3 +42,11 @@
 td, th {
   font-variant-numeric: tabular-nums;
 }
+
+/* Lista aberta dos <select>: no tema escuro o campo é transparente com texto
+   branco, e o navegador abria a lista branca com o texto branco (invisível). */
+@layer base {
+  option, optgroup {
+    @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+  }
+}
