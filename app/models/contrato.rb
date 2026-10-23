@@ -13,7 +13,9 @@ class Contrato < ApplicationRecord
   attr_accessor :arquivo_pdf, :remover_pdf
 
   normalizes :inquilino, :fiador, with: ->(nome) { nome.squish.presence }
-  normalizes :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco, with: ->(texto) { texto.squish.presence }
+  normalizes :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco,
+             :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao,
+             with: ->(texto) { texto.squish.presence }
   # Só dígitos, sem o +55: "(27) 99999-9999" e "+55 27 99999-9999" viram "27999999999".
   normalizes :celular, with: ->(numero) {
     digitos = numero.gsub(/\D/, "")

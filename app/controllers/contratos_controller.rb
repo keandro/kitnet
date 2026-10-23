@@ -73,6 +73,7 @@ class ContratosController < ApplicationController
 
     def contrato_params
       params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf,
-                                        :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco ])
+                                        :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco,
+                                        :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao ])
     end
 end

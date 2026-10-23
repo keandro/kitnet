@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_220000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_230000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
     t.string "locador_nome"
     t.string "locador_qualificacao"
@@ -65,6 +65,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_220000) do
     t.string "fiador_cpf"
     t.string "fiador_rg"
     t.string "fiador_endereco"
+    t.string "inquilino_nacionalidade"
+    t.string "inquilino_estado_civil"
+    t.string "inquilino_profissao"
+    t.string "fiador_nacionalidade"
+    t.string "fiador_estado_civil"
+    t.string "fiador_profissao"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end

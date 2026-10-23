@@ -11,7 +11,7 @@ module EnergiaHelper
     valor&.to_d&.to_s("F")&.sub(/\.?0+\z/, "")
   end
 
-  # Mensagem da conta de energia de uma kitnet, para mandar ao inquilino.
+  # Mensagem da conta de energia de uma kitnet, para mandar ao locatário.
   def mensagem_energia(leitura, contrato)
     conta = leitura.conta_energia
     saudacao = contrato ? "Olá, #{contrato.inquilino.split.first}!" : "Olá!"

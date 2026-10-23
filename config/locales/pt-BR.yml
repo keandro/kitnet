@@ -23,9 +23,9 @@ pt-BR:
         agua_esgoto: Água e esgoto
       contrato:
         unidade: Kitnet
-        inquilino: Inquilino
+        inquilino: Locatário
         celular: Celular
-        inquilino_cpf: CPF do inquilino
+        inquilino_cpf: CPF do locatário
         fiador_cpf: CPF do fiador
         fiador: Fiador
         valor: Valor
