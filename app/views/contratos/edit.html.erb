@@ -8,11 +8,11 @@
   <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Contrato de <%= @contrato.inquilino_was %></h1>
   <div class="flex flex-wrap gap-2">
     <% if @contrato.status_was == "ativo" %>
-      <%= button_to finalizar_contrato_path(@contrato), method: :patch, form_class: "inline-block", class: "btn btn-secondary", data: { turbo_confirm: "Finalizar o contrato de #{@contrato.inquilino_was}? A kitnet fica livre." } do %>
+      <%= button_to finalizar_contrato_path(@contrato), method: :patch, form_class: "inline-block", class: "btn btn-secondary", data: { turbo_confirm: "Finalizar o contrato de #{@contrato.inquilino_was}? A kitnet fica livre.", confirmar_rotulo: "Finalizar" } do %>
         <%= icon :check_circle, css_class: "size-4" %> Finalizar
       <% end %>
     <% end %>
-    <%= button_to @contrato, method: :delete, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Remover este contrato? Para encerrar um contrato que terminou, use Finalizar." } do %>
+    <%= button_to @contrato, method: :delete, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Remover este contrato? Para encerrar um contrato que terminou, use Finalizar.", confirmar_rotulo: "Remover", confirmar_perigo: "true" } do %>
       <%= icon :trash, css_class: "size-4" %> Remover
     <% end %>
   </div>

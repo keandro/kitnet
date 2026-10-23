@@ -68,6 +68,27 @@
       </div>
     </div>
 
+    <%# confirmação do sistema (data-turbo-confirm) %>
+    <dialog data-controller="confirmacao" data-action="click->confirmacao#fora cancel->confirmacao#cancelar close->confirmacao#cancelar"
+            class="m-auto w-[calc(100%-2rem)] max-w-sm rounded-2xl bg-white p-0 text-slate-900 shadow-2xl ring-1 ring-slate-900/10 backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm dark:bg-slate-900 dark:text-slate-100 dark:ring-white/10"
+            aria-labelledby="confirmacao-titulo">
+      <div class="p-6">
+        <div class="flex items-start gap-4">
+          <span data-confirmacao-target="icone" class="confirmacao-icone flex size-10 shrink-0 items-center justify-center rounded-full">
+            <%= icon :exclamation_triangle, css_class: "size-5" %>
+          </span>
+          <div class="min-w-0">
+            <h2 id="confirmacao-titulo" class="text-base font-semibold">Confirmar</h2>
+            <p data-confirmacao-target="mensagem" class="mt-1 text-sm text-slate-600 dark:text-slate-300"></p>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" data-action="confirmacao#cancelar" class="btn btn-secondary">Cancelar</button>
+          <button type="button" data-action="confirmacao#confirmar" data-confirmacao-target="confirmar" class="btn btn-primary">Confirmar</button>
+        </div>
+      </div>
+    </dialog>
+
     <%# avisos (somem sozinhos) %>
     <div class="pointer-events-none fixed inset-x-0 top-16 z-50 flex flex-col items-center gap-2 px-4 lg:top-6 lg:right-6 lg:left-auto lg:items-end">
       <% { notice => :good, alert => :critical }.each do |mensagem, tom| %>

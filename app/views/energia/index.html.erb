@@ -103,20 +103,20 @@
             </td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
               <% if leitura&.valor && !leitura.pago? %>
-                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?" } do %>
+                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?", confirmar_rotulo: "Marcar como pago" } do %>
                   <%= icon :check_circle, css_class: "size-4" %> Pago
                 <% end %>
               <% elsif leitura&.pago? %>
-                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-200", title: "Desfazer o pagamento", data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto." } do %>
+                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-200", title: "Desfazer o pagamento", data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto.", confirmar_rotulo: "Desfazer" } do %>
                   <%= icon :desfazer, css_class: "size-4" %> Desfazer
                 <% end %>
               <% end %>
             </td>
             <td class="whitespace-nowrap px-2 py-3 sm:px-4 text-right">
               <% if leitura&.valor && !leitura.pago? %>
-                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block sm:hidden", class: "inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?" } do %><%= icon :check_circle, css_class: "size-4" %> Pago<% end %>
+                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block sm:hidden", class: "inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?", confirmar_rotulo: "Marcar como pago" } do %><%= icon :check_circle, css_class: "size-4" %> Pago<% end %>
               <% elsif leitura&.pago? %>
-                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block sm:hidden", class: "inline-flex cursor-pointer items-center rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5", title: "Desfazer o pagamento", aria: { label: "Desfazer o pagamento da kitnet #{unidade.nome}" }, data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto." } do %><%= icon :desfazer, css_class: "size-4" %><% end %>
+                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block sm:hidden", class: "inline-flex cursor-pointer items-center rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5", title: "Desfazer o pagamento", aria: { label: "Desfazer o pagamento da kitnet #{unidade.nome}" }, data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto.", confirmar_rotulo: "Desfazer" } do %><%= icon :desfazer, css_class: "size-4" %><% end %>
               <% end %>
               <% if leitura&.valor %>
                 <% contrato = @contratos[unidade.id] %>

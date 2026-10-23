@@ -72,7 +72,7 @@
               </td>
               <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right">
                 <% if contrato.ativo? %>
-                  <%= button_to finalizar_contrato_path(contrato), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5", data: { turbo_confirm: "Finalizar o contrato de #{contrato.inquilino}? A kitnet #{contrato.unidade.nome} fica livre." } do %>
+                  <%= button_to finalizar_contrato_path(contrato), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5", data: { turbo_confirm: "Finalizar o contrato de #{contrato.inquilino}? A kitnet #{contrato.unidade.nome} fica livre.", confirmar_rotulo: "Finalizar" } do %>
                     <%= icon :check_circle, css_class: "size-4" %> Finalizar
                   <% end %>
                 <% end %>

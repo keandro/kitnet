@@ -6,7 +6,7 @@
 
 <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
   <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Editar pagamento</h1>
-  <%= button_to @pagamento, method: :delete, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(@pagamento.valor)} da kitnet #{@pagamento.unidade.nome}?" } do %>
+  <%= button_to @pagamento, method: :delete, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(@pagamento.valor)} da kitnet #{@pagamento.unidade.nome}?", confirmar_rotulo: "Remover", confirmar_perigo: "true" } do %>
     <%= icon :trash, css_class: "size-4" %> Remover
   <% end %>
 </div>
