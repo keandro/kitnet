@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_203857) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_205931) do
+  create_table "configuracoes_contrato", force: :cascade do |t|
+    t.string "locador_nome"
+    t.string "locador_qualificacao"
+    t.string "locador_cpf"
+    t.string "locador_endereco"
+    t.string "imovel_endereco"
+    t.string "imovel_bairro_cidade"
+    t.text "forma_pagamento"
+    t.string "cidade_assinatura"
+    t.string "foro"
+    t.decimal "taxa_limpeza", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -45,6 +60,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_203857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "celular"
+    t.string "inquilino_nacionalidade"
+    t.string "inquilino_estado_civil"
+    t.string "inquilino_profissao"
+    t.string "inquilino_cpf"
+    t.string "inquilino_rg"
+    t.string "inquilino_endereco"
+    t.string "fiador_nacionalidade"
+    t.string "fiador_estado_civil"
+    t.string "fiador_profissao"
+    t.string "fiador_cpf"
+    t.string "fiador_rg"
+    t.string "fiador_endereco"
+    t.date "data_assinatura"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end

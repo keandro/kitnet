@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   resources :unidades, path: "kitnets", only: %i[index show edit update]
   resources :pagamentos, except: %i[show]
+  # antes de resources :contratos, senão "modelo" seria lido como o id de um contrato
+  resource :modelo_de_contrato, path: "contratos/modelo", only: %i[edit update], controller: "configuracoes_contrato"
   resources :contratos, except: %i[show] do
     patch :finalizar, on: :member
   end
   get "contratos/:id/contrato.pdf", to: "contratos#pdf", as: :pdf_contrato, format: false
+  get "contratos/:id/para-assinar.pdf", to: "contratos#para_assinar", as: :contrato_para_assinar, format: false
   get "ocupacao", to: "ocupacao#index", as: :ocupacao
   get "mais", to: "mais#index", as: :mais
   get "financas", to: "financas#index", as: :financas

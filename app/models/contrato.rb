@@ -13,6 +13,9 @@ class Contrato < ApplicationRecord
   attr_accessor :arquivo_pdf, :remover_pdf
 
   normalizes :inquilino, :fiador, with: ->(nome) { nome.squish.presence }
+  normalizes :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :inquilino_cpf, :inquilino_rg, :inquilino_endereco,
+             :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao, :fiador_cpf, :fiador_rg, :fiador_endereco,
+             with: ->(texto) { texto.squish.presence }
   # Só dígitos, sem o +55: "(27) 99999-9999" e "+55 27 99999-9999" viram "27999999999".
   normalizes :celular, with: ->(numero) {
     digitos = numero.gsub(/\D/, "")
@@ -32,13 +35,18 @@ class Contrato < ApplicationRecord
 
   scope :recentes, -> { order(Arel.sql("status, COALESCE(data_inicio, created_at) DESC")) }
 
+  # Como nos contratos assinados: início 10/01/2024 + 30 meses = término 10/07/2026.
   def data_fim
-    data_inicio&.advance(months: duracao_meses)&.prev_day
+    data_inicio&.advance(months: duracao_meses)
   end
 
   # (27) 99999-9999
   def celular_formatado
     celular&.sub(/\A(\d{2})(\d{5})(\d{4})\z/, '(\\1) \\2-\\3')
+  end
+
+  def sem_fiador_no_contrato?
+    fiador.blank?
   end
 
   # Nome e tamanho do PDF, sem carregar o arquivo.

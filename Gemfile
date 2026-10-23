@@ -20,6 +20,9 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 # Traduções do Rails para pt-BR (datas, meses, moeda)
 gem "rails-i18n"
+# Gera o PDF do contrato para assinar [https://github.com/prawnpdf/prawn]
+gem "prawn", "~> 2.4"
+gem "matrix" # usado pelo prawn; no Ruby 3.4 deixou de vir embutido
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

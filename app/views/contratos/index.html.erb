@@ -2,9 +2,14 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Contratos</h1>
-  <%= link_to new_contrato_path, class: "btn btn-primary" do %>
-    <%= icon :plus, css_class: "size-4" %> Novo contrato
-  <% end %>
+  <div class="flex flex-wrap gap-2">
+    <%= link_to edit_modelo_de_contrato_path, class: "btn btn-secondary" do %>
+      <%= icon :pencil, css_class: "size-4" %> Modelo do contrato
+    <% end %>
+    <%= link_to new_contrato_path, class: "btn btn-primary" do %>
+      <%= icon :plus, css_class: "size-4" %> Novo contrato
+    <% end %>
+  </div>
 </div>
 
 <nav class="mt-6 inline-flex rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-900/5 dark:bg-slate-900 dark:ring-white/10" aria-label="Situação">
@@ -76,6 +81,7 @@
                     <%= icon :check_circle, css_class: "size-4" %> Finalizar
                   <% end %>
                 <% end %>
+                <%= link_to icon(:document, css_class: "size-4"), contrato_para_assinar_path(contrato), target: "_blank", rel: "noopener", data: { turbo: false }, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Contrato para assinar (PDF)" %>
                 <%= link_to icon(:pencil, css_class: "size-4"), edit_contrato_path(contrato), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
               </td>
             </tr>

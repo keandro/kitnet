@@ -56,6 +56,43 @@
         <%= form.select :status, [ [ "Ativo", "ativo" ], [ "Finalizado", "finalizado" ] ], {}, class: field_classes(contrato, :status) %>
       </div>
 
+      <details class="sm:col-span-2 rounded-xl ring-1 ring-slate-200 ring-inset dark:ring-white/10" <%= "open" if contrato.new_record? || contrato.errors.any? %>>
+        <summary class="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-slate-900 dark:text-white">Dados para o contrato escrito</summary>
+        <div class="grid grid-cols-1 gap-5 border-t border-slate-100 p-4 sm:grid-cols-2 dark:border-white/5">
+          <% { "inquilino" => "Inquilino", "fiador" => "Fiador" }.each do |pessoa, titulo| %>
+            <p class="sm:col-span-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %><%= " (se tiver)" if pessoa == "fiador" %></p>
+            <div>
+              <%= form.label :"#{pessoa}_nacionalidade", "Nacionalidade", class: label_classes %>
+              <%= form.text_field :"#{pessoa}_nacionalidade", placeholder: "brasileiro(a)", class: field_classes(contrato, :"#{pessoa}_nacionalidade") %>
+            </div>
+            <div>
+              <%= form.label :"#{pessoa}_estado_civil", "Estado civil", class: label_classes %>
+              <%= form.text_field :"#{pessoa}_estado_civil", placeholder: "solteiro(a)", class: field_classes(contrato, :"#{pessoa}_estado_civil") %>
+            </div>
+            <div>
+              <%= form.label :"#{pessoa}_profissao", "Profissão", class: label_classes %>
+              <%= form.text_field :"#{pessoa}_profissao", class: field_classes(contrato, :"#{pessoa}_profissao") %>
+            </div>
+            <div>
+              <%= form.label :"#{pessoa}_cpf", "CPF", class: label_classes %>
+              <%= form.text_field :"#{pessoa}_cpf", inputmode: "numeric", placeholder: "000.000.000-00", class: field_classes(contrato, :"#{pessoa}_cpf") %>
+            </div>
+            <div>
+              <%= form.label :"#{pessoa}_rg", (pessoa == "fiador" ? "Identidade" : "RG"), class: label_classes %>
+              <%= form.text_field :"#{pessoa}_rg", class: field_classes(contrato, :"#{pessoa}_rg") %>
+            </div>
+            <div class="sm:col-span-2">
+              <%= form.label :"#{pessoa}_endereco", "Endereço", class: label_classes %>
+              <%= form.text_field :"#{pessoa}_endereco", placeholder: "rua, número, bairro, cidade/UF", class: field_classes(contrato, :"#{pessoa}_endereco") %>
+            </div>
+          <% end %>
+          <div>
+            <%= form.label :data_assinatura, "Data da assinatura", class: label_classes %>
+            <%= form.date_field :data_assinatura, class: field_classes(contrato, :data_assinatura) %>
+          </div>
+        </div>
+      </details>
+
       <div class="sm:col-span-2">
         <%= form.label :arquivo_pdf, "Contrato em PDF", class: label_classes %>
         <% if (doc = contrato.documento_info) %>

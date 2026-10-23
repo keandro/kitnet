@@ -24,6 +24,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 
 - **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
 - **Contratos**: quem aluga cada kitnet — inquilino, celular para WhatsApp (opcional), fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado` e o contrato em PDF (opcional, até 20 MB). Independentes dos pagamentos: não geram cobranças
+- **Contrato para assinar**: gera o PDF do contrato de locação (modelo das kitnets) com os dados de inquilino, fiador, valor e prazo por extenso; os dados fixos (locador, imóvel, forma de pagamento, foro, taxa de limpeza) ficam em *Contratos → Modelo do contrato*, no banco, fora do código
 - **Ocupação**: as kitnets ocupadas (com inquilino, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado

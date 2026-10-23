@@ -1,6 +1,6 @@
 # Contratos de aluguel. Ficam separados dos pagamentos: não geram cobranças.
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: %i[ edit update destroy finalizar pdf ]
+  before_action :set_contrato, only: %i[ edit update destroy finalizar pdf para_assinar ]
 
   # GET /contratos?situacao=ativo|finalizado|todos
   def index
@@ -17,6 +17,12 @@ class ContratosController < ApplicationController
     return head(:not_found) unless documento
 
     send_data documento.dados, filename: documento.nome, type: "application/pdf", disposition: "inline"
+  end
+
+  # GET /contratos/1/para-assinar.pdf — o contrato escrito, pronto para imprimir e assinar.
+  def para_assinar
+    documento = ContratoPdf.new(@contrato)
+    send_data documento.render, filename: documento.nome_do_arquivo, type: "application/pdf", disposition: "inline"
   end
 
   # GET /contratos/new?unidade_id=1
@@ -66,6 +72,8 @@ class ContratosController < ApplicationController
     end
 
     def contrato_params
-      params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf ])
+      params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf,
+                                        :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :inquilino_cpf, :inquilino_rg, :inquilino_endereco,
+                                        :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao, :fiador_cpf, :fiador_rg, :fiador_endereco, :data_assinatura ])
     end
 end
