@@ -67,19 +67,18 @@ class ContratoPdf
 
   def dinheiro(valor) = number_to_currency(valor, unit: "R$", separator: ",", delimiter: ".", format: "%u%n")
 
-  def qualificacao(nacionalidade, estado_civil, profissao)
-    [ nacionalidade, estado_civil, profissao ].map { |x| v(x) }.join(", ")
+  # O inquilino mora na própria kitnet alugada.
+  def endereco_da_kitnet
+    "#{v(@cfg.imovel_endereco)}, #{andar}, kitnet #{@c.unidade.nome}, #{v(@cfg.imovel_bairro_cidade)}"
   end
 
   def partes
     lista = [
       [ "LOCADOR", "<b>#{v(@cfg.locador_nome)}</b>, #{v(@cfg.locador_qualificacao)}, CPF #{v(@cfg.locador_cpf)}, com endereço na #{v(@cfg.locador_endereco)}." ],
-      [ "LOCATÁRIO", "<b>#{v(@c.inquilino)}</b>, #{qualificacao(@c.inquilino_nacionalidade, @c.inquilino_estado_civil, @c.inquilino_profissao)}, " \
-                     "CPF #{v(@c.inquilino_cpf)}, RG #{v(@c.inquilino_rg)}, com endereço em #{v(@c.inquilino_endereco)}." ]
+      [ "LOCATÁRIO", "<b>#{v(@c.inquilino)}</b>, CPF #{v(@c.inquilino_cpf)}, RG #{v(@c.inquilino_rg)}, com endereço na #{endereco_da_kitnet}." ]
     ]
     if com_fiador?
-      lista << [ "FIADOR", "<b>#{v(@c.fiador)}</b>, #{qualificacao(@c.fiador_nacionalidade, @c.fiador_estado_civil, @c.fiador_profissao)}, " \
-                           "CPF #{v(@c.fiador_cpf)}, identidade #{v(@c.fiador_rg)}, com endereço em #{v(@c.fiador_endereco)}." ]
+      lista << [ "FIADOR", "<b>#{v(@c.fiador)}</b>, CPF #{v(@c.fiador_cpf)}, identidade #{v(@c.fiador_rg)}, com endereço em #{v(@c.fiador_endereco)}." ]
     end
     lista
   end
@@ -164,7 +163,7 @@ class ContratoPdf
   end
 
   def assinaturas(pdf)
-    data = @c.data_assinatura ? I18n.l(@c.data_assinatura, format: "%d de %B de %Y") : "_____ de ______________ de ________"
+    data = "_____ de ______________ de ________"
     pessoas = [ [ "LOCADOR", @cfg.locador_nome ], [ "LOCATÁRIO", @c.inquilino ] ]
     pessoas << [ "FIADOR", @c.fiador ] if com_fiador?
 

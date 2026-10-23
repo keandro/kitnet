@@ -27,7 +27,6 @@ pt-BR:
         celular: Celular
         inquilino_cpf: CPF do inquilino
         fiador_cpf: CPF do fiador
-        data_assinatura: Data da assinatura
         fiador: Fiador
         valor: Valor
         duracao_meses: Duração (meses)
