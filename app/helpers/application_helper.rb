@@ -86,8 +86,7 @@ module ApplicationHelper
   def menu_barra_lateral
     [
       [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
-      [ [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
-      [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ] ],
+      [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ], [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
       [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
       [ [ "Backup", backups_path, :arquivo ] ]
     ]
