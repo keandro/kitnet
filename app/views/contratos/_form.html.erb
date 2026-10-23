@@ -16,7 +16,8 @@
         </div>
         <div>
           <%= form.label :inquilino_cpf, "CPF", class: label_classes %>
-          <%= form.text_field :inquilino_cpf, inputmode: "numeric", placeholder: "000.000.000-00", class: field_classes(contrato, :inquilino_cpf) %>
+          <%= form.text_field :inquilino_cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+                class: field_classes(contrato, :inquilino_cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
         </div>
         <div>
           <%= form.label :inquilino_rg, "RG", class: label_classes %>
@@ -45,7 +46,8 @@
         </div>
         <div>
           <%= form.label :fiador_cpf, "CPF", class: label_classes %>
-          <%= form.text_field :fiador_cpf, inputmode: "numeric", placeholder: "000.000.000-00", class: field_classes(contrato, :fiador_cpf) %>
+          <%= form.text_field :fiador_cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+                class: field_classes(contrato, :fiador_cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
         </div>
         <div>
           <%= form.label :fiador_rg, "Identidade", class: label_classes %>

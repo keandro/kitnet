@@ -14,7 +14,12 @@ class Contrato < ApplicationRecord
   attr_accessor :arquivo_pdf, :remover_pdf
 
   normalizes :inquilino, :fiador, with: ->(nome) { nome.squish.presence }
-  normalizes :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco,
+  # CPF sempre no padrão 000.000.000-00 (com 11 dígitos; senão fica como veio e a validação avisa).
+  normalizes :inquilino_cpf, :fiador_cpf, with: ->(cpf) {
+    digitos = cpf.gsub(/\D/, "")
+    digitos.length == 11 ? digitos.sub(/\A(\d{3})(\d{3})(\d{3})(\d{2})\z/, '\\1.\\2.\\3-\\4') : cpf.squish.presence
+  }
+  normalizes :inquilino_rg, :fiador_rg, :fiador_endereco,
              :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao,
              with: ->(texto) { texto.squish.presence }
   # Só dígitos, sem o +55: "(27) 99999-9999" e "+55 27 99999-9999" viram "27999999999".
@@ -29,10 +34,22 @@ class Contrato < ApplicationRecord
   validates :duracao_meses, numericality: { only_integer: true, in: 1..120 }
   validates :dia_vencimento, numericality: { only_integer: true, in: 1..31 }
   validates :celular, format: { with: /\A[1-9]{2}9\d{8}\z/, message: "precisa ter DDD + 9 dígitos (ex.: (27) 99999-9999)" }, allow_nil: true
+  validate :cpfs_validos
   validate :uma_kitnet_um_contrato_ativo, if: :ativo?
   validate :arquivo_pdf_valido, if: -> { arquivo_pdf.present? }
 
   after_save :salvar_pdf
+
+  # 11 dígitos, não todos iguais, com os dois dígitos verificadores certos.
+  def self.cpf_valido?(cpf)
+    d = cpf.to_s.gsub(/\D/, "").chars.map(&:to_i)
+    return false unless d.size == 11 && d.uniq.size > 1
+
+    [ 9, 10 ].all? do |n|
+      resto = d.first(n).each_with_index.sum { |x, i| x * (n + 1 - i) } * 10 % 11
+      resto % 10 == d[n]
+    end
+  end
 
   scope :recentes, -> { order(Arel.sql("status, COALESCE(data_inicio, created_at) DESC")) }
 
@@ -67,6 +84,12 @@ class Contrato < ApplicationRecord
   end
 
   private
+
+    def cpfs_validos
+      { inquilino_cpf: inquilino_cpf, fiador_cpf: fiador_cpf }.each do |campo, cpf|
+        errors.add(campo, "não é válido (use 000.000.000-00)") if cpf.present? && !self.class.cpf_valido?(cpf)
+      end
+    end
 
   def arquivo_pdf_valido
     if arquivo_pdf.size > ContratoDocumento::TAMANHO_MAXIMO
