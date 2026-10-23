@@ -26,7 +26,9 @@ class UnidadesController < ApplicationController
   # PATCH /kitnets/1
   def update
     if @unidade.update(unidade_params)
-      redirect_to @unidade, notice: "Kitnet #{@unidade.nome} atualizada.", status: :see_other
+      # Edição rápida pelo quadro de kitnets volta para o quadro.
+      destino = params[:retorno] == "kitnets" ? unidades_path : @unidade
+      redirect_to destino, notice: "Valor base da kitnet #{@unidade.nome} atualizado.", status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
