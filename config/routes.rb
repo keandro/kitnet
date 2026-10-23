@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :pagamentos, except: %i[show]
   # antes de resources :contratos, senão "modelo" seria lido como o id de um contrato
   resource :modelo_de_contrato, path: "contratos/modelo", only: %i[edit update], controller: "configuracoes_contrato"
+  get "contratos/modelo/exemplo.pdf", to: "configuracoes_contrato#exemplo", as: :exemplo_do_modelo_de_contrato, format: false
   resources :contratos, except: %i[show] do
     patch :finalizar, on: :member
   end

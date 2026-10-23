@@ -1,0 +1,70 @@
+# CONTRATO DE LOCAÇÃO RESIDENCIAL POR PRAZO DETERMINADO
+
+> Contrato de locação de um imóvel situado na {imovel_endereco}, {andar}, kitnet {kitnet}, {bairro_cidade}, no qual se destina para locação exclusivamente residencial, vedada utilização para qualquer outro fim.
+
+**LOCADOR –** **{locador}**, {locador_qualificacao}, CPF {locador_cpf}, com endereço na {locador_endereco}.
+
+**LOCATÁRIO –** **{locatario}**, {locatario_nacionalidade}, {locatario_estado_civil}, {locatario_profissao}, CPF {locatario_cpf}, RG {locatario_rg}, com endereço na {locatario_endereco}.
+
+[se tiver fiador]
+**FIADOR –** **{fiador}**, {fiador_nacionalidade}, {fiador_estado_civil}, {fiador_profissao}, CPF {fiador_cpf}, identidade {fiador_identidade}, com endereço em {fiador_endereco}.
+[fim]
+
+## CLÁUSULAS E CONDIÇÕES
+
+1- O valor do aluguel ora avençado é {valor} ({valor_extenso}) o qual deverá ser pago até o dia {dia_vencimento} ({dia_vencimento_extenso}) de cada mês, {forma_pagamento}.
+
+2- O prazo de locação é de {duracao} ({duracao_extenso}) meses, com início no dia {inicio} e término no dia {termino}. Sendo que, após um ano, o locatário poderá rescindir esta locação sem multa, desde que avise expressamente ao locador com antecedência mínima de 30 dias. Caso haja rescisão unilateral pelo locatário antes de completar um ano, será cobrada uma multa de um mês de aluguel.
+
+3- O valor da locação será reajustado anualmente de acordo com os índices governamentais. Sendo que o índice apurado na data do reajuste será aplicado sobre o valor do aluguel da época.
+
+4- A destinação do imóvel locado é para fim residencial para uma pessoa, vedado expressamente o uso do mesmo para outros fins, sendo também vedado transferir, sublocar, ceder ou emprestar, a qualquer título, no todo ou em parte o imóvel locado: a não ser através de prévio consentimento expresso do locador. Cabe ainda ressaltar que não é também permitido crianças até 12 anos nas dependências do imóvel devido a condições de acessibilidade inadequadas para elas, bem como, é proibido qualquer tipo de animais nas dependências do referido imóvel.
+
+5- É vedado ao locatário fumar nas áreas comuns, o uso de ar condicionado fixo, o uso de aparelho sonoro em alto volume para não incomodar a vizinhança, bem como não jogar papel ou absorvente dentro do vaso sanitário e não furar a cerâmica.
+
+6- Não é permitido ao locatário manter em depósito, substância ilícita, tóxica ou inflamável dentro do imóvel objeto desta locação.
+
+7- São de inteira responsabilidade do locatário, **o aluguel e a conta de luz**, sendo esta última, medida separadamente via medidor individual, já no caso da tarifa de água, está inclusa no valor da locação.
+
+8- Os aluguéis ou encargos convencionados não pagos no seu vencimento terão seus valores acrescidos de __multa de 10%, mais juros de 1% (um por cento) ao mês se o atraso for superior a trinta dias__, ficarão também sujeitos a correção monetária, de acordo com as normas governamentais.
+
+9- Fica esclarecido que estando o locatário de posse do aluguel e encargos concernentes ao último mês da locação, não é prova suficiente de que tenha quitado os débitos anteriores.
+
+[se tiver fiador]
+## DA RESPONSABILIDADE DOS FIADORES
+
+10- O fiador é o principal pagador do locatário, em qualquer falta ou impontualidade do mesmo, ficará solidariamente responsável pelo cumprimento de todas as cláusulas contratuais e obrigações legais, perdurando tais responsabilidades legais até a devolução e quitação geral de todas despesas inerentes ao imóvel.
+
+11- O fiador devedor solidário declara renunciar expressamente desde a assinatura deste contrato, ao direito de restringir a fiança no prazo ajustado ou nas prorrogações expressas e tácitas, assim renunciando desde logo a faculdade que lhe é assegurada pela legislação em vigor.
+
+12- Nas hipóteses de morte, falência ou insolvência do fiador, obriga-se o locatário, a imediata apresentação de novo fiador.
+[fim]
+
+## DA RESCISÃO
+
+13- Considerar-se-á rescindido o presente contrato, de pleno direito, sem qualquer interpelação judicial ou extrajudicial, nos seguintes casos:
+a) Incêndio ou acidente que obrigue o prédio a obras;
+b) Desapropriação imposta pelas autoridades;
+c) Falência do locatário ou seu representante legal;
+d) Inadimplemento do locatário por mais de 30 (trinta) dias;
+e) Fim da vigência do contrato.
+
+14- A parte que infringir obrigação legal ou cometer infração a obrigação contratual fica sujeita ao pagamento de uma multa correspondente a 20% (vinte por cento) do valor total do contrato, incluídos em tal valor os reajustes previstos, sendo o valor da multa desde logo exigível, e no caso de procedimento judicial, aos acréscimos de juros de mora, correção monetária, custas judiciais e honorários advocatícios, sobre o valor da causa e demais despesas atinentes a demanda, cujo valor será sempre líquido e certo, considerando todas as despesas de aluguel, consertos, conservação e limpeza, luz, desde que vinculados ao presente contrato.
+
+## DA CONSERVAÇÃO - BENFEITORIA - RESTITUIÇÃO - VISTORIAS
+
+15- O locatário, salvo as obras que importem na segurança do imóvel (benfeitorias necessárias), obriga-se a fazer com solidez e perfeição, todos os reparos e consertos de que necessite o imóvel objeto deste contrato desde que sejam oriundas de sua manutenção (conservação).
+
+16- É vedado modificar, pintar, decorar (ex: papel de parede) o imóvel em questão sem a anuência expressa do locador.
+
+[se tiver taxa de limpeza]
+17- Como o locatário recebeu o imóvel objeto deste contrato totalmente pintado da cor gelo, haverá uma taxa de limpeza e pintura no valor de {taxa_limpeza}, por ocasião da assinatura deste instrumento contratual. O que liberará o locatário da responsabilidade de tais serviços por ocasião de sua saída no fim do contrato.
+[fim]
+
+18- O locatário obriga-se a manter o imóvel locado em boas condições de higiene e limpeza e em perfeito estado de conservação e funcionamento, obrigando-se pela sua completa reparação no caso de **mau uso** quando termine, ou rescindindo este contrato, por qualquer motivo, de modo a entregar o imóvel ao locador em perfeitas condições de uso, ficando sem qualquer direito a retenção ou indenização por quaisquer benfeitorias, salvo as necessárias, as quais se incorporarão ao imóvel locado.
+
+19- O locador a qualquer tempo, por si ou por pessoa de sua confiança, poderá examinar ou vistoriar o imóvel locado quando assim o entender, desde que comunique ao locatário com antecedência mínima de sete dias.
+
+20- Para todas as questões oriundas do presente contrato, fica eleito o foro de {foro}.
+
+21- E por se acharem de pleno e comum acordo, de tudo quanto neste instrumento de locação foi lavrado, as partes contratantes, na presença de duas testemunhas abaixo, assinaram este compromisso em duas vias de igual teor.

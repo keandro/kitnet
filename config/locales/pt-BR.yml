@@ -35,6 +35,9 @@ pt-BR:
         status: Situação
         observacoes: Observações
         arquivo_pdf: PDF do contrato
+      configuracao_contrato:
+        taxa_limpeza: Taxa de limpeza
+        texto_modelo: No texto do contrato,
       pagamento:
         unidade: Kitnet
         valor: Valor
