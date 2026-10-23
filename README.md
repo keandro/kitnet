@@ -167,6 +167,7 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 | `/financas`      | Finanças por ano                  |
 | `/energia`       | Conta de energia e medidores      |
 | `/energia-solar` | Lucro da energia solar            |
+| `/backup`        | Exportar, importar e cópias       |
 | `/up`            | Health check                      |
 
 ## App Android
@@ -219,14 +220,13 @@ Esses mesmos passos rodam no GitHub Actions a cada push na `main` e em pull requ
 
 ## Backup
 
-O banco de dados é um único arquivo SQLite dentro de `storage/`:
+Todos os dados ficam num único arquivo SQLite (`storage/development.sqlite3`). A página **Backup** (`/backup`) cuida das cópias:
 
-| Ambiente        | Arquivo                         |
-| --------------- | ------------------------------- |
-| Desenvolvimento | `storage/development.sqlite3`   |
-| Produção        | `storage/production.sqlite3`    |
+- **Exportar:** baixa uma cópia completa e consistente do banco, feita com o app rodando. Guarde num pendrive ou na nuvem.
+- **Importar:** restaura um backup exportado antes e **substitui todos os dados atuais**. Antes de trocar, o sistema guarda uma cópia do banco atual (`antes-importacao-…`). Só aceita bancos do LF Kitnets; backups de versões anteriores do app são atualizados (as migrações que faltam rodam na importação).
+- **Cópias guardadas no computador:** ficam em `storage/backups/` (fora do git). Um backup automático (`auto-AAAA-MM-DD`) é feito por dia, no primeiro acesso, e os últimos 15 ficam guardados. Cada cópia pode ser baixada pela página.
 
-Para fazer backup com segurança, mesmo com o app rodando:
+Sem o app, dá para copiar o banco pelo terminal:
 
 ```bash
 sqlite3 storage/development.sqlite3 ".backup 'kitnet-$(date +%F).sqlite3'"

@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   resources :unidades, path: "kitnets", only: %i[index show edit update]
   resources :pagamentos, except: %i[index show]
   get "financas", to: "financas#index", as: :financas
+  scope "backup" do
+    get "", to: "backups#index", as: :backups
+    get "exportar", to: "backups#exportar", as: :exportar_backup
+    post "importar", to: "backups#importar", as: :importar_backup
+    get "copias/:nome", to: "backups#baixar", as: :baixar_backup, constraints: { nome: /[^\/]+/ }, format: false
+  end
   get "energia", to: "energia#index", as: :energia
   get "energia-solar", to: "energia_solar#index", as: :energia_solar
   patch "energia-solar/:ano/:mes", to: "energia_solar#update", as: :apuracao_energia_solar, constraints: { ano: /\d{4}/, mes: /\d{1,2}/ }
