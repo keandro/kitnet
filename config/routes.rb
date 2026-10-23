@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :unidades, path: "kitnets", only: %i[index show edit update]
-  resources :pagamentos, except: %i[index show]
+  resources :pagamentos, except: %i[show]
   get "financas", to: "financas#index", as: :financas
   scope "backup" do
     get "", to: "backups#index", as: :backups
@@ -26,5 +26,6 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "pagamentos#index"
+  # A página inicial é Finanças.
+  root to: redirect("/financas")
 end

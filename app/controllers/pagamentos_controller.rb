@@ -1,7 +1,7 @@
 class PagamentosController < ApplicationController
   before_action :set_pagamento, only: %i[ edit update destroy ]
 
-  # GET /?ano=2026&mes=10 — pagamentos do mês, por kitnet.
+  # GET /pagamentos?ano=2026&mes=10 — pagamentos do mês, por kitnet.
   def index
     hoje = Date.current
     ano = params[:ano].present? ? params[:ano].to_i : hoje.year
@@ -61,6 +61,6 @@ class PagamentosController < ApplicationController
     end
 
     def mes_do(pagamento)
-      root_path(ano: pagamento.data_pagamento.year, mes: pagamento.data_pagamento.month)
+      pagamentos_path(ano: pagamento.data_pagamento.year, mes: pagamento.data_pagamento.month)
     end
 end

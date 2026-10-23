@@ -11,7 +11,7 @@
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Pagamentos</h1>
   </div>
   <div class="flex flex-wrap items-center gap-2">
-    <%= render "energia/navegacao_mes", conta: Struct.new(:ano, :mes).new(@mes.year, @mes.month), rota: :root_path %>
+    <%= render "energia/navegacao_mes", conta: Struct.new(:ano, :mes).new(@mes.year, @mes.month), rota: :pagamentos_path %>
     <%= link_to new_pagamento_path(data: data_sugerida), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
       <%= icon :plus, css_class: "size-4" %> Registrar pagamento
     <% end %>

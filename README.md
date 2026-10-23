@@ -22,9 +22,9 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 
 ## Funcionalidades
 
-- **Pagamentos** (página inicial): os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
+- **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
-- **Finanças**: visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
+- **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
 - Interface responsiva com modo escuro
@@ -162,7 +162,8 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 
 | Rota             | Descrição                         |
 | ---------------- | --------------------------------- |
-| `/`              | Pagamentos do mês                 |
+| `/`              | Abre Finanças                     |
+| `/pagamentos`    | Pagamentos do mês                 |
 | `/kitnets`       | Kitnets e histórico de pagamentos |
 | `/financas`      | Finanças por ano                  |
 | `/energia`       | Conta de energia e medidores      |
