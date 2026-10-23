@@ -1,23 +1,29 @@
 <% content_for :title, "Kitnets" %>
 
-<h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Kitnets</h1>
+<h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Kitnets</h1>
 
 <% @grupos.each do |titulo, unidades| %>
   <div class="mt-8">
-    <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></h2>
+    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></h2>
 
-    <div class="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <div class="mt-3 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4">
       <% unidades.each do |unidade| %>
-        <%= link_to unidade, class: "block rounded-xl border bg-white p-5 transition hover:shadow-md dark:bg-slate-800/40 border-slate-200 dark:border-white/10" do %>
-          <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold text-slate-900 dark:text-white"><%= unidade.nome %></span>
+        <% paga = @pagas_no_mes.include?(unidade.id) %>
+        <%= link_to unidade, class: "card group block p-4 transition hover:-translate-y-0.5 hover:shadow-md hover:ring-indigo-200 sm:p-5 dark:hover:ring-indigo-400/30" do %>
+          <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+            <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold tracking-tight text-slate-900 dark:text-white"><%= unidade.nome %></span>
+            <% if unidade.descontinuada? %>
+              <%= status_badge("Antiga", tone: :neutral, icon: :clock) %>
+            <% elsif paga %>
+              <%= status_badge("Pago", tone: :good) %>
+            <% elsif unidade.valor_base %>
+              <%= status_badge("Em aberto", tone: :warning, icon: :clock) %>
+            <% end %>
+          </div>
 
-          <p class="mt-4 text-sm tabular-nums text-slate-900 dark:text-white"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "Sem valor base" %></p>
+          <p class="mt-4 text-sm font-medium tabular-nums <%= unidade.valor_base ? "text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-500" %>"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "Sem valor base" %></p>
           <% if unidade.descontinuada? %>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400"><%= pluralize(unidade.pagamentos.size, "pagamento", plural: "pagamentos") %> no histórico</p>
-          <% else %>
-            <p class="mt-1 text-xs <%= @pagas_no_mes.include?(unidade.id) ? "text-emerald-700 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400" %>">
-              <%= @pagas_no_mes.include?(unidade.id) ? "✓ Pago este mês" : "Sem pagamento este mês" %>
-            </p>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400"><%= pluralize(unidade.pagamentos.size, "pagamento", plural: "pagamentos") %> no histórico</p>
           <% end %>
         <% end %>
       <% end %>

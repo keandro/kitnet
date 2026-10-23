@@ -2,20 +2,20 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <div>
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Finanças</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Finanças</h1>
   </div>
 
-  <nav class="flex flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-slate-800/40" aria-label="Ano">
+  <nav class="card flex flex-wrap items-center gap-1 rounded-lg p-1" aria-label="Ano">
     <% @anos.each do |ano| %>
       <%= link_to ano, financas_path(ano: ano),
-            class: "rounded-md px-3 py-1.5 text-sm font-medium #{ano == @ano ? "bg-indigo-600 text-white" : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5"}",
+            class: "rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors #{ano == @ano ? "bg-indigo-600 text-white shadow-sm dark:bg-indigo-500" : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5"}",
             aria: { current: (ano == @ano ? "page" : nil) } %>
     <% end %>
   </nav>
 </div>
 
 <% custos = @totais[:despesas_gerais] + @totais[:agua_esgoto] %>
-<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
   <%= render "shared/stat_tile", label: "Resultado em #{@ano}", value: number_to_currency(@totais[:resultado]), icon_name: :chart, tone: (@totais[:resultado].negative? ? :critical : :good), value_class: "text-xl",
         sublabel: (@meses_com_movimento.positive? ? "média de #{number_to_currency(@media_mensal)} por mês (#{pluralize(@meses_com_movimento, "mês", plural: "meses")})" : "sem movimento no ano") %>
   <%= render "shared/stat_tile", label: "Recebido em #{@ano}", value: number_to_currency(@total_recebido), icon_name: :cash, tone: :primary, value_class: "text-xl" %>
@@ -25,7 +25,7 @@
 
 <% escala = escala_financas(@meses.map { |m| m[:resultado] }) %>
 <% zero = posicao_na_escala(0, escala) %>
-<section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+<section class="card mt-6 p-5">
   <h2 class="text-sm font-medium text-slate-900 dark:text-white">Resultado por mês</h2>
 
   <div class="mt-6 flex gap-2">
@@ -80,20 +80,20 @@
   </div>
 </section>
 
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês</h2>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-      <thead class="bg-slate-50 dark:bg-white/5">
+    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Mês</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Recebido</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Resultado</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mês</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Recebido</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Resultado</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Editar</span></th>
         </tr>
       </thead>

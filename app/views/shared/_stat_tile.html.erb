@@ -1,10 +1,12 @@
-<div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/40 p-5 flex items-start gap-4">
-  <div class="shrink-0 rounded-lg p-2.5 <%= icon_chip_classes(local_assigns.fetch(:tone, :primary)) %>">
+<%# value_class: "text-2xl" (padrão) ou "text-xl"; no celular o número fica um passo menor %>
+<% tamanho = { "text-2xl" => "text-xl sm:text-2xl", "text-xl" => "text-lg sm:text-xl max-[359px]:text-base" }.fetch(local_assigns.fetch(:value_class, "text-2xl"), local_assigns[:value_class]) %>
+<div class="card flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:gap-4 sm:p-5 <%= local_assigns[:classe] %>">
+  <div class="flex size-9 shrink-0 items-center justify-center rounded-xl sm:size-10 <%= icon_chip_classes(local_assigns.fetch(:tone, :primary)) %>">
     <%= icon(icon_name, css_class: "size-5") %>
   </div>
   <div class="min-w-0">
-    <p class="text-sm text-slate-500 dark:text-slate-400"><%= label %></p>
-    <p class="mt-1 whitespace-nowrap <%= local_assigns.fetch(:value_class, "text-2xl") %> font-semibold text-slate-900 dark:text-white"><%= value %></p>
+    <p class="text-xs text-slate-500 sm:text-sm dark:text-slate-400"><%= label %></p>
+    <p class="mt-1 whitespace-nowrap <%= tamanho %> font-semibold tracking-tight tabular-nums text-slate-900 dark:text-white"><%= value %></p>
     <% if local_assigns[:sublabel].present? %>
       <p class="mt-1 text-xs text-slate-500 dark:text-slate-400"><%= sublabel %></p>
     <% end %>

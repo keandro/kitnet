@@ -2,7 +2,7 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <div>
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Energia</h1>
   </div>
   <%= render "navegacao_mes", conta: @conta %>
 </div>
@@ -13,7 +13,7 @@
 <% valor_pago = leituras.select(&:pago?).filter_map(&:valor).sum %>
 
 <%# conta do mês %>
-<section class="mt-6 rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+<section class="card mt-6 p-5">
   <h2 class="text-sm font-medium text-slate-900 dark:text-white">Conta do mês</h2>
 
   <%= render "shared/error_summary", object: @conta %>
@@ -35,13 +35,13 @@
         </p>
       </div>
       <div>
-        <%= form.submit "Salvar conta", class: "w-full cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
+        <%= form.submit "Salvar conta", class: "btn btn-primary w-full" %>
       </div>
     </div>
   <% end %>
 </section>
 
-<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
   <%= render "shared/stat_tile", label: "Consumo das kitnets", value: "#{kwh(consumo_kitnets)} kWh", icon_name: :bolt, tone: :primary, value_class: "text-xl",
         sublabel: (@conta.kwh_total ? "de #{kwh(@conta.kwh_total)} kWh da conta" : "lance a conta do mês") %>
   <%= render "shared/stat_tile", label: "Áreas comuns e perdas", value: (@conta.kwh_total ? "#{kwh(@conta.kwh_total - consumo_kitnets)} kWh" : "—"), icon_name: :building, tone: :info, value_class: "text-xl" %>
@@ -52,23 +52,23 @@
 </div>
 
 <%# kitnets %>
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <div>
       <h2 class="text-sm font-medium text-slate-900 dark:text-white">Por kitnet</h2>
     </div>
-    <%= link_to editar_leituras_energia_path(ano: @conta.ano, mes: @conta.mes), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
+    <%= link_to editar_leituras_energia_path(ano: @conta.ano, mes: @conta.mes), class: "btn btn-primary" do %>
       <%= icon :pencil, css_class: "size-4" %> Lançar leituras
     <% end %>
   </div>
 
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-      <thead class="bg-slate-50 dark:bg-white/5">
+    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
           <%# no celular ficam Kitnet, Valor e Pagamento (que já traz o botão Pago) %>
           <% [ [ "Kitnet", "left", true ], [ "Leitura anterior", "right", false ], [ "Leitura atual", "right", false ], [ "Consumo", "right", false ], [ "Valor", "right", true ], [ "Pagamento", "left", true ] ].each do |titulo, lado, celular| %>
-            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></th>
+            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
           <% end %>
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
         </tr>
@@ -124,16 +124,16 @@
      ls = c ? c.leituras.to_a : []
      { mes: mes, conta: c, consumo: ls.filter_map(&:consumo).sum, cobrar: ls.filter_map(&:valor).sum, recebido: ls.select(&:pago?).filter_map(&:valor).sum }
    end %>
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês em <%= @conta.ano %></h2>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-      <thead class="bg-slate-50 dark:bg-white/5">
+    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
           <% [ [ "Mês", "left", true ], [ "kWh da conta", "right", false ], [ "Valor do kWh", "right", false ], [ "Valor da conta", "right", true ], [ "Consumo das kitnets", "right", false ], [ "A cobrar das kitnets", "right", true ], [ "Já recebido", "right", false ] ].each do |titulo, lado, celular| %>
-            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400"><%= titulo %></th>
+            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
           <% end %>
         </tr>
       </thead>

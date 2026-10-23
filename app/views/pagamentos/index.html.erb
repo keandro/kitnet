@@ -8,36 +8,36 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <div>
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Pagamentos</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Pagamentos</h1>
   </div>
   <div class="flex flex-wrap items-center gap-2">
     <%= render "energia/navegacao_mes", conta: Struct.new(:ano, :mes).new(@mes.year, @mes.month), rota: :pagamentos_path %>
-    <%= link_to new_pagamento_path(data: data_sugerida), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-indigo-500" do %>
+    <%= link_to new_pagamento_path(data: data_sugerida), class: "btn btn-primary" do %>
       <%= icon :plus, css_class: "size-4" %> Registrar pagamento
     <% end %>
   </div>
 </div>
 
-<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-  <%= render "shared/stat_tile", label: "Recebido no mês", value: number_to_currency(recebido), icon_name: :cash, tone: :good, value_class: "text-xl",
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3">
+  <%= render "shared/stat_tile", classe: "col-span-2 sm:col-span-1", label: "Recebido no mês", value: number_to_currency(recebido), icon_name: :cash, tone: :good, value_class: "text-xl",
         sublabel: "#{@pagamentos.size} #{@pagamentos.size == 1 ? "pagamento" : "pagamentos"}" %>
   <%= render "shared/stat_tile", label: "Kitnets que pagaram", value: "#{cobradas.size - faltam.size} de #{cobradas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl" %>
   <%= render "shared/stat_tile", label: "Faltam pagar", value: faltam.size, icon_name: :clock, tone: (faltam.any? ? :critical : :good), value_class: "text-xl",
         sublabel: (faltam.any? ? faltam.map(&:nome).join(", ") : "todas pagaram") %>
 </div>
 
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Por kitnet</h2>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-      <thead class="bg-slate-50 dark:bg-white/5">
+    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Kitnet</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Valor base</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Pago no mês</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Pagamento</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Kitnet</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor base</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pago no mês</th>
+          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pagamento</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
         </tr>
       </thead>
@@ -77,13 +77,13 @@
   </div>
 </section>
 
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Pagamentos de <%= nome_mes %></h2>
   </div>
   <% if @pagamentos.any? %>
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
+      <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
         <%= render "table_head", mostrar_kitnet: true %>
         <tbody class="divide-y divide-slate-100 dark:divide-white/5">
           <%= render partial: "pagamento_row", collection: @pagamentos, as: :pagamento, locals: { mostrar_kitnet: true } %>

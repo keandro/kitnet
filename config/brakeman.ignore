@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "d9d0edbe0e694f9fd98b2812b51a5943a9dc0afde5a79d2614d12a6c3b621ea6",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/backups_controller.rb",
+      "line": 35,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(BancoBackup.encontrar(params[:nome]).caminho, :filename => BancoBackup.encontrar(params[:nome]).nome, :type => \"application/vnd.sqlite3\", :disposition => \"attachment\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BackupsController",
+        "method": "baixar"
+      },
+      "user_input": "params[:nome]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": "Falso positivo: BancoBackup.encontrar só devolve arquivos da lista de cópias em storage/backups (compara o nome com a listagem); o parâmetro nunca vira caminho. Testado: ../, development.sqlite3 e nomes inexistentes dão 404."
+    }
+  ],
+  "brakeman_version": "8.1.0"
+}

@@ -47,9 +47,10 @@ module BancoBackup
          .sort_by(&:data).reverse
   end
 
+  # Só devolve arquivos que estão na lista de cópias: o nome vindo do link
+  # nunca vira caminho diretamente.
   def encontrar(nome)
-    caminho = PASTA.join(File.basename(nome.to_s))
-    caminho if caminho.extname == ".sqlite3" && caminho.file?
+    copias.find { |copia| copia.nome == nome.to_s }
   end
 
   def resumo

@@ -3,7 +3,7 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <div>
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Energia solar</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Energia solar</h1>
   </div>
   <%= render "energia/navegacao_mes", conta: a, rota: :energia_solar_path %>
 </div>
@@ -13,7 +13,7 @@
 <%= form_with(model: a, url: apuracao_energia_solar_path(ano: a.ano, mes: a.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-6") do |form| %>
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
     <%# 1. valor sem solar %>
-    <section class="rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+    <section class="card p-5">
       <h2 class="text-sm font-medium text-slate-900 dark:text-white">Sem a energia solar</h2>
 
       <dl class="mt-4 space-y-4">
@@ -41,7 +41,7 @@
     </section>
 
     <%# 2. pago %>
-    <section class="rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+    <section class="card p-5">
       <h2 class="text-sm font-medium text-slate-900 dark:text-white">Pago de verdade</h2>
 
       <div class="mt-4 space-y-4">
@@ -61,7 +61,7 @@
     </section>
 
     <%# 3. lucro %>
-    <section class="flex flex-col rounded-xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-slate-800/40">
+    <section class="card flex flex-col p-5">
       <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro das kitnets</h2>
 
       <p class="mt-4 text-4xl font-semibold tabular-nums <%= a.lucro_kitnets&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
@@ -82,23 +82,23 @@
       </div>
 
       <div class="mt-auto pt-6">
-        <%= form.submit "Salvar", class: "w-full cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
+        <%= form.submit "Salvar", class: "btn btn-primary w-full" %>
       </div>
     </section>
   </div>
 <% end %>
 
-<section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800/40">
-  <div class="border-b border-slate-200 px-4 py-3 dark:border-white/10">
+<section class="card mt-6 overflow-hidden">
+  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro mês a mês em <%= a.ano %></h2>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/10">
-      <thead class="bg-slate-50 dark:bg-white/5">
+    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Mês</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Lucro das kitnets</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Lucro total</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mês</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro das kitnets</th>
+          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro total</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100 dark:divide-white/5">

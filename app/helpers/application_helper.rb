@@ -20,7 +20,7 @@ module ApplicationHelper
   def status_badge(label, tone:, icon: nil)
     classes = TONE_CLASSES.fetch(tone, TONE_CLASSES[:neutral])
     icon_name = icon || TONE_ICONS.fetch(tone, :clock)
-    tag.span class: "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ring-1 ring-inset #{classes}" do
+    tag.span class: "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset #{classes}" do
       concat icon(icon_name, css_class: "size-3.5")
       concat label
     end
@@ -40,9 +40,9 @@ module ApplicationHelper
     ICON_CHIP_CLASSES.fetch(tone, ICON_CHIP_CLASSES[:primary])
   end
 
-  FIELD_BASE_CLASSES = "mt-1 block w-full rounded-lg border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 dark:bg-slate-900 dark:text-white"
-  FIELD_OK_CLASSES = "border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-white/10"
-  FIELD_ERROR_CLASSES = "border-rose-400 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-400/50"
+  FIELD_BASE_CLASSES = "mt-1.5 block w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-1 ring-inset placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:outline-none dark:bg-white/5 dark:text-white"
+  FIELD_OK_CLASSES = "ring-slate-300 focus:ring-indigo-600 dark:ring-white/10 dark:focus:ring-indigo-500"
+  FIELD_ERROR_CLASSES = "ring-rose-400 focus:ring-rose-500 dark:ring-rose-400/50"
   LABEL_CLASSES = "block text-sm font-medium text-slate-700 dark:text-slate-300"
 
   def field_classes(object, attribute)
@@ -60,7 +60,7 @@ module ApplicationHelper
     valor = format_money(valor, precision: decimais) if valor.is_a?(Numeric)
 
     tag.div(class: "relative") do
-      tag.span("R$", class: "pointer-events-none absolute inset-y-0 left-3 mt-1 flex items-center text-sm text-slate-500 dark:text-slate-400") +
+      tag.span("R$", class: "pointer-events-none absolute inset-y-0 left-3 mt-1.5 flex items-center text-sm text-slate-400") +
         form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: format_money(0, precision: decimais),
                         class: "#{field_classes(form.object, attribute)} pl-10",
                         data: { controller: "money", action: "input->money#format", money_decimais_value: decimais }.merge(data))
@@ -72,17 +72,47 @@ module ApplicationHelper
     number_with_precision(valor, precision: precision, delimiter: ".", separator: ",")
   end
 
+  # Itens do menu: barra lateral (rótulo) e navegação de baixo do celular (curto).
+  def menu_principal
+    [
+      { rotulo: "Finanças", curto: "Finanças", caminho: financas_path, icone: :chart },
+      { rotulo: "Pagamentos", curto: "Pagamentos", caminho: pagamentos_path, icone: :cash },
+      { rotulo: "Energia", curto: "Energia", caminho: energia_path, icone: :bolt },
+      { rotulo: "Energia solar", curto: "Solar", caminho: energia_solar_path, icone: :sun },
+      { rotulo: "Kitnets", curto: "Kitnets", caminho: unidades_path, icone: :grid }
+    ]
+  end
+
+  def menu_ativo?(path)
+    current_page?(path) || request.path.start_with?("#{path}/")
+  end
+
   def sidebar_nav_link(label, path, icon_name)
-    active = current_page?(path) || (path != root_path && request.path.start_with?("#{path}/"))
-    classes = if active
-      "bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400"
+    classes = if menu_ativo?(path)
+      "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300"
     else
-      "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
+      "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
     end
 
-    link_to path, class: "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors #{classes}" do
+    link_to path, class: "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors #{classes}",
+                  aria: { current: (menu_ativo?(path) ? "page" : nil) } do
       concat icon(icon_name, css_class: "size-5 shrink-0")
       concat label
     end
+  end
+
+  def bottom_nav_link(label, path, icon_name)
+    ativo = menu_ativo?(path)
+    link_to path, class: "flex flex-col items-center gap-1 px-1 pt-2 pb-2.5 text-[11px] font-medium #{ativo ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400"}",
+                  aria: { current: (ativo ? "page" : nil) } do
+      concat tag.span(icon(icon_name, css_class: "size-5"), class: "flex h-7 w-12 items-center justify-center rounded-full #{"bg-indigo-50 dark:bg-indigo-500/15" if ativo}")
+      concat tag.span(label, class: "truncate")
+    end
+  end
+
+  # Logotipo: a casinha do ícone num quadrado com degradê.
+  def marca_lf_kitnets(tamanho: "size-8")
+    tag.span(icon(:home, css_class: "size-[60%]"),
+             class: "flex #{tamanho} shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-sm shadow-indigo-500/30")
   end
 end

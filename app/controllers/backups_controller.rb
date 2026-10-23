@@ -29,9 +29,9 @@ class BackupsController < ApplicationController
 
   # GET /backup/copias/:nome
   def baixar
-    caminho = BancoBackup.encontrar(params[:nome])
-    return head(:not_found) unless caminho
+    copia = BancoBackup.encontrar(params[:nome])
+    return head(:not_found) unless copia
 
-    send_file caminho, filename: caminho.basename.to_s, type: "application/vnd.sqlite3", disposition: "attachment"
+    send_file copia.caminho, filename: copia.nome, type: "application/vnd.sqlite3", disposition: "attachment"
   end
 end
