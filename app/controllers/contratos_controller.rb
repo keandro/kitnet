@@ -28,7 +28,7 @@ class ContratosController < ApplicationController
   # GET /contratos/new?unidade_id=1
   def new
     unidade = Unidade.find_by(id: params[:unidade_id])
-    @contrato = Contrato.new(unidade: unidade, valor: unidade&.valor_base, duracao_meses: 12, dia_vencimento: 10, data_inicio: Date.current)
+    @contrato = Contrato.new(unidade: unidade, valor: unidade&.valor_base, duracao_meses: 30, dia_vencimento: 10, data_inicio: Date.current)
   end
 
   # GET /contratos/1/edit
