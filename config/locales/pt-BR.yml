@@ -23,6 +23,7 @@ pt-BR:
       contrato:
         unidade: Kitnet
         inquilino: Inquilino
+        celular: Celular
         fiador: Fiador
         valor: Valor
         duracao_meses: Duração (meses)

@@ -66,6 +66,6 @@ class ContratosController < ApplicationController
     end
 
     def contrato_params
-      params.expect(contrato: [ :unidade_id, :inquilino, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf ])
+      params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf ])
     end
 end

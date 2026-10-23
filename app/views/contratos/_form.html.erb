@@ -9,6 +9,12 @@
       </div>
 
       <div class="sm:col-span-2">
+        <%= form.label :celular, "Celular do inquilino (WhatsApp)", class: label_classes %>
+        <%= form.telephone_field :celular, value: contrato.celular_formatado || contrato.celular, placeholder: "(27) 99999-9999", inputmode: "tel",
+              class: field_classes(contrato, :celular), data: { controller: "celular", action: "input->celular#formatar" } %>
+      </div>
+
+      <div class="sm:col-span-2">
         <%= form.label :fiador, class: label_classes %>
         <%= form.text_field :fiador, placeholder: "Deixe em branco se não tiver", class: field_classes(contrato, :fiador) %>
       </div>

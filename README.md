@@ -23,11 +23,11 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 ## Funcionalidades
 
 - **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
-- **Contratos**: quem aluga cada kitnet — inquilino, fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado` e o contrato em PDF (opcional, até 20 MB). Independentes dos pagamentos: não geram cobranças
+- **Contratos**: quem aluga cada kitnet — inquilino, celular para WhatsApp (opcional), fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado` e o contrato em PDF (opcional, até 20 MB). Independentes dos pagamentos: não geram cobranças
 - **Ocupação**: as kitnets ocupadas (com inquilino, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
-- **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
+- **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago; um botão manda a conta de cada kitnet pelo WhatsApp para o inquilino do contrato ativo
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
 - Interface responsiva com modo escuro; no celular, navegação na barra de baixo (como num app)
 
@@ -60,6 +60,7 @@ classDiagram
         +bigint id
         +bigint unidade_id
         +string inquilino
+        +string celular
         +string fiador
         +decimal valor
         +integer duracao_meses
@@ -142,6 +143,7 @@ classDiagram
 - **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e pode ser ajustado.
 - **Pagamentos do mês**: uma kitnet conta como paga no mês se tiver ao menos um pagamento com data naquele mês; "faltam pagar" lista as kitnets **com valor base** sem pagamento (kitnet sem valor base não é cobrada).
 - **Energia**: a tarifa do kWh é digitada (sem o desconto da energia solar) e o valor total da conta = kWh total × tarifa; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
+- **Mensagem de energia (WhatsApp):** usa o primeiro nome e o celular do contrato **ativo** da kitnet e traz mês, leitura anterior e atual, consumo, valor do kWh e o total a pagar (e, se já pago, a data). Sem celular no contrato, o WhatsApp abre com a mensagem pronta para escolher o contato. O celular é guardado só com dígitos, com DDD (ex.: `27999999999`).
 - **Lucro total da energia solar** = (conta das kitnets pela tarifa + energia do apartamento) − (conta paga do apartamento + conta paga das kitnets).
 - **Lucro da energia solar das kitnets** = conta das kitnets pela tarifa − conta paga das kitnets. É este valor que entra em Finanças na coluna Energia solar.
 - **Resultado do mês** (Finanças) = recebido + energia solar − despesas gerais − água e esgoto. Os custos não podem ser negativos.

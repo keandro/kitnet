@@ -13,11 +13,18 @@ class Contrato < ApplicationRecord
   attr_accessor :arquivo_pdf, :remover_pdf
 
   normalizes :inquilino, :fiador, with: ->(nome) { nome.squish.presence }
+  # Só dígitos, sem o +55: "(27) 99999-9999" e "+55 27 99999-9999" viram "27999999999".
+  normalizes :celular, with: ->(numero) {
+    digitos = numero.gsub(/\D/, "")
+    digitos = digitos.delete_prefix("55") if digitos.length > 11
+    digitos.presence
+  }
 
   validates :inquilino, presence: true
   validates :valor, numericality: { greater_than: 0 }
   validates :duracao_meses, numericality: { only_integer: true, in: 1..120 }
   validates :dia_vencimento, numericality: { only_integer: true, in: 1..31 }
+  validates :celular, format: { with: /\A[1-9]{2}9\d{8}\z/, message: "precisa ter DDD + 9 dígitos (ex.: (27) 99999-9999)" }, allow_nil: true
   validate :uma_kitnet_um_contrato_ativo, if: :ativo?
   validate :arquivo_pdf_valido, if: -> { arquivo_pdf.present? }
 
@@ -27,6 +34,11 @@ class Contrato < ApplicationRecord
 
   def data_fim
     data_inicio&.advance(months: duracao_meses)&.prev_day
+  end
+
+  # (27) 99999-9999
+  def celular_formatado
+    celular&.sub(/\A(\d{2})(\d{5})(\d{4})\z/, '(\\1) \\2-\\3')
   end
 
   # Nome e tamanho do PDF, sem carregar o arquivo.

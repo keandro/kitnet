@@ -11,6 +11,30 @@ module EnergiaHelper
     valor&.to_d&.to_s("F")&.sub(/\.?0+\z/, "")
   end
 
+  # Mensagem da conta de energia de uma kitnet, para mandar ao inquilino.
+  def mensagem_energia(leitura, contrato)
+    conta = leitura.conta_energia
+    saudacao = contrato ? "Olá, #{contrato.inquilino.split.first}!" : "Olá!"
+    [
+      saudacao,
+      "Segue a conta de energia da kitnet #{leitura.unidade.nome} referente a #{nome_do_mes_energia(conta).downcase}:",
+      "",
+      "• Leitura anterior: #{kwh(leitura.leitura_anterior)} kWh",
+      "• Leitura atual: #{kwh(leitura.leitura_atual)} kWh",
+      "• Consumo: #{kwh(leitura.consumo)} kWh",
+      "• Valor do kWh: #{number_to_currency(conta.valor_kwh, precision: 4)}",
+      "",
+      "*Total a pagar: #{number_to_currency(leitura.valor)}*",
+      (leitura.pago? ? "(pagamento recebido em #{l(leitura.data_pagamento)} — obrigado!)" : nil)
+    ].compact.join("\n")
+  end
+
+  # Link do WhatsApp com a mensagem pronta; sem número, o WhatsApp pede o contato.
+  def whatsapp_url(celular, texto)
+    destino = celular.present? ? "55#{celular}" : ""
+    "https://wa.me/#{destino}?text=#{ERB::Util.url_encode(texto)}"
+  end
+
   def nome_do_mes_energia(conta)
     "#{I18n.t("date.month_names")[conta.mes].capitalize} de #{conta.ano}"
   end

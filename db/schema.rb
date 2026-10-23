@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_201818) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_203141) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_201818) do
     t.text "observacoes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "celular"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
