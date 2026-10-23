@@ -72,7 +72,7 @@ module ApplicationHelper
     number_with_precision(valor, precision: precision, delimiter: ".", separator: ",")
   end
 
-  # Áreas que ficam na barra de baixo do celular (e no topo da barra lateral).
+  # Áreas que ficam na barra de baixo do celular.
   def menu_principal
     [
       { rotulo: "Finanças", curto: "Finanças", caminho: financas_path, icone: :chart },
@@ -82,7 +82,17 @@ module ApplicationHelper
     ]
   end
 
-  # Áreas do "Mais" (no celular) e do fim da barra lateral.
+  # Barra lateral (computador), em grupos separados por uma linha.
+  def menu_barra_lateral
+    [
+      [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
+      [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ] ],
+      [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
+      [ [ "Backup", backups_path, :arquivo ] ]
+    ]
+  end
+
+  # Áreas do "Mais" (no celular).
   def menu_mais
     [
       { rotulo: "Energia", caminho: energia_path, icone: :bolt, tom: :warning, descricao: "Conta do mês e medidores das kitnets" },

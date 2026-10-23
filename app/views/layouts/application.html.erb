@@ -32,12 +32,11 @@
         </div>
 
         <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4" aria-label="Menu">
-          <% menu_principal.each do |item| %>
-            <%= sidebar_nav_link item[:rotulo], item[:caminho], item[:icone] %>
-          <% end %>
-          <div class="my-3 border-t border-slate-100 dark:border-white/5"></div>
-          <% menu_mais.each do |item| %>
-            <%= sidebar_nav_link item[:rotulo], item[:caminho], item[:icone] %>
+          <% menu_barra_lateral.each_with_index do |grupo, i| %>
+            <% if i.positive? %><div class="my-3 border-t border-slate-100 dark:border-white/5"></div><% end %>
+            <% grupo.each do |rotulo, caminho, icone| %>
+              <%= sidebar_nav_link rotulo, caminho, icone %>
+            <% end %>
           <% end %>
         </nav>
       </aside>
