@@ -9,6 +9,8 @@ on:
 jobs:
   apk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # publicar o APK em Releases
 
     steps:
       - name: Checkout code
@@ -43,3 +45,12 @@ jobs:
           name: lf-kitnets-apk
           path: android/app/build/outputs/apk/release/*.apk
           retention-days: 30
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSAO: 1.0.${{ github.run_number }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk "lf-kitnets-$VERSAO.apk"
+          gh release create "v$VERSAO" "lf-kitnets-$VERSAO.apk" --target "$GITHUB_SHA" \
+            --title "LF Kitnets $VERSAO" --generate-notes

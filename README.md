@@ -222,25 +222,19 @@ A pasta `android/` tem um app Android (WebView) que abre o sistema com o mesmo l
 
 ### Como baixar o APK
 
-O APK é gerado pelo GitHub Actions e fica disponível por 30 dias em cada execução.
+Cada APK gerado pelo GitHub Actions é publicado em [**Releases**](https://github.com/keandro/kitnet/releases): abra a mais recente (**LF Kitnets 1.0.N**) e, em *Assets*, baixe o `lf-kitnets-1.0.N.apk`.
 
-**Pelo site do GitHub** (precisa estar logado):
-
-1. Abra a aba [**Actions**](https://github.com/keandro/kitnet/actions/workflows/android.yml) do repositório, no workflow **Android APK**.
-2. Clique na execução mais recente com ✓ verde.
-3. No fim da página, em **Artifacts**, baixe **lf-kitnets-apk**. Vem um `.zip`; dentro dele está o `app-release.apk`.
-
-**Pelo terminal**, com o [GitHub CLI](https://cli.github.com/):
+Pelo terminal:
 
 ```bash
-gh run download -R keandro/kitnet -n lf-kitnets-apk -D ~/Downloads/lf-kitnets-apk
+gh release download -R keandro/kitnet -p "*.apk" -D ~/Downloads
 ```
 
-Se a última execução já passou dos 30 dias, gere um APK novo em *Actions → Android APK → Run workflow*.
+Para gerar uma versão nova sem mexer no código: *Actions → Android APK → Run workflow*.
 
 ### Como instalar no celular
 
-1. Passe o `app-release.apk` para o celular (cabo USB, Google Drive, WhatsApp para você mesmo…).
+1. Passe o APK para o celular (ou baixe direto pelo navegador do celular, em Releases) (cabo USB, Google Drive, WhatsApp para você mesmo…).
 2. Toque no arquivo no celular. O Android pede para permitir **instalar apps desconhecidos** a partir do app que abriu o arquivo; permita.
 3. Confirme a instalação. O app **LF Kitnets** aparece com o ícone da casinha.
 
@@ -251,7 +245,7 @@ Para atualizar, instale o APK novo por cima: o endereço do servidor salvo conti
 - **Endereço do servidor:** começa em `http://192.168.18.204:3000`. Se o servidor não responder (computador desligado, celular fora do Wi-Fi de casa ou IP do computador mudou), o app mostra uma tela para corrigir o endereço, que fica salvo no celular. Fixe o IP do computador no roteador para não precisar mudar.
 - **Arquivos:** o botão de escolher arquivo abre o seletor do Android (PDF do contrato, importar backup); PDFs e backups baixados abrem no leitor de PDF ou no navegador do celular.
 - **Navegação:** o botão voltar do Android volta de página, puxar para baixo no topo da página atualiza e o modo claro/escuro segue o celular.
-- **Gerar o APK:** o workflow `.github/workflows/android.yml` compila e assina o APK a cada push que mexe em `android/`, ou manualmente em *Actions → Android APK → Run workflow*.
+- **Gerar o APK:** o workflow `.github/workflows/android.yml` compila, assina e publica o APK em Releases (`v1.0.<número da execução>`) a cada push que mexe em `android/`, ou manualmente em *Actions → Android APK → Run workflow*.
 - **Assinatura:** a chave fica fora do repositório (`~/.config/lf-kitnets/`) e no GitHub como os segredos `KEYSTORE_BASE64` e `KEYSTORE_PASSWORD`. Guarde uma cópia dela: sem a mesma chave, o celular não aceita atualizar o app (seria preciso desinstalar e instalar de novo).
 
 ## Qualidade e segurança
