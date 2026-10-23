@@ -72,19 +72,32 @@ module ApplicationHelper
     number_with_precision(valor, precision: precision, delimiter: ".", separator: ",")
   end
 
-  # Itens do menu: barra lateral (rótulo) e navegação de baixo do celular (curto).
+  # Áreas que ficam na barra de baixo do celular (e no topo da barra lateral).
   def menu_principal
     [
       { rotulo: "Finanças", curto: "Finanças", caminho: financas_path, icone: :chart },
       { rotulo: "Pagamentos", curto: "Pagamentos", caminho: pagamentos_path, icone: :cash },
-      { rotulo: "Energia", curto: "Energia", caminho: energia_path, icone: :bolt },
-      { rotulo: "Energia solar", curto: "Solar", caminho: energia_solar_path, icone: :sun },
-      { rotulo: "Kitnets", curto: "Kitnets", caminho: unidades_path, icone: :grid }
+      { rotulo: "Contratos", curto: "Contratos", caminho: contratos_path, icone: :document },
+      { rotulo: "Ocupação", curto: "Ocupação", caminho: ocupacao_path, icone: :users }
+    ]
+  end
+
+  # Áreas do "Mais" (no celular) e do fim da barra lateral.
+  def menu_mais
+    [
+      { rotulo: "Energia", caminho: energia_path, icone: :bolt, tom: :warning, descricao: "Conta do mês e medidores das kitnets" },
+      { rotulo: "Energia solar", caminho: energia_solar_path, icone: :sun, tom: :info, descricao: "Lucro da energia solar" },
+      { rotulo: "Kitnets", caminho: unidades_path, icone: :grid, tom: :primary, descricao: "Valor base e histórico de pagamentos" },
+      { rotulo: "Backup", caminho: backups_path, icone: :arquivo, tom: :neutral, descricao: "Exportar, importar e cópias" }
     ]
   end
 
   def menu_ativo?(path)
     current_page?(path) || request.path.start_with?("#{path}/")
+  end
+
+  def menu_mais_ativo?
+    current_page?(mais_path) || menu_mais.any? { |item| menu_ativo?(item[:caminho]) }
   end
 
   def sidebar_nav_link(label, path, icon_name)
@@ -101,8 +114,7 @@ module ApplicationHelper
     end
   end
 
-  def bottom_nav_link(label, path, icon_name)
-    ativo = menu_ativo?(path)
+  def bottom_nav_link(label, path, icon_name, ativo: menu_ativo?(path))
     link_to path, class: "flex flex-col items-center gap-1 px-1 pt-2 pb-2.5 text-[11px] font-medium #{ativo ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400"}",
                   aria: { current: (ativo ? "page" : nil) } do
       concat tag.span(icon(icon_name, css_class: "size-5"), class: "flex h-7 w-12 items-center justify-center rounded-full #{"bg-indigo-50 dark:bg-indigo-500/15" if ativo}")

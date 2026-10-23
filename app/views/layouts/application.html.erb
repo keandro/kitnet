@@ -36,7 +36,9 @@
             <%= sidebar_nav_link item[:rotulo], item[:caminho], item[:icone] %>
           <% end %>
           <div class="my-3 border-t border-slate-100 dark:border-white/5"></div>
-          <%= sidebar_nav_link "Backup", backups_path, :arquivo %>
+          <% menu_mais.each do |item| %>
+            <%= sidebar_nav_link item[:rotulo], item[:caminho], item[:icone] %>
+          <% end %>
         </nav>
       </aside>
 
@@ -47,9 +49,6 @@
             <%= marca_lf_kitnets(tamanho: "size-7") %>
             <span class="text-base font-semibold tracking-tight">LF Kitnets</span>
           </div>
-          <%= link_to backups_path, class: "rounded-lg p-2 #{request.path.start_with?(backups_path) ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/5"}", title: "Backup", aria: { label: "Backup" } do %>
-            <%= icon :arquivo, css_class: "size-5" %>
-          <% end %>
         </header>
 
         <main class="flex-1 overflow-y-auto px-4 pt-6 pb-28 sm:px-6 lg:px-10 lg:pt-8 lg:pb-10">
@@ -64,6 +63,7 @@
             <% menu_principal.each do |item| %>
               <%= bottom_nav_link item[:curto], item[:caminho], item[:icone] %>
             <% end %>
+            <%= bottom_nav_link "Mais", mais_path, :menu, ativo: menu_mais_ativo? %>
           </div>
         </nav>
       </div>

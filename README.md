@@ -23,6 +23,8 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 ## Funcionalidades
 
 - **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
+- **Contratos**: quem aluga cada kitnet — inquilino, fiador (opcional), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional) e situação `ativo` ou `finalizado`. Independentes dos pagamentos: não geram cobranças
+- **Ocupação**: as kitnets ocupadas (com inquilino, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e tarifa do kWh; o valor total é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago
@@ -52,6 +54,19 @@ classDiagram
         +string nome
         +decimal valor_base
         +boolean descontinuada
+    }
+
+    class Contrato {
+        +bigint id
+        +bigint unidade_id
+        +string inquilino
+        +string fiador
+        +decimal valor
+        +integer duracao_meses
+        +integer dia_vencimento
+        +date data_inicio
+        +enum status
+        +data_fim()
     }
 
     class Pagamento {
@@ -104,6 +119,7 @@ classDiagram
     }
 
     Unidade "1" --> "0..*" Pagamento : recebe
+    Unidade "1" --> "0..*" Contrato : alugada em
     ContaEnergia "1" --> "0..*" LeituraEnergia : rateia
     Unidade "1" --> "0..*" LeituraEnergia : medidor
 ```
@@ -113,6 +129,7 @@ classDiagram
 ## Regras de negócio
 
 - **Kitnets são fixas**: as 12 (`001`–`004`, `101`–`104`, `201`–`204`) e a **Antiga casa** vêm do seed; no app só se altera o valor base. A Antiga casa é `descontinuada`: não é mais alugada, aceita pagamentos com datas do passado, aparece separada no quadro e some das telas mensais depois do mês do último pagamento.
+- **Contrato** exige inquilino, kitnet, valor maior que zero, duração de 1 a 120 meses e dia de vencimento de 1 a 31; fiador e início são opcionais (com início, o fim é calculado). **Cada kitnet só pode ter um contrato ativo**; finalizar o contrato deixa a kitnet livre na Ocupação. Contratos não criam nem alteram pagamentos.
 - **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e pode ser ajustado.
 - **Pagamentos do mês**: uma kitnet conta como paga no mês se tiver ao menos um pagamento com data naquele mês; "faltam pagar" lista as kitnets **com valor base** sem pagamento (kitnet sem valor base não é cobrada).
 - **Energia**: a tarifa do kWh é digitada (sem o desconto da energia solar) e o valor total da conta = kWh total × tarifa; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
@@ -164,6 +181,8 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 | ---------------- | --------------------------------- |
 | `/`              | Abre Finanças                     |
 | `/pagamentos`    | Pagamentos do mês                 |
+| `/contratos`     | Contratos (ativos e finalizados)  |
+| `/ocupacao`      | Kitnets ocupadas e livres         |
 | `/kitnets`       | Kitnets e histórico de pagamentos |
 | `/financas`      | Finanças por ano                  |
 | `/energia`       | Conta de energia e medidores      |

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Novo pagamento: ao escolher a kitnet, sugere o valor base dela.
+// Novo pagamento ou contrato: ao escolher a kitnet, sugere o valor base dela.
 // Não sobrescreve um valor digitado à mão.
 export default class extends Controller {
   static targets = ["unidade", "valor"]

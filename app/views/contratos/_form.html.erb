@@ -1,0 +1,64 @@
+<div class="card p-6">
+  <%= render "shared/error_summary", object: contrato %>
+
+  <%= form_with(model: contrato, html: { autocomplete: "off" }, data: (contrato.new_record? ? { controller: "valor-base" } : {})) do |form| %>
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <%= form.label :inquilino, "Inquilino (quem vai morar)", class: label_classes %>
+        <%= form.text_field :inquilino, class: field_classes(contrato, :inquilino), autofocus: contrato.new_record? %>
+      </div>
+
+      <div class="sm:col-span-2">
+        <%= form.label :fiador, class: label_classes %>
+        <%= form.text_field :fiador, placeholder: "Deixe em branco se não tiver", class: field_classes(contrato, :fiador) %>
+      </div>
+
+      <div>
+        <%= form.label :unidade_id, "Kitnet", class: label_classes %>
+        <% ocupadas = Contrato.ativo.where.not(id: contrato.id).includes(:unidade).index_by(&:unidade_id) %>
+        <%= form.select :unidade_id,
+              options_for_select(Unidade.em_uso.order(:nome).map { |u|
+                [ ocupadas[u.id] ? "#{u.nome} — ocupada (#{ocupadas[u.id].inquilino})" : u.nome, u.id,
+                  { disabled: ocupadas[u.id].present? && contrato.ativo?, data: { valor_base: u.valor_base && format_money(u.valor_base) } } ]
+              }, contrato.unidade_id),
+              { prompt: "Selecione a kitnet" },
+              class: field_classes(contrato, :unidade), data: { valor_base_target: "unidade", action: "valor-base#preencherValor" } %>
+      </div>
+
+      <div>
+        <%= form.label :valor, "Valor do aluguel", class: label_classes %>
+        <%= money_field form, :valor, data: { valor_base_target: "valor" } %>
+      </div>
+
+      <div>
+        <%= form.label :duracao_meses, class: label_classes %>
+        <%= form.number_field :duracao_meses, in: 1..120, inputmode: "numeric", class: field_classes(contrato, :duracao_meses) %>
+      </div>
+
+      <div>
+        <%= form.label :dia_vencimento, class: label_classes %>
+        <%= form.number_field :dia_vencimento, in: 1..31, inputmode: "numeric", class: field_classes(contrato, :dia_vencimento) %>
+      </div>
+
+      <div>
+        <%= form.label :data_inicio, "Início do contrato (opcional)", class: label_classes %>
+        <%= form.date_field :data_inicio, class: field_classes(contrato, :data_inicio) %>
+      </div>
+
+      <div>
+        <%= form.label :status, class: label_classes %>
+        <%= form.select :status, [ [ "Ativo", "ativo" ], [ "Finalizado", "finalizado" ] ], {}, class: field_classes(contrato, :status) %>
+      </div>
+
+      <div class="sm:col-span-2">
+        <%= form.label :observacoes, class: label_classes %>
+        <%= form.text_area :observacoes, rows: 3, class: field_classes(contrato, :observacoes) %>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-white/5">
+      <%= link_to "Cancelar", contratos_path, class: "btn btn-secondary" %>
+      <%= form.submit "Salvar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

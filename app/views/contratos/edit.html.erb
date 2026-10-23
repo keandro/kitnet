@@ -1,0 +1,23 @@
+<% content_for :title, "Contrato de #{@contrato.inquilino}" %>
+
+<%= link_to contratos_path(situacao: @contrato.status_was), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white" do %>
+  <%= icon :arrow_left, css_class: "size-4" %> Contratos
+<% end %>
+
+<div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Contrato de <%= @contrato.inquilino_was %></h1>
+  <div class="flex flex-wrap gap-2">
+    <% if @contrato.status_was == "ativo" %>
+      <%= button_to finalizar_contrato_path(@contrato), method: :patch, form_class: "inline-block", class: "btn btn-secondary", data: { turbo_confirm: "Finalizar o contrato de #{@contrato.inquilino_was}? A kitnet fica livre." } do %>
+        <%= icon :check_circle, css_class: "size-4" %> Finalizar
+      <% end %>
+    <% end %>
+    <%= button_to @contrato, method: :delete, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Remover este contrato? Para encerrar um contrato que terminou, use Finalizar." } do %>
+      <%= icon :trash, css_class: "size-4" %> Remover
+    <% end %>
+  </div>
+</div>
+
+<div class="mt-6 max-w-2xl">
+  <%= render "form", contrato: @contrato %>
+</div>

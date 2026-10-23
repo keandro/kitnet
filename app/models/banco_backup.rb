@@ -57,6 +57,7 @@ module BancoBackup
     {
       "kitnets" => Unidade.count,
       "pagamentos" => Pagamento.count,
+      "contratos" => Contrato.count,
       "contas de energia" => ContaEnergia.count,
       "leituras" => LeituraEnergia.count,
       "meses de energia solar" => EnergiaSolarMensal.count,

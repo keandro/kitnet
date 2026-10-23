@@ -1,0 +1,86 @@
+<% content_for :title, "Contratos" %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Contratos</h1>
+  <%= link_to new_contrato_path, class: "btn btn-primary" do %>
+    <%= icon :plus, css_class: "size-4" %> Novo contrato
+  <% end %>
+</div>
+
+<nav class="mt-6 inline-flex rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-900/5 dark:bg-slate-900 dark:ring-white/10" aria-label="Situação">
+  <% { "ativo" => "Ativos", "finalizado" => "Finalizados", "todos" => "Todos" }.each do |chave, rotulo| %>
+    <% total = chave == "todos" ? @totais.values.sum : @totais[chave].to_i %>
+    <%= link_to contratos_path(situacao: chave),
+          class: "rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors #{@situacao == chave ? "bg-indigo-600 text-white shadow-sm dark:bg-indigo-500" : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5"}",
+          aria: { current: (@situacao == chave ? "page" : nil) } do %>
+      <%= rotulo %> <span class="ml-0.5 <%= @situacao == chave ? "text-indigo-100" : "text-slate-400" %>"><%= total %></span>
+    <% end %>
+  <% end %>
+</nav>
+
+<section class="card mt-4 overflow-hidden">
+  <% if @contratos.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
+        <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
+          <tr>
+            <th class="px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Inquilino</th>
+            <th class="px-3 py-3 sm:px-4 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor</th>
+            <th class="hidden sm:table-cell px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Vencimento</th>
+            <th class="hidden md:table-cell px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Período</th>
+            <th class="px-3 py-3 sm:px-4 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Situação</th>
+            <th class="hidden sm:table-cell px-3 py-3 sm:px-4"><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+          <% @contratos.each do |contrato| %>
+            <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= edit_contrato_path(contrato) %>" data-action="click->row-link#visit">
+              <td class="px-3 py-3 sm:px-4">
+                <p class="text-sm font-medium text-slate-900 dark:text-white"><%= contrato.inquilino %></p>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                  Kitnet <%= contrato.unidade.nome %> · <%= contrato.fiador ? "fiador: #{contrato.fiador}" : "sem fiador" %>
+                </p>
+              </td>
+              <td class="whitespace-nowrap px-3 py-3 sm:px-4 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
+                <%= number_to_currency(contrato.valor) %>
+                <span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">dia <%= contrato.dia_vencimento %></span>
+              </td>
+              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-sm text-slate-700 dark:text-slate-300">todo dia <%= contrato.dia_vencimento %></td>
+              <td class="hidden md:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-sm text-slate-700 dark:text-slate-300">
+                <%= pluralize(contrato.duracao_meses, "mês", plural: "meses") %>
+                <% if contrato.data_inicio %>
+                  <span class="block text-xs text-slate-500 dark:text-slate-400"><%= l(contrato.data_inicio) %> a <%= l(contrato.data_fim) %></span>
+                <% end %>
+              </td>
+              <td class="whitespace-nowrap px-3 py-3 sm:px-4">
+                <% if contrato.ativo? %>
+                  <%= status_badge("Ativo", tone: :good) %>
+                  <% if contrato.meses_restantes&.<=(1) %>
+                    <span class="mt-1 block text-xs text-amber-700 dark:text-amber-400"><%= contrato.meses_restantes.zero? ? "venceu" : "termina mês que vem" %></span>
+                  <% end %>
+                <% else %>
+                  <%= status_badge("Finalizado", tone: :neutral, icon: :check_circle) %>
+                <% end %>
+              </td>
+              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-right">
+                <% if contrato.ativo? %>
+                  <%= button_to finalizar_contrato_path(contrato), method: :patch, form_class: "inline-block", class: "inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5", data: { turbo_confirm: "Finalizar o contrato de #{contrato.inquilino}? A kitnet #{contrato.unidade.nome} fica livre." } do %>
+                    <%= icon :check_circle, css_class: "size-4" %> Finalizar
+                  <% end %>
+                <% end %>
+                <%= link_to icon(:pencil, css_class: "size-4"), edit_contrato_path(contrato), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-4 py-14 text-center">
+      <%= icon :document, css_class: "mx-auto size-8 text-slate-300 dark:text-slate-600" %>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+        <%= { "ativo" => "Nenhum contrato ativo.", "finalizado" => "Nenhum contrato finalizado.", "todos" => "Nenhum contrato ainda." }[@situacao] %>
+      </p>
+    </div>
+  <% end %>
+</section>

@@ -1,19 +1,19 @@
 <div class="card p-6">
   <%= render "shared/error_summary", object: pagamento %>
 
-  <%= form_with(model: pagamento, html: { autocomplete: "off" }, data: (pagamento.new_record? ? { controller: "pagamento-form" } : {})) do |form| %>
+  <%= form_with(model: pagamento, html: { autocomplete: "off" }, data: (pagamento.new_record? ? { controller: "valor-base" } : {})) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :unidade_id, "Kitnet", class: label_classes %>
         <%= form.select :unidade_id,
               options_for_select(Unidade.order(:nome).map { |u| [ u.nome, u.id, { data: { valor_base: u.valor_base && format_money(u.valor_base) } } ] }, pagamento.unidade_id),
               { prompt: "Selecione a kitnet" },
-              class: field_classes(pagamento, :unidade), data: { pagamento_form_target: "unidade", action: "pagamento-form#preencherValor" } %>
+              class: field_classes(pagamento, :unidade), data: { valor_base_target: "unidade", action: "valor-base#preencherValor" } %>
       </div>
 
       <div>
         <%= form.label :valor, class: label_classes %>
-        <%= money_field form, :valor, data: { pagamento_form_target: "valor" } %>
+        <%= money_field form, :valor, data: { valor_base_target: "valor" } %>
       </div>
 
       <div>

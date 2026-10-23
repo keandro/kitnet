@@ -1,0 +1,52 @@
+<% content_for :title, "Ocupação" %>
+
+<% livres = @unidades.size - @ocupadas %>
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Ocupação</h1>
+  <%= link_to new_contrato_path, class: "btn btn-primary" do %>
+    <%= icon :plus, css_class: "size-4" %> Novo contrato
+  <% end %>
+</div>
+
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4">
+  <%= render "shared/stat_tile", label: "Ocupadas", value: "#{@ocupadas} de #{@unidades.size}", icon_name: :users, tone: :primary, value_class: "text-xl",
+        sublabel: (@unidades.any? ? "#{(@ocupadas * 100.0 / @unidades.size).round}% das kitnets" : nil) %>
+  <%= render "shared/stat_tile", label: "Livres", value: livres, icon_name: :home, tone: (livres.zero? ? :good : :warning), value_class: "text-xl" %>
+</div>
+
+<% @unidades.group_by { |u| andar_label(u.nome.to_s[0]) }.each do |andar, unidades| %>
+  <div class="mt-8">
+    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= andar %></h2>
+    <div class="mt-3 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <% unidades.each do |unidade| %>
+        <% contrato = unidade.contrato_ativo %>
+        <% if contrato %>
+          <%= link_to edit_contrato_path(contrato), class: "card group block p-4 transition hover:-translate-y-0.5 hover:shadow-md hover:ring-indigo-200 sm:p-5 dark:hover:ring-indigo-400/30" do %>
+            <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+              <span class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white"><%= unidade.nome %></span>
+              <%= status_badge("Ocupada", tone: :info, icon: :users) %>
+            </div>
+            <p class="mt-4 truncate text-sm font-medium text-slate-900 dark:text-white"><%= contrato.inquilino %></p>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+              <%= number_to_currency(contrato.valor) %> · vence dia <%= contrato.dia_vencimento %>
+            </p>
+            <% if contrato.data_fim %>
+              <p class="mt-0.5 text-xs <%= contrato.meses_restantes.to_i <= 1 ? "text-amber-700 dark:text-amber-400" : "text-slate-500 dark:text-slate-400" %>">até <%= l(contrato.data_fim) %></p>
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= link_to new_contrato_path(unidade_id: unidade.id), class: "group block rounded-2xl border-2 border-dashed border-slate-200 p-4 transition hover:border-indigo-300 hover:bg-white sm:p-5 dark:border-white/10 dark:hover:border-indigo-400/40 dark:hover:bg-slate-900" do %>
+            <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+              <span class="text-2xl font-semibold tracking-tight text-slate-400 dark:text-slate-500"><%= unidade.nome %></span>
+              <%= status_badge("Livre", tone: :good, icon: :home) %>
+            </div>
+            <p class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">
+              <%= icon :plus, css_class: "size-4" %> Novo contrato
+            </p>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400"><%= unidade.valor_base ? "valor base #{number_to_currency(unidade.valor_base)}" : "sem valor base" %></p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

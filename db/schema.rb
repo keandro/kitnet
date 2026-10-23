@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_10_032033) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_200825) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -19,6 +19,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_032033) do
     t.datetime "updated_at", null: false
     t.decimal "valor_kwh", precision: 12, scale: 6
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
+  end
+
+  create_table "contratos", force: :cascade do |t|
+    t.integer "unidade_id", null: false
+    t.string "inquilino", null: false
+    t.string "fiador"
+    t.decimal "valor", precision: 10, scale: 2, null: false
+    t.integer "duracao_meses", null: false
+    t.integer "dia_vencimento", null: false
+    t.date "data_inicio"
+    t.integer "status", default: 0, null: false
+    t.text "observacoes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
+    t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
 
   create_table "energia_solar_mensal", force: :cascade do |t|
@@ -74,6 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_10_032033) do
     t.boolean "descontinuada", default: false, null: false
   end
 
+  add_foreign_key "contratos", "unidades"
   add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
   add_foreign_key "leituras_energia", "unidades"
   add_foreign_key "pagamentos", "unidades"

@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   resources :unidades, path: "kitnets", only: %i[index show edit update]
   resources :pagamentos, except: %i[show]
+  resources :contratos, except: %i[show] do
+    patch :finalizar, on: :member
+  end
+  get "ocupacao", to: "ocupacao#index", as: :ocupacao
+  get "mais", to: "mais#index", as: :mais
   get "financas", to: "financas#index", as: :financas
   scope "backup" do
     get "", to: "backups#index", as: :backups

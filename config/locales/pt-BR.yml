@@ -20,6 +20,16 @@ pt-BR:
       fechamento_mensal:
         despesas_gerais: Despesas gerais
         agua_esgoto: Água e esgoto
+      contrato:
+        unidade: Kitnet
+        inquilino: Inquilino
+        fiador: Fiador
+        valor: Valor
+        duracao_meses: Duração (meses)
+        dia_vencimento: Dia de vencimento
+        data_inicio: Início
+        status: Situação
+        observacoes: Observações
       pagamento:
         unidade: Kitnet
         valor: Valor
