@@ -86,6 +86,7 @@ module ApplicationHelper
   def menu_barra_lateral
     [
       [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
+      [ [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
       [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ] ],
       [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
       [ [ "Backup", backups_path, :arquivo ] ]
@@ -98,6 +99,7 @@ module ApplicationHelper
       { rotulo: "Energia", caminho: energia_path, icone: :bolt, tom: :warning, descricao: "Conta do mês e medidores das kitnets" },
       { rotulo: "Energia solar", caminho: energia_solar_path, icone: :sun, tom: :info, descricao: "Lucro da energia solar" },
       { rotulo: "Kitnets", caminho: unidades_path, icone: :grid, tom: :primary, descricao: "Valor base e histórico de pagamentos" },
+      { rotulo: "Contas para pagamento", caminho: contas_pagamento_path, icone: :banco, tom: :good, descricao: "Banco, agência, conta e chave Pix" },
       { rotulo: "Backup", caminho: backups_path, icone: :arquivo, tom: :neutral, descricao: "Exportar, importar e cópias" }
     ]
   end

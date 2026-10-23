@@ -1,0 +1,51 @@
+<% content_for :title, "Contas para pagamento" %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Contas para pagamento</h1>
+  <%= link_to new_conta_pagamento_path, class: "btn btn-primary" do %>
+    <%= icon :plus, css_class: "size-4" %> Nova conta
+  <% end %>
+</div>
+
+<% if @contas.empty? %>
+  <div class="card mt-6 px-6 py-12 text-center">
+    <span class="mx-auto flex size-12 items-center justify-center rounded-xl <%= icon_chip_classes(:good) %>"><%= icon :banco, css_class: "size-6" %></span>
+    <p class="mt-4 text-sm font-semibold text-slate-900 dark:text-white">Nenhuma conta ainda</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Cadastre a conta e a chave Pix onde os locatários pagam.</p>
+  </div>
+<% else %>
+  <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <% @contas.each do |conta| %>
+      <article class="card p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-xl <%= icon_chip_classes(:good) %>"><%= icon :banco, css_class: "size-5" %></span>
+          <div class="min-w-0 flex-1">
+            <h2 class="truncate text-base font-semibold text-slate-900 dark:text-white"><%= conta.titular %></h2>
+            <p class="truncate text-sm text-slate-500 dark:text-slate-400"><%= conta.banco || "Banco não informado" %></p>
+          </div>
+          <%= link_to edit_conta_pagamento_path(conta), class: "-m-1 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5 dark:hover:text-slate-200", aria: { label: "Editar a conta de #{conta.titular}" } do %>
+            <%= icon :pencil, css_class: "size-4" %>
+          <% end %>
+        </div>
+
+        <dl class="mt-4 divide-y divide-slate-100 text-sm dark:divide-white/5">
+          <% [ [ "Agência", conta.agencia ], [ "Conta", conta.conta ], [ "Chave Pix", conta.chave_pix ] ].each do |rotulo, valor| %>
+            <% next if valor.blank? %>
+            <div class="flex items-center gap-3 py-2.5">
+              <dt class="w-20 shrink-0 text-slate-500 dark:text-slate-400"><%= rotulo %></dt>
+              <dd class="min-w-0 flex-1 break-all font-medium text-slate-900 tabular-nums dark:text-white"><%= valor %></dd>
+              <% unless rotulo == "Agência" %>
+                <button type="button" data-controller="copiar" data-copiar-texto-value="<%= valor %>" data-action="copiar#copiar"
+                        class="botao-copiar -my-1 shrink-0 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5 dark:hover:text-slate-200"
+                        aria-label="Copiar <%= rotulo.downcase %>" title="Copiar">
+                  <%= icon :copiar, css_class: "icone-copiar size-4" %>
+                  <%= icon :check_circle, css_class: "icone-copiado size-4 text-emerald-600 dark:text-emerald-400" %>
+                </button>
+              <% end %>
+            </div>
+          <% end %>
+        </dl>
+      </article>
+    <% end %>
+  </div>
+<% end %>

@@ -19,4 +19,5 @@
 # (e.g. "fiadores" would otherwise singularize to "fiadore").
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular "fiador", "fiadores"
+  inflect.irregular "conta_pagamento", "contas_pagamento"
 end

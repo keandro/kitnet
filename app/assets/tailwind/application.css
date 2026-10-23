@@ -50,3 +50,12 @@ td, th {
     @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
   }
 }
+
+/* Botão copiar: mostra o "✓" por um instante depois de copiar. */
+.botao-copiar .icone-copiado,
+.botao-copiar.copiado .icone-copiar {
+  display: none;
+}
+.botao-copiar.copiado .icone-copiado {
+  display: block;
+}

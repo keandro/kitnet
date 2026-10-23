@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_24_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_24_010000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
     t.string "locador_nome"
     t.string "locador_qualificacao"
@@ -36,6 +36,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_000000) do
     t.decimal "valor_kwh", precision: 12, scale: 6
     t.decimal "valor_total", precision: 10, scale: 2
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
+  end
+
+  create_table "contas_pagamento", force: :cascade do |t|
+    t.string "titular", null: false
+    t.string "banco_codigo"
+    t.string "banco_nome"
+    t.string "agencia"
+    t.string "conta"
+    t.string "chave_pix"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contrato_documentos", force: :cascade do |t|

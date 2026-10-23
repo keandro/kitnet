@@ -38,6 +38,13 @@ pt-BR:
       configuracao_contrato:
         taxa_limpeza: Taxa de limpeza
         texto_modelo: No texto do contrato,
+      conta_pagamento:
+        titular: Nome da conta
+        banco_codigo: Código do banco
+        banco_nome: Nome do banco
+        agencia: Agência
+        conta: Conta
+        chave_pix: Chave Pix
       pagamento:
         unidade: Kitnet
         valor: Valor

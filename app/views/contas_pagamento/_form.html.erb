@@ -1,0 +1,48 @@
+<div class="card p-6">
+  <%= render "shared/error_summary", object: conta %>
+
+  <%= form_with(model: conta, html: { autocomplete: "off" }, data: { controller: "banco", banco_bancos_value: ContaPagamento::BANCOS.to_json }) do |form| %>
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <%= form.label :titular, "Nome da conta bancária (titular)", class: label_classes %>
+        <%= form.text_field :titular, class: field_classes(conta, :titular), autofocus: conta.new_record? %>
+      </div>
+
+      <div>
+        <%= form.label :banco_codigo, "Código do banco", class: label_classes %>
+        <%= form.text_field :banco_codigo, inputmode: "numeric", maxlength: 3, placeholder: "260", list: "bancos",
+              class: field_classes(conta, :banco_codigo), data: { banco_target: "codigo", action: "input->banco#completar" } %>
+        <datalist id="bancos">
+          <% ContaPagamento::BANCOS.each do |codigo, nome| %>
+            <option value="<%= codigo %>"><%= nome %></option>
+          <% end %>
+        </datalist>
+      </div>
+
+      <div>
+        <%= form.label :banco_nome, "Nome do banco", class: label_classes %>
+        <%= form.text_field :banco_nome, placeholder: "Nubank", class: field_classes(conta, :banco_nome), data: { banco_target: "nome" } %>
+      </div>
+
+      <div>
+        <%= form.label :agencia, "Agência", class: label_classes %>
+        <%= form.text_field :agencia, inputmode: "numeric", placeholder: "0001", class: field_classes(conta, :agencia) %>
+      </div>
+
+      <div>
+        <%= form.label :conta, "Conta (com dígito)", class: label_classes %>
+        <%= form.text_field :conta, inputmode: "numeric", placeholder: "12345-6", class: field_classes(conta, :conta) %>
+      </div>
+
+      <div class="sm:col-span-2">
+        <%= form.label :chave_pix, "Chave Pix", class: label_classes %>
+        <%= form.text_field :chave_pix, placeholder: "CPF, celular, e-mail ou chave aleatória", class: field_classes(conta, :chave_pix) %>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-white/5">
+      <%= link_to "Cancelar", contas_pagamento_path, class: "btn btn-secondary" %>
+      <%= form.submit "Salvar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
