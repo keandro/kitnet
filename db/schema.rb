@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_203141) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_203857) do
   create_table "contas_energia", force: :cascade do |t|
     t.integer "ano", null: false
     t.integer "mes", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_203141) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "valor_kwh", precision: 12, scale: 6
+    t.decimal "valor_total", precision: 10, scale: 2
     t.index ["ano", "mes"], name: "index_contas_energia_on_ano_and_mes", unique: true
   end
 

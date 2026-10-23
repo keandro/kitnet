@@ -9,6 +9,7 @@ pt-BR:
       conta_energia:
         kwh_total: kWh total
         valor_kwh: Valor do kWh
+        valor_total: Valor total
       leitura_energia:
         leitura_anterior: Leitura anterior
         leitura_atual: Leitura atual

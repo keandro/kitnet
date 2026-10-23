@@ -18,20 +18,22 @@
 
   <%= render "shared/error_summary", object: @conta %>
 
-  <%= form_with(model: @conta, url: conta_energia_path(ano: @conta.ano, mes: @conta.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-4") do |form| %>
+  <%= form_with(model: @conta, url: conta_energia_path(ano: @conta.ano, mes: @conta.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-4",
+                data: { controller: "tarifa" }) do |form| %>
     <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <%= form.label :kwh_total, "Energia total (kWh)", class: label_classes %>
-        <%= form.number_field :kwh_total, value: numero_para_campo(@conta.kwh_total), step: "any", min: 0, inputmode: "decimal", placeholder: "0", class: field_classes(@conta, :kwh_total) %>
+        <%= form.number_field :kwh_total, value: numero_para_campo(@conta.kwh_total), step: "any", min: 0, inputmode: "decimal", placeholder: "0",
+              class: field_classes(@conta, :kwh_total), data: { tarifa_target: "kwh", action: "input->tarifa#calcular" } %>
       </div>
       <div>
-        <%= form.label :valor_kwh, "Valor do kWh (tarifa)", class: label_classes %>
-        <%= money_field form, :valor_kwh, decimais: 4 %>
+        <%= form.label :valor_total, "Valor total (sem o desconto da solar)", class: label_classes %>
+        <%= money_field form, :valor_total, data: { tarifa_target: "total", action: "input->money#format input->tarifa#calcular" } %>
       </div>
       <div>
-        <p class="<%= label_classes %>">Valor total</p>
-        <p class="mt-1 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white">
-          <%= @conta.valor_total ? number_to_currency(@conta.valor_total) : "—" %>
+        <p class="<%= label_classes %>">Valor do kWh</p>
+        <p class="mt-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white" data-tarifa-target="resultado">
+          <%= @conta.valor_kwh ? number_to_currency(@conta.valor_kwh, precision: 4) : "—" %>
         </p>
       </div>
       <div>
