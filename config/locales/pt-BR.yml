@@ -28,6 +28,7 @@ pt-BR:
         inquilino_cpf: CPF do locatário
         fiador_cpf: CPF do fiador
         fiador: Fiador
+        conta_pagamento: Conta para pagamento
         valor: Valor
         duracao_meses: Duração (meses)
         dia_vencimento: Dia de vencimento

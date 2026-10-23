@@ -1,4 +1,4 @@
-# Dados fixos do contrato escrito (locador, imóvel, pagamento, foro, taxa) e o
+# Dados fixos do contrato escrito (locador, imóvel, foro, taxa) e o
 # texto do contrato.
 class ConfiguracoesContratoController < ApplicationController
   before_action { @configuracao = ConfiguracaoContrato.atual }
@@ -10,7 +10,7 @@ class ConfiguracoesContratoController < ApplicationController
   # PATCH /contratos/modelo
   def update
     dados = params.expect(configuracao_contrato: [ :locador_nome, :locador_qualificacao, :locador_cpf, :locador_endereco,
-                                                   :imovel_endereco, :imovel_bairro_cidade, :forma_pagamento,
+                                                   :imovel_endereco, :imovel_bairro_cidade,
                                                    :cidade_assinatura, :foro, :taxa_limpeza, :texto_modelo ])
     dados[:texto_modelo] = nil if params[:restaurar].present?
 

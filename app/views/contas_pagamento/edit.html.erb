@@ -7,7 +7,7 @@
 <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
   <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Conta de <%= @conta.titular_was %></h1>
   <%= button_to @conta, method: :delete, form_class: "inline-block", class: "btn btn-danger",
-        data: { turbo_confirm: "Remover a conta de #{@conta.titular_was}?", confirmar_rotulo: "Remover", confirmar_perigo: "true" } do %>
+        data: { turbo_confirm: "Remover a conta de #{@conta.titular_was}?#{" Os contratos que usam esta conta ficam sem conta para pagamento." if @conta.contratos.exists?}", confirmar_rotulo: "Remover", confirmar_perigo: "true" } do %>
     <%= icon :trash, css_class: "size-4" %> Remover
   <% end %>
 </div>

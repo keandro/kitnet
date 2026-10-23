@@ -28,7 +28,8 @@ class ContratosController < ApplicationController
   # GET /contratos/new?unidade_id=1
   def new
     unidade = Unidade.find_by(id: params[:unidade_id])
-    @contrato = Contrato.new(unidade: unidade, valor: unidade&.valor_base, duracao_meses: 30, dia_vencimento: 10, data_inicio: Date.current)
+    @contrato = Contrato.new(unidade: unidade, valor: unidade&.valor_base, duracao_meses: 30, dia_vencimento: 10, data_inicio: Date.current,
+                             conta_pagamento: (ContaPagamento.first if ContaPagamento.count == 1))
   end
 
   # GET /contratos/1/edit
@@ -72,7 +73,7 @@ class ContratosController < ApplicationController
     end
 
     def contrato_params
-      params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf,
+      params.expect(contrato: [ :unidade_id, :inquilino, :celular, :fiador, :valor, :duracao_meses, :dia_vencimento, :data_inicio, :status, :observacoes, :arquivo_pdf, :remover_pdf, :conta_pagamento_id,
                                         :inquilino_cpf, :inquilino_rg, :fiador_cpf, :fiador_rg, :fiador_endereco,
                                         :inquilino_nacionalidade, :inquilino_estado_civil, :inquilino_profissao, :fiador_nacionalidade, :fiador_estado_civil, :fiador_profissao ])
     end

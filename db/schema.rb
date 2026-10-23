@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_24_010000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_24_020000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
     t.string "locador_nome"
     t.string "locador_qualificacao"
@@ -18,7 +18,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_010000) do
     t.string "locador_endereco"
     t.string "imovel_endereco"
     t.string "imovel_bairro_cidade"
-    t.text "forma_pagamento"
     t.string "cidade_assinatura"
     t.string "foro"
     t.decimal "taxa_limpeza", precision: 10, scale: 2
@@ -83,6 +82,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_010000) do
     t.string "fiador_nacionalidade"
     t.string "fiador_estado_civil"
     t.string "fiador_profissao"
+    t.integer "conta_pagamento_id"
+    t.index ["conta_pagamento_id"], name: "index_contratos_on_conta_pagamento_id"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
@@ -141,6 +142,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_010000) do
   end
 
   add_foreign_key "contrato_documentos", "contratos"
+  add_foreign_key "contratos", "contas_pagamento"
   add_foreign_key "contratos", "unidades"
   add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
   add_foreign_key "leituras_energia", "unidades"

@@ -20,10 +20,23 @@ class ContaPagamento < ApplicationRecord
   validates :banco_codigo, format: { with: /\A\d{3}\z/, message: "deve ter 3 números" }, allow_nil: true
   validate :tem_como_pagar
 
+  has_many :contratos, dependent: :nullify
+
   scope :ordenadas, -> { order(:titular, :banco_nome) }
 
   def banco
     [ banco_codigo, banco_nome ].compact.join(" – ").presence
+  end
+
+  # Como o contrato escrito diz onde pagar (continua a frase "…de cada mês,").
+  def forma_de_pagamento
+    deposito = "depósito bancário na conta #{conta}, agência #{agencia}#{", banco #{banco}" if banco}" if agencia.present? && conta.present?
+    pix = "Pix pela chave #{chave_pix}" if chave_pix.present?
+    "via #{[ deposito, pix ].compact.join(" ou ")} em nome de #{titular}"
+  end
+
+  def rotulo
+    banco ? "#{titular} (#{banco})" : titular
   end
 
   private

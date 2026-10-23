@@ -15,7 +15,8 @@ class ModeloDeContrato
     "Locatário" => %w[locatario locatario_nacionalidade locatario_estado_civil locatario_profissao locatario_cpf locatario_rg locatario_endereco],
     "Fiador" => %w[fiador fiador_nacionalidade fiador_estado_civil fiador_profissao fiador_cpf fiador_identidade fiador_endereco],
     "Imóvel" => %w[imovel_endereco andar kitnet bairro_cidade],
-    "Aluguel e prazo" => %w[valor valor_extenso dia_vencimento dia_vencimento_extenso forma_pagamento duracao duracao_extenso inicio termino],
+    "Aluguel e prazo" => %w[valor valor_extenso dia_vencimento dia_vencimento_extenso duracao duracao_extenso inicio termino],
+    "Conta para pagamento" => %w[forma_pagamento conta_titular conta_banco conta_agencia conta_numero conta_pix],
     "Outros" => %w[taxa_limpeza taxa_limpeza_extenso foro cidade]
   }.freeze
   NOMES_DOS_CAMPOS = CAMPOS.values.flatten.to_set.freeze

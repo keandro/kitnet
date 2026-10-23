@@ -101,6 +101,13 @@
         <%= form.date_field :data_inicio, class: field_classes(contrato, :data_inicio) %>
       </div>
 
+      <div class="sm:col-span-2">
+        <%= form.label :conta_pagamento_id, "Conta para pagamento", class: label_classes %>
+        <%= form.select :conta_pagamento_id, ContaPagamento.ordenadas.map { |conta| [ conta.rotulo, conta.id ] },
+              { include_blank: "Nenhuma (fica em branco no contrato)" }, class: field_classes(contrato, :conta_pagamento) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Onde o locatário paga; vai para o contrato para assinar. <%= link_to "Cadastrar conta", new_conta_pagamento_path, class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %></p>
+      </div>
+
       <div>
         <%= form.label :status, class: label_classes %>
         <%= form.select :status, [ [ "Ativo", "ativo" ], [ "Finalizado", "finalizado" ] ], {}, class: field_classes(contrato, :status) %>
