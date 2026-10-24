@@ -32,7 +32,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e valor total; o valor do kWh é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago; um botão manda a conta de cada kitnet pelo WhatsApp para o locatário do contrato ativo
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
-- Interface responsiva com modo escuro; no celular, navegação na barra de baixo (como num app)
+- Interface responsiva com modo escuro; no celular, navegação na barra de baixo (como num app) com Finanças, Pagamentos, Energia e Energia solar; o resto fica em **Mais**
 
 ## Tecnologias
 

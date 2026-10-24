@@ -77,8 +77,8 @@ module ApplicationHelper
     [
       { rotulo: "Finanças", curto: "Finanças", caminho: financas_path, icone: :chart },
       { rotulo: "Pagamentos", curto: "Pagamentos", caminho: pagamentos_path, icone: :cash },
-      { rotulo: "Contratos", curto: "Contratos", caminho: contratos_path, icone: :document },
-      { rotulo: "Ocupação", curto: "Ocupação", caminho: ocupacao_path, icone: :users }
+      { rotulo: "Energia", curto: "Energia", caminho: energia_path, icone: :bolt },
+      { rotulo: "Energia solar", curto: "Solar", caminho: energia_solar_path, icone: :sun }
     ]
   end
 
@@ -95,8 +95,8 @@ module ApplicationHelper
   # Áreas do "Mais" (no celular).
   def menu_mais
     [
-      { rotulo: "Energia", caminho: energia_path, icone: :bolt, tom: :warning, descricao: "Conta do mês e medidores das kitnets" },
-      { rotulo: "Energia solar", caminho: energia_solar_path, icone: :sun, tom: :info, descricao: "Lucro da energia solar" },
+      { rotulo: "Contratos", caminho: contratos_path, icone: :document, tom: :info, descricao: "Contratos de aluguel e contrato para assinar" },
+      { rotulo: "Ocupação", caminho: ocupacao_path, icone: :users, tom: :warning, descricao: "Kitnets ocupadas e livres" },
       { rotulo: "Kitnets", caminho: unidades_path, icone: :grid, tom: :primary, descricao: "Valor base e histórico de pagamentos" },
       { rotulo: "Contas para pagamento", caminho: contas_pagamento_path, icone: :banco, tom: :good, descricao: "Banco, agência, conta e chave Pix" },
       { rotulo: "Backup", caminho: backups_path, icone: :arquivo, tom: :neutral, descricao: "Exportar, importar e cópias" }
