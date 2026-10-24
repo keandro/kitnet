@@ -16,6 +16,7 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 - [Começando](#começando)
 - [Uso](#uso)
 - [Qualidade e segurança](#qualidade-e-segurança)
+- [Rodando no Windows](#rodando-no-windows)
 - [App Android](#app-android)
 - [Backup](#backup)
 - [Deploy](#deploy)
@@ -167,6 +168,8 @@ classDiagram
 
 ### Pré-requisitos
 
+> No Windows, siga [Rodando no Windows](#rodando-no-windows).
+
 - Ruby 3.4.10
 - SQLite 3
 - Bundler
@@ -215,6 +218,90 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 | `/energia-solar` | Lucro da energia solar            |
 | `/backup`        | Exportar, importar e cópias       |
 | `/up`            | Health check                      |
+
+## Rodando no Windows
+
+O sistema roda direto no Windows 10 ou 11 (64 bits), sem Docker nem WSL. Os comandos abaixo são para o **PowerShell**.
+
+### O que instalar
+
+1. **Git**:
+
+   ```powershell
+   winget install --id Git.Git -e
+   ```
+
+2. **Ruby 3.4 com DevKit** (precisa do DevKit para compilar algumas gems):
+
+   ```powershell
+   winget install --id RubyInstallerTeam.RubyWithDevKit.3.4 -e
+   ```
+
+   Ou baixe o **Ruby+Devkit 3.4.x (x64)** em <https://rubyinstaller.org/downloads/>. No fim da instalação, deixe marcado *Run 'ridk install'* e, na janela preta que abre, escolha a opção **3** (MSYS2 e MINGW toolchain). Se pulou essa parte, rode `ridk install` depois.
+
+Feche e abra o PowerShell de novo para ele achar o `git` e o `ruby` (`ruby -v` deve mostrar 3.4).
+
+### Instalar o sistema
+
+```powershell
+cd $HOME
+git clone https://github.com/keandro/kitnet.git
+cd kitnet
+gem install bundler
+bundle install
+ruby bin\rails db:prepare
+```
+
+O `db:prepare` cria o banco (`storage\development.sqlite3`) com as 12 kitnets e a Antiga casa. O SQLite já vem dentro da gem; não precisa instalar à parte.
+
+Para testar, rode `script\windows\iniciar.cmd` e abra <http://localhost:3000>. Para parar, feche a janela.
+
+**Trazendo os dados de outro computador:** no computador antigo, abra **Backup → Exportar**; no Windows, abra **Backup → Importar** e escolha o arquivo.
+
+### Liberar para o celular
+
+1. Deixe a rede Wi-Fi como **Privada** (*Configurações → Rede e Internet → Wi-Fi → sua rede → Tipo de perfil de rede*).
+2. Libere a porta 3000 no firewall (PowerShell **como administrador**):
+
+   ```powershell
+   New-NetFirewallRule -DisplayName "LF Kitnets" -Direction Inbound -Protocol TCP -LocalPort 3000 -Action Allow -Profile Private
+   ```
+
+3. Veja o IP do computador com `ipconfig` (*Endereço IPv4*, ex.: `192.168.18.50`) e use `http://192.168.18.50:3000` no navegador do celular ou no app. Para o endereço não mudar, reserve esse IP para o computador nas configurações do roteador (*DHCP → reserva de endereço*).
+4. Em *Configurações → Sistema → Energia*, deixe o computador **nunca suspender** quando estiver na tomada; suspenso, o sistema fica fora do ar.
+
+### Iniciar sozinho com o Windows
+
+O `script\windows\iniciar.cmd` apaga o PID que sobra de um desligamento sem fechar o servidor, instala gems novas, atualiza o banco, gera o CSS e sobe o servidor na porta 3000, aberto para a rede. Se o servidor cair, ele sobe de novo em 5 segundos.
+
+**Opção 1 — sem janela (recomendada):** cria uma tarefa no Agendador de Tarefas que roda escondida quando você entra no Windows. Rode no PowerShell (normal, não precisa ser administrador):
+
+```powershell
+$script = "$HOME\kitnet\script\windows\iniciar.cmd"
+$acao = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -Command `"& '$script'`""
+$gatilho = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+$config = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+Register-ScheduledTask -TaskName "LF Kitnets" -Action $acao -Trigger $gatilho -Settings $config
+```
+
+- Iniciar agora sem reiniciar: `Start-ScheduledTask "LF Kitnets"`
+- Parar: `Stop-ScheduledTask "LF Kitnets"` (se a página continuar abrindo, encerre o Ruby: `Get-Process ruby | Stop-Process`)
+- Desfazer: `Unregister-ScheduledTask "LF Kitnets" -Confirm:$false`
+
+O `ExecutionTimeLimit` zerado é importante: sem ele, o Windows encerra a tarefa depois de 3 dias.
+
+**Opção 2 — com janela:** aperte <kbd>Win</kbd>+<kbd>R</kbd>, digite `shell:startup` e, na pasta que abrir, crie um atalho para `script\windows\iniciar.cmd` (em *Propriedades* do atalho, *Executar: Minimizada*). A janela fica aberta na barra de tarefas; fechar a janela para o sistema.
+
+As duas opções iniciam quando você **entra** na sua conta. Para o computador ligar já com o sistema no ar, configure o Windows para entrar sozinho na sua conta (*netplwiz*) ou, no Agendador de Tarefas, abra a tarefa **LF Kitnets** e marque *Executar estando o usuário conectado ou não* (pede a senha do Windows).
+
+### Atualizar
+
+```powershell
+cd $HOME\kitnet
+git pull
+```
+
+Depois reinicie o sistema (`Stop-ScheduledTask "LF Kitnets"; Start-ScheduledTask "LF Kitnets"`, ou feche e abra a janela). O script instala o que mudou e atualiza o banco sozinho. Faça um **Backup → Exportar** antes de atualizar, por garantia.
 
 ## App Android
 
