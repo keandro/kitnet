@@ -12,6 +12,7 @@ class UnidadesController < ApplicationController
     descontinuadas = unidades.select(&:descontinuada?)
     @grupos["Descontinuadas"] = descontinuadas if descontinuadas.any?
     @pagas_no_mes = Pagamento.do_mes(Date.current).distinct.pluck(:unidade_id).to_set
+    @vazias_no_mes = Pagamento.do_mes(Date.current).group(:unidade_id).having("SUM(valor) = 0").pluck(:unidade_id).to_set
   end
 
   # GET /kitnets/1

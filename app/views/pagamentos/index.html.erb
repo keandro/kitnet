@@ -1,7 +1,9 @@
 <% nome_mes = "#{t("date.month_names")[@mes.month]} de #{@mes.year}" %>
 <% content_for :title, "Pagamentos — #{nome_mes}" %>
 
-<% cobradas = @unidades.select(&:valor_base) %>
+<%# pagamento de R$ 0,00 no mês = kitnet vazia: não é cobrada nem conta como paga %>
+<% vazias = @unidades.select { |u| @por_unidade[u.id]&.sum(&:valor)&.zero? } %>
+<% cobradas = @unidades.select(&:valor_base) - vazias %>
 <% faltam = cobradas.reject { |u| @por_unidade.key?(u.id) } %>
 <% recebido = @pagamentos.sum(&:valor) %>
 <% data_sugerida = @mes == Date.current.beginning_of_month ? Date.current : [ @mes.end_of_month, Date.current ].min %>
@@ -21,7 +23,8 @@
 <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3">
   <%= render "shared/stat_tile", classe: "col-span-2 sm:col-span-1", label: "Recebido no mês", value: number_to_currency(recebido), icon_name: :cash, tone: :good, value_class: "text-xl",
         sublabel: "#{@pagamentos.size} #{@pagamentos.size == 1 ? "pagamento" : "pagamentos"}" %>
-  <%= render "shared/stat_tile", label: "Kitnets que pagaram", value: "#{cobradas.size - faltam.size} de #{cobradas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Kitnets que pagaram", value: "#{cobradas.size - faltam.size} de #{cobradas.size}", icon_name: :check_circle, tone: :primary, value_class: "text-xl",
+        sublabel: (vazias.any? ? "#{vazias.size} #{vazias.size == 1 ? "vazia" : "vazias"}: #{vazias.map(&:nome).join(", ")}" : nil) %>
   <%= render "shared/stat_tile", label: "Faltam pagar", value: faltam.size, icon_name: :clock, tone: (faltam.any? ? :critical : :good), value_class: "text-xl",
         sublabel: (faltam.any? ? faltam.map(&:nome).join(", ") : "todas pagaram") %>
 </div>
@@ -44,20 +47,25 @@
       <tbody class="divide-y divide-slate-100 dark:divide-white/5">
         <% @unidades.each do |unidade| %>
           <% pagos = @por_unidade[unidade.id] || [] %>
+          <% vazia = vazias.include?(unidade) %>
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= unidade_path(unidade) %>" data-action="click->row-link#visit">
             <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
               <%= pagos.any? ? number_to_currency(pagos.sum(&:valor)) : "—" %>
               <%# no celular a coluna Pagamento some; a situação vem aqui embaixo %>
-              <% if pagos.any? %>
+              <% if vazia %>
+                <span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">vazia</span>
+              <% elsif pagos.any? %>
                 <span class="block text-xs font-normal text-emerald-700 sm:hidden dark:text-emerald-400">✓ <%= pagos.map { |p| l(p.data_pagamento, format: "%d/%m") }.join(", ") %></span>
               <% elsif unidade.valor_base %>
                 <span class="block text-xs font-normal text-amber-700 sm:hidden dark:text-amber-400">não pago</span>
               <% end %>
             </td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm">
-              <% if pagos.any? %>
+              <% if vazia %>
+                <%= status_badge("Vazia", tone: :neutral, icon: :clock) %>
+              <% elsif pagos.any? %>
                 <%= status_badge("Pago em #{pagos.map { |p| l(p.data_pagamento, format: "%d/%m") }.join(", ")}", tone: :good, icon: :check_circle) %>
               <% elsif unidade.valor_base %>
                 <%= status_badge("Não pago", tone: :warning, icon: :clock) %>

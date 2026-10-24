@@ -6,7 +6,8 @@ class Pagamento < ApplicationRecord
 
   belongs_to :unidade
 
-  validates :valor, numericality: { greater_than: 0 }
+  # Zero vale: registra o mês em que a kitnet ficou vazia.
+  validates :valor, numericality: { greater_than_or_equal_to: 0 }
   validates :data_pagamento, presence: true
   validate :data_pagamento_nao_pode_ser_futura
 

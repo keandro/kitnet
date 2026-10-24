@@ -17,6 +17,8 @@
             <span class="<%= unidade.nome.size > 4 ? "text-lg" : "text-2xl" %> font-semibold tracking-tight text-slate-900 dark:text-white"><%= unidade.nome %></span>
             <% if unidade.descontinuada? %>
               <%= status_badge("Antiga", tone: :neutral, icon: :clock) %>
+            <% elsif @vazias_no_mes.include?(unidade.id) %>
+              <%= status_badge("Vazia", tone: :neutral) %>
             <% elsif paga %>
               <%= status_badge("Pago", tone: :good) %>
             <% elsif unidade.valor_base %>
