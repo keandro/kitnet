@@ -28,7 +28,7 @@ class UnidadesController < ApplicationController
     if @unidade.update(unidade_params)
       # Edição rápida pelo quadro de kitnets volta para o quadro.
       destino = params[:retorno] == "kitnets" ? unidades_path : @unidade
-      redirect_to destino, notice: "Valor base da kitnet #{@unidade.nome} atualizado.", status: :see_other
+      redirect_to destino, notice: "Kitnet #{@unidade.nome} atualizada.", status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -40,6 +40,6 @@ class UnidadesController < ApplicationController
     end
 
     def unidade_params
-      params.expect(unidade: [ :valor_base ])
+      params.expect(unidade: [ :valor_base, :dia_pagamento ])
     end
 end

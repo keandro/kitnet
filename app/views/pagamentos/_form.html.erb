@@ -1,14 +1,14 @@
 <div class="card p-6">
   <%= render "shared/error_summary", object: pagamento %>
 
-  <%= form_with(model: pagamento, html: { autocomplete: "off" }, data: (pagamento.new_record? ? { controller: "valor-base" } : {})) do |form| %>
+  <%= form_with(model: pagamento, html: { autocomplete: "off" }, data: (pagamento.new_record? ? { controller: "valor-base", valor_base_referencia_value: (@referencia || Date.current).iso8601, valor_base_hoje_value: Date.current.iso8601 } : {})) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :unidade_id, "Kitnet", class: label_classes %>
         <%= form.select :unidade_id,
-              options_for_select(Unidade.order(:nome).map { |u| [ u.nome, u.id, { data: { valor_base: u.valor_base && format_money(u.valor_base) } } ] }, pagamento.unidade_id),
+              options_for_select(Unidade.order(:nome).map { |u| [ u.nome, u.id, { data: { valor_base: u.valor_base && format_money(u.valor_base), dia_pagamento: u.dia_pagamento } } ] }, pagamento.unidade_id),
               { prompt: "Selecione a kitnet" },
-              class: field_classes(pagamento, :unidade), data: { valor_base_target: "unidade", action: "valor-base#preencherValor" } %>
+              class: field_classes(pagamento, :unidade), data: { valor_base_target: "unidade", action: "valor-base#preencherValor valor-base#preencherData" } %>
       </div>
 
       <div>
@@ -18,7 +18,7 @@
 
       <div>
         <%= form.label :data_pagamento, class: label_classes %>
-        <%= form.date_field :data_pagamento, max: Date.current, class: field_classes(pagamento, :data_pagamento) %>
+        <%= form.date_field :data_pagamento, max: Date.current, class: field_classes(pagamento, :data_pagamento), data: { valor_base_target: "data" } %>
       </div>
 
       <div class="sm:col-span-2">

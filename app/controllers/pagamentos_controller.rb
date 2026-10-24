@@ -17,8 +17,9 @@ class PagamentosController < ApplicationController
   # GET /pagamentos/new?unidade_id=1&data=2026-10-05
   def new
     unidade = Unidade.find_by(id: params[:unidade_id])
-    data = Date.parse(params[:data].to_s) rescue nil
-    @pagamento = Pagamento.new(unidade: unidade, valor: unidade&.valor_base, data_pagamento: [ data || Date.current, Date.current ].min)
+    @referencia = (Date.parse(params[:data].to_s) rescue nil) || Date.current
+    data = unidade ? unidade.data_de_pagamento(@referencia) : [ @referencia, Date.current ].min
+    @pagamento = Pagamento.new(unidade: unidade, valor: unidade&.valor_base, data_pagamento: data)
   end
 
   # GET /pagamentos/1/edit

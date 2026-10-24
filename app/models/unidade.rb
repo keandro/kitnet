@@ -1,5 +1,6 @@
-# Uma das kitnets (fixas; criadas pelo seed). Guarda o valor base do aluguel,
-# que sugere o valor de cada pagamento; kitnet sem valor base não é cobrada.
+# Uma das kitnets (fixas; criadas pelo seed). Guarda o valor base do aluguel e o
+# dia do pagamento, que sugerem o valor e a data de cada pagamento; kitnet sem
+# valor base não é cobrada.
 # "Descontinuada" marca unidades que não são mais alugadas (a antiga casa),
 # mas que guardam pagamentos do passado.
 class Unidade < ApplicationRecord
@@ -27,4 +28,12 @@ class Unidade < ApplicationRecord
     contratos.find(&:ativo?)
   end
   validates :valor_base, numericality: { greater_than: 0 }, allow_nil: true
+  validates :dia_pagamento, numericality: { only_integer: true, in: 1..31, message: "deve ser de 1 a 31" }, allow_nil: true
+
+  # Data sugerida para um pagamento no mês de referência: o dia do pagamento
+  # (no último dia, em meses mais curtos), mas nunca depois de hoje.
+  def data_de_pagamento(referencia = Date.current)
+    data = dia_pagamento ? referencia.change(day: [ dia_pagamento, referencia.end_of_month.day ].min) : referencia
+    [ data, Date.current ].min
+  end
 end

@@ -6,6 +6,7 @@ pt-BR:
       unidade:
         nome: Nome
         valor_base: Valor base
+        dia_pagamento: Dia do pagamento
       conta_energia:
         kwh_total: kWh total
         valor_kwh: Valor do kWh

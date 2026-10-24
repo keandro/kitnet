@@ -23,12 +23,12 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 
 ## Funcionalidades
 
-- **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data e observações
+- **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base; cada pagamento tem valor (sugerido pelo valor base da kitnet), data (sugerida pelo dia do pagamento da kitnet) e observações
 - **Contratos**: quem aluga cada kitnet — locatário (nome, celular para WhatsApp, CPF, RG, nacionalidade, estado civil e profissão), fiador (opcional, com os mesmos dados e endereço), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado`, a conta para pagamento (uma das Contas para pagamento) e o contrato em PDF (opcional, até 20 MB). Independentes dos pagamentos: não geram cobranças
 - **Contrato para assinar**: gera o PDF do contrato de locação (modelo das kitnets) com os dados do locatário, fiador, valor e prazo por extenso; a forma de pagamento sai da conta para pagamento escolhida no contrato; os dados fixos (locador, imóvel, foro, taxa de limpeza) ficam em *Contratos → Modelo do contrato*, no banco, fora do código. Lá também se edita o texto inteiro do contrato (títulos, cláusulas renumeradas sozinhas, negrito/sublinhado, campos como `{locatario}` e trechos que só entram com fiador ou taxa de limpeza), com PDF de exemplo e botão para voltar ao texto original (`config/contrato_padrao.txt`)
 - **Contas para pagamento**: as contas onde os locatários pagam — nome da conta (titular), banco com código e nome (o nome se completa pelo código), agência, conta e chave Pix, com botão para copiar a conta e a chave
 - **Ocupação**: as kitnets ocupadas (com locatário, valor e vencimento) e as livres, pelos contratos ativos
-- **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base e o histórico de pagamentos de cada uma
+- **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base, dia do pagamento e o histórico de pagamentos de cada uma (o lápis do quadro edita o valor base e o dia ali mesmo)
 - **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: conta de energia do mês (kWh total e valor total; o valor do kWh é calculado) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago; um botão manda a conta de cada kitnet pelo WhatsApp para o locatário do contrato ativo
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
@@ -56,6 +56,7 @@ classDiagram
         +bigint id
         +string nome
         +decimal valor_base
+        +integer dia_pagamento
         +boolean descontinuada
     }
 
@@ -156,7 +157,7 @@ classDiagram
 - **Kitnets são fixas**: as 12 (`001`–`004`, `101`–`104`, `201`–`204`) e a **Antiga casa** vêm do seed; no app só se altera o valor base. A Antiga casa é `descontinuada`: não é mais alugada, aceita pagamentos com datas do passado, aparece separada no quadro e some das telas mensais depois do mês do último pagamento.
 - **Contrato** exige locatário, kitnet, valor maior que zero, duração de 1 a 120 meses e dia de vencimento de 1 a 31; fiador e início são opcionais (com início, o fim é calculado). CPFs do locatário e do fiador são guardados sempre como `000.000.000-00` e precisam ter os dígitos verificadores certos. **Cada kitnet só pode ter um contrato ativo**; finalizar o contrato deixa a kitnet livre na Ocupação. Contratos não criam nem alteram pagamentos. O PDF do contrato fica guardado no próprio banco (`ContratoDocumento`), então entra no backup; só são aceitos arquivos que realmente são PDF.
 - **Conta para pagamento** exige o nome da conta (titular) e a chave Pix ou a agência e a conta; o código do banco tem 3 números (`1` vira `001`). Remover uma conta deixa os contratos que a usavam sem conta.
-- **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e pode ser ajustado.
+- **Pagamento** pertence a uma kitnet e tem valor maior que zero e data de pagamento obrigatória, que não pode ser no futuro. O valor vem preenchido com o valor base da kitnet e a data com o **dia do pagamento** da kitnet (1 a 31) no mês de referência — no último dia em meses mais curtos e nunca depois de hoje; os dois podem ser ajustados.
 - **Pagamentos do mês**: uma kitnet conta como paga no mês se tiver ao menos um pagamento com data naquele mês; "faltam pagar" lista as kitnets **com valor base** sem pagamento (kitnet sem valor base não é cobrada).
 - **Energia**: lança-se o kWh total e o valor total da conta (sem o desconto da energia solar); o valor do kWh = valor total ÷ kWh total, guardado com 6 casas; consumo da kitnet = leitura atual − leitura anterior (que vem do mês passado); valor da kitnet = consumo × valor do kWh. A diferença entre a conta e a soma dos medidores aparece como áreas comuns e perdas.
 - **Mensagem de energia (WhatsApp):** usa o primeiro nome e o celular do contrato **ativo** da kitnet e traz mês, leitura anterior e atual, consumo, valor do kWh e o total a pagar (e, se já pago, a data). Sem celular no contrato, o WhatsApp abre com a mensagem pronta para escolher o contato. O celular é guardado só com dígitos, com DDD (ex.: `27999999999`).
