@@ -22,11 +22,7 @@
     <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <%= form.label :valor_kwh, "Valor do kWh", class: label_classes %>
-        <div class="relative">
-          <span class="pointer-events-none absolute inset-y-0 left-3 mt-1.5 flex items-center text-sm text-slate-400">R$</span>
-          <%= form.text_field :valor_kwh, value: valor_kwh_para_campo(@conta.valor_kwh), inputmode: "decimal", placeholder: "0,000000",
-                class: "#{field_classes(@conta, :valor_kwh)} pl-10 tabular-nums" %>
-        </div>
+        <%= money_field form, :valor_kwh, decimais: 6 %>
       </div>
       <div>
         <p class="<%= label_classes %>">Energia total (soma das kitnets)</p>
