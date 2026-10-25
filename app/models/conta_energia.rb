@@ -1,4 +1,4 @@
-# Conta de energia do mês. Lança-se só o valor do kWh (até 6 casas); a energia
+# Conta de energia do mês. Lança-se só o valor do kWh (3 casas); a energia
 # total e o valor total são a soma das kitnets (consumo e valor de cada
 # leitura) e são refeitos quando o valor do kWh ou as leituras mudam. O valor
 # realmente pago fica em EnergiaSolarMensal.

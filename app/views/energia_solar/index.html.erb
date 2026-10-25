@@ -22,7 +22,7 @@
           <dd class="mt-1 rounded-lg bg-slate-50 px-3 py-2 text-sm tabular-nums text-slate-900 dark:bg-white/5 dark:text-white">
             <% if a.valor_kitnets %>
               <%= number_to_currency(a.valor_kitnets) %>
-              <span class="text-xs text-slate-500 dark:text-slate-400">· <%= kwh(a.conta_energia.kwh_total) %> kWh × <%= number_to_currency(a.conta_energia.valor_kwh, precision: 4) %></span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">· <%= kwh(a.conta_energia.kwh_total) %> kWh × <%= number_to_currency(a.conta_energia.valor_kwh, precision: 3) %></span>
             <% else %>
               <span class="text-slate-500 dark:text-slate-400">Lance a conta em</span>
               <%= link_to "Energia", energia_path(ano: a.ano, mes: a.mes), class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %>

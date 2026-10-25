@@ -22,7 +22,7 @@ module EnergiaHelper
       "• Leitura anterior: #{kwh(leitura.leitura_anterior)} kWh",
       "• Leitura atual: #{kwh(leitura.leitura_atual)} kWh",
       "• Consumo: #{kwh(leitura.consumo)} kWh",
-      "• Valor do kWh: #{number_to_currency(conta.valor_kwh, precision: 4)}",
+      "• Valor do kWh: #{number_to_currency(conta.valor_kwh, precision: 3)}",
       "",
       "*Total a pagar: #{number_to_currency(leitura.valor)}*",
       (leitura.pago? ? "(pagamento recebido em #{l(leitura.data_pagamento)} — obrigado!)" : nil)

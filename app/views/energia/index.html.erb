@@ -22,7 +22,7 @@
     <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <%= form.label :valor_kwh, "Valor do kWh", class: label_classes %>
-        <%= money_field form, :valor_kwh, decimais: 6 %>
+        <%= money_field form, :valor_kwh, decimais: 3 %>
       </div>
       <div>
         <p class="<%= label_classes %>">Energia total (soma das kitnets)</p>
@@ -166,7 +166,7 @@
               data-controller="row-link" data-row-link-url-value="<%= energia_path(ano: @conta.ano, mes: l[:mes]) %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= t("date.month_names")[l[:mes]].capitalize %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.kwh_total ? "#{kwh(c.kwh_total)} kWh" : "—" %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.valor_kwh ? number_to_currency(c.valor_kwh, precision: 4) : "—" %></td>
+            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.valor_kwh ? number_to_currency(c.valor_kwh, precision: 3) : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= c&.valor_total ? number_to_currency(c.valor_total) : "—" %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= l[:consumo].positive? ? "#{kwh(l[:consumo])} kWh" : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= l[:cobrar].positive? ? number_to_currency(l[:cobrar]) : "—" %></td>
