@@ -12,6 +12,7 @@ class PagamentosController < ApplicationController
     @unidades = Unidade.do_mes(@mes).order(:nome)
     @pagamentos = Pagamento.do_mes(@mes).includes(:unidade).order(:data_pagamento, :id)
     @por_unidade = @pagamentos.group_by(&:unidade_id)
+    @fechamento = FechamentoMensal.find_or_initialize_by(ano: ano, mes: mes)
   end
 
   # GET /pagamentos/new?unidade_id=1&data=2026-10-05

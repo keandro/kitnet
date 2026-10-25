@@ -8,7 +8,9 @@ class FechamentosMensaisController < ApplicationController
   # PATCH /financas/2026/10
   def update
     if @fechamento.update(fechamento_params)
-      redirect_to financas_path(ano: @fechamento.ano), notice: "Valores de #{nome_do_mes} atualizados.", status: :see_other
+      # Lançado pela página Pagamentos volta para ela.
+      destino = params[:retorno] == "pagamentos" ? pagamentos_path(ano: @fechamento.ano, mes: @fechamento.mes) : financas_path(ano: @fechamento.ano)
+      redirect_to destino, notice: "Custos de #{nome_do_mes} salvos.", status: :see_other
     else
       render :edit, status: :unprocessable_content
     end

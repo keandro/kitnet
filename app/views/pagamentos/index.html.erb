@@ -105,3 +105,25 @@
     </div>
   <% end %>
 </section>
+
+<%# custos do mês (os mesmos de Finanças) %>
+<section class="card mt-6 p-5">
+  <h2 class="text-sm font-medium text-slate-900 dark:text-white">Custos do mês</h2>
+  <%= render "shared/error_summary", object: @fechamento %>
+  <%= form_with(model: @fechamento, url: fechamento_mensal_path(ano: @mes.year, mes: @mes.month), method: :patch, html: { autocomplete: "off" }, class: "mt-4") do |form| %>
+    <%= hidden_field_tag :retorno, "pagamentos" %>
+    <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
+      <div>
+        <%= form.label :despesas_gerais, class: label_classes %>
+        <%= money_field form, :despesas_gerais %>
+      </div>
+      <div>
+        <%= form.label :agua_esgoto, class: label_classes %>
+        <%= money_field form, :agua_esgoto %>
+      </div>
+      <div>
+        <%= form.submit "Salvar custos", class: "btn btn-primary w-full" %>
+      </div>
+    </div>
+  <% end %>
+</section>
