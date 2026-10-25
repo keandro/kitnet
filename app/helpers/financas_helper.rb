@@ -44,6 +44,16 @@ module FinancasHelper
     "#{valor.negative? ? "−" : "+"} #{number_to_currency(valor.abs)}"
   end
 
+  # "vence em 3 dias", "vence hoje", "venceu há 2 dias"; contratos "terminam".
+  def prazo_do_aviso(data, hoje: Date.current, verbo: "vence", passado: "venceu")
+    dias = (data - hoje).to_i
+    if dias.zero? then "#{verbo} hoje"
+    elsif dias.negative? then "#{passado} há #{pluralize(-dias, "dia", plural: "dias")}"
+    elsif dias > 31 then "#{verbo} em #{l(data)}"
+    else "#{verbo} em #{pluralize(dias, "dia", plural: "dias")}"
+    end
+  end
+
   def nome_mes(mes, abreviado: false)
     I18n.t(abreviado ? "date.abbr_month_names" : "date.month_names")[mes]
   end

@@ -14,6 +14,8 @@
   </nav>
 </div>
 
+<%= render "notificacoes", notificacoes: @notificacoes %>
+
 <% custos = @totais[:despesas_gerais] + @totais[:agua_esgoto] %>
 <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
   <%= render "shared/stat_tile", label: "Resultado em #{@ano}", value: number_to_currency(@totais[:resultado]), icon_name: :chart, tone: (@totais[:resultado].negative? ? :critical : :good), value_class: "text-xl",

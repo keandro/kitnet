@@ -4,6 +4,7 @@ class FinancasController < ApplicationController
     hoje = Date.current
     @ano = params[:ano].to_i.between?(2000, 2100) ? params[:ano].to_i : hoje.year
     @anos = anos_disponiveis(hoje.year)
+    @notificacoes = Notificacoes.new(hoje)
 
     periodo = Date.new(@ano).all_year
     recebido = Pagamento.where(data_pagamento: periodo).group("strftime('%m', data_pagamento)").sum(:valor)

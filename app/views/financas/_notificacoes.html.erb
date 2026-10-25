@@ -1,0 +1,49 @@
+<%# Avisos de hoje (não dependem do ano escolhido). %>
+<% grupos = [
+     { titulo: "Kitnets a pagar", icone: :cash, avisos: notificacoes.kitnets, vazio: "Nenhum aluguel vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
+     { titulo: "Energia a pagar", icone: :bolt, avisos: notificacoes.energia, vazio: "Nenhuma conta de energia vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
+     { titulo: "Contratos a vencer", icone: :document, avisos: notificacoes.contratos, vazio: "Nenhum contrato terminando nos próximos #{Notificacoes::MESES_CONTRATO} meses.", contrato: true },
+     { titulo: "Outros avisos", icone: :exclamation_triangle, avisos: notificacoes.outros, vazio: "Nada por aqui." }
+   ] %>
+<section class="card mt-6 p-5" aria-labelledby="avisos-titulo">
+  <div class="flex items-center gap-2">
+    <h2 id="avisos-titulo" class="text-sm font-medium text-slate-900 dark:text-white">Avisos</h2>
+    <% if notificacoes.total.positive? %>
+      <span class="rounded-full bg-rose-600 px-2 py-0.5 text-xs font-semibold text-white"><%= notificacoes.total %></span>
+    <% end %>
+  </div>
+
+  <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <% grupos.each do |grupo| %>
+      <div class="min-w-0 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200/70 ring-inset dark:bg-white/[0.03] dark:ring-white/10">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <%= icon grupo[:icone], css_class: "size-4 text-slate-500 dark:text-slate-400" %> <%= grupo[:titulo] %>
+          </h3>
+          <span class="text-xs font-semibold tabular-nums <%= grupo[:avisos].any? ? "text-rose-600 dark:text-rose-400" : "text-slate-400" %>"><%= grupo[:avisos].size %></span>
+        </div>
+
+        <% if grupo[:avisos].any? %>
+          <ul class="mt-3 space-y-2">
+            <% grupo[:avisos].each do |aviso| %>
+              <% vencido = aviso.vencimento < notificacoes.hoje %>
+              <li>
+                <%= link_to aviso.caminho, class: "block rounded-lg bg-white px-3 py-2.5 ring-1 ring-inset transition-colors hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-white/5 #{vencido ? "ring-rose-200 dark:ring-rose-400/30" : "ring-amber-200 dark:ring-amber-400/30"}" do %>
+                  <span class="flex items-start justify-between gap-2">
+                    <span class="min-w-0 truncate text-sm font-medium text-slate-900 dark:text-white"><%= aviso.titulo %></span>
+                    <span class="shrink-0 text-xs font-semibold <%= vencido ? "text-rose-700 dark:text-rose-400" : "text-amber-700 dark:text-amber-400" %>">
+                      <%= grupo[:contrato] ? prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje, verbo: "termina", passado: "terminou") : prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje) %>
+                    </span>
+                  </span>
+                  <span class="mt-0.5 block truncate text-xs text-slate-500 dark:text-slate-400"><%= aviso.detalhe %> · <%= l(aviso.vencimento) %></span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="mt-3 text-xs text-slate-500 dark:text-slate-400"><%= grupo[:vazio] %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
