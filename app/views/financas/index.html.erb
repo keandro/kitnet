@@ -80,6 +80,8 @@
   </div>
 </section>
 
+<%= render "energia_solar/grafico_lucro", ano: @ano, lucros: @lucros_solar, lucros_kitnets: @lucros_solar_kitnets %>
+
 <section class="card mt-6 overflow-hidden">
   <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
     <h2 class="text-sm font-medium text-slate-900 dark:text-white">Mês a mês</h2>
@@ -128,3 +130,5 @@
     </table>
   </div>
 </section>
+
+<%= render "energia_solar/lucro_mes_a_mes", ano: @ano, lucros: @lucros_solar, lucros_kitnets: @lucros_solar_kitnets %>

@@ -1,0 +1,58 @@
+<%# Barras do lucro da energia solar das kitnets e do lucro total de cada mês (Finanças). %>
+<% escala = escala_financas((lucros.values + lucros_kitnets.values).presence || [ 0 ]) %>
+<% zero = posicao_na_escala(0, escala) %>
+<section class="card mt-6 p-5">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro da energia solar por mês</h2>
+    <div class="flex flex-wrap items-center gap-4 text-xs text-slate-600 dark:text-slate-300">
+      <span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-amber-500"></span> Lucro das kitnets</span>
+      <span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-sky-500"></span> Lucro total</span>
+    </div>
+  </div>
+
+  <div class="mt-6 flex gap-2">
+    <div class="relative h-48 w-16 shrink-0 text-right text-xs tabular-nums text-slate-500 dark:text-slate-400" aria-hidden="true">
+      <% escala[:ticks].each do |tick| %>
+        <span class="absolute right-0 translate-y-1/2" style="bottom: <%= posicao_na_escala(tick, escala) %>%"><%= dinheiro_compacto(tick) %></span>
+      <% end %>
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <div class="relative h-48">
+        <% escala[:ticks].each do |tick| %>
+          <div class="absolute inset-x-0 border-t <%= tick.zero? ? "border-slate-300 dark:border-white/20" : "border-slate-100 dark:border-white/5" %>" style="bottom: <%= posicao_na_escala(tick, escala) %>%"></div>
+        <% end %>
+
+        <div class="absolute inset-0 flex gap-0.5">
+          <% (1..12).each do |mes| %>
+            <% kitnets, total = lucros_kitnets[mes], lucros[mes] %>
+            <div class="group relative flex h-full flex-1 justify-center gap-px" tabindex="0"
+                 aria-label="<%= nome_mes(mes) %>: lucro das kitnets <%= kitnets ? number_to_currency(kitnets) : "sem dados" %>, lucro total <%= total ? number_to_currency(total) : "sem dados" %>">
+              <% [ [ kitnets, "bg-amber-500" ], [ total, "bg-sky-500" ] ].each do |valor, cor| %>
+                <div class="relative h-full w-full max-w-3">
+                  <% if valor && !valor.zero? %>
+                    <% topo = posicao_na_escala(valor, escala) %>
+                    <% base, altura = valor.negative? ? [ topo, zero - topo ] : [ zero, topo - zero ] %>
+                    <div class="absolute w-full <%= valor.negative? ? "rounded-b-[3px] opacity-60" : "rounded-t-[3px]" %> <%= cor %>" style="bottom: <%= base %>%; height: <%= altura %>%"></div>
+                  <% end %>
+                </div>
+              <% end %>
+
+              <div class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg group-hover:block group-focus:block dark:bg-slate-700">
+                <p class="font-medium"><%= nome_mes(mes).capitalize %> de <%= ano %></p>
+                <p class="mt-1 tabular-nums">Lucro das kitnets: <%= kitnets ? number_to_currency(kitnets) : "—" %></p>
+                <p class="tabular-nums text-slate-300">Lucro total: <%= total ? number_to_currency(total) : "—" %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-2 flex gap-0.5 text-xs text-slate-500 dark:text-slate-400" aria-hidden="true">
+        <% (1..12).each do |mes| %>
+          <span class="flex-1 text-center"><span class="sm:hidden"><%= nome_mes(mes, abreviado: true).first.upcase %></span><span class="hidden sm:inline"><%= nome_mes(mes, abreviado: true) %></span></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

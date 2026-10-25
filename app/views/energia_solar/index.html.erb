@@ -88,39 +88,4 @@
   </div>
 <% end %>
 
-<section class="card mt-6 overflow-hidden">
-  <div class="border-b border-slate-100 px-5 py-4 dark:border-white/5">
-    <h2 class="text-sm font-medium text-slate-900 dark:text-white">Lucro mês a mês em <%= a.ano %></h2>
-  </div>
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
-      <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
-        <tr>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mês</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro das kitnets</th>
-          <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro total</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-slate-100 dark:divide-white/5">
-        <% (1..12).each do |mes| %>
-          <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if mes == a.mes %>"
-              data-controller="row-link" data-row-link-url-value="<%= energia_solar_path(ano: a.ano, mes: mes) %>" data-action="click->row-link#visit">
-            <td class="whitespace-nowrap px-3 py-2.5 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= t("date.month_names")[mes].capitalize %></td>
-            <% [ @lucros_kitnets[mes], @lucros[mes] ].each do |lucro| %>
-              <td class="whitespace-nowrap px-3 py-2.5 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums <%= lucro&.negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>">
-                <%= lucro ? number_to_currency(lucro) : "—" %>
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot class="bg-slate-50 dark:bg-white/5">
-        <tr>
-          <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-semibold text-slate-900 dark:text-white">Total <%= a.ano %></td>
-          <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@lucros_kitnets.values.sum) %></td>
-          <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@lucros.values.sum) %></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-</section>
+<%= render "energia_solar/lucro_mes_a_mes", ano: a.ano, lucros: @lucros, lucros_kitnets: @lucros_kitnets, destaque: a.mes %>

@@ -9,7 +9,8 @@ class FinancasController < ApplicationController
     recebido = Pagamento.where(data_pagamento: periodo).group("strftime('%m', data_pagamento)").sum(:valor)
 
     fechamentos = FechamentoMensal.do_ano(@ano)
-    lucros_solar = EnergiaSolarMensal.lucros_do_ano(@ano, tipo: :lucro_kitnets)
+    @lucros_solar_kitnets = EnergiaSolarMensal.lucros_do_ano(@ano, tipo: :lucro_kitnets)
+    @lucros_solar = EnergiaSolarMensal.lucros_do_ano(@ano)
 
     @meses = (1..12).map do |mes|
       chave = format("%02d", mes)
@@ -19,7 +20,7 @@ class FinancasController < ApplicationController
         recebido: recebido[chave].to_d,
         despesas_gerais: fechamento&.despesas_gerais.to_d,
         agua_esgoto: fechamento&.agua_esgoto.to_d,
-        energia_solar: lucros_solar[mes]
+        energia_solar: @lucros_solar_kitnets[mes]
       }
       linha[:resultado] = linha[:recebido] + linha[:energia_solar].to_d - linha[:despesas_gerais] - linha[:agua_esgoto]
       linha
