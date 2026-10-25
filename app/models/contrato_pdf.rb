@@ -46,9 +46,14 @@ class ContratoPdf
   private
 
   # O texto do modelo e os dados vão escapados; só **negrito** e __sublinhado__
-  # viram formatação.
+  # viram formatação. Um trecho entre colchetes ("[, RG {locatario_rg}]") some
+  # quando algum campo dele está vazio.
   def preencher(texto)
     String.new(ERB::Util.html_escape(texto))
+      .gsub(ModeloDeContrato::OPCIONAL) do
+        trecho = Regexp.last_match(1)
+        trecho.scan(ModeloDeContrato::CAMPO).flatten.any? { |campo| valores[campo] == VAZIO } ? "" : trecho
+      end
       .gsub(/\*\*(.+?)\*\*/, '<b>\\1</b>')
       .gsub(/__(?=[^_\s])(.+?)(?<=[^_\s])__/, '<u>\\1</u>')
       .gsub(ModeloDeContrato::CAMPO) { valores.fetch($1, $&) }

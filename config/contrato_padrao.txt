@@ -2,12 +2,12 @@
 
 > Contrato de locação de um imóvel situado na {imovel_endereco}, {andar}, kitnet {kitnet}, {bairro_cidade}, no qual se destina para locação exclusivamente residencial, vedada utilização para qualquer outro fim.
 
-**LOCADOR –** **{locador}**, {locador_qualificacao}, CPF {locador_cpf}, com endereço na {locador_endereco}.
+**LOCADOR –** **{locador}**[, {locador_qualificacao}][, CPF {locador_cpf}][, com endereço na {locador_endereco}].
 
-**LOCATÁRIO –** **{locatario}**, {locatario_nacionalidade}, {locatario_estado_civil}, {locatario_profissao}, CPF {locatario_cpf}, RG {locatario_rg}, com endereço na {locatario_endereco}.
+**LOCATÁRIO –** **{locatario}**[, {locatario_nacionalidade}][, {locatario_estado_civil}][, {locatario_profissao}][, CPF {locatario_cpf}][, RG {locatario_rg}], com endereço na {locatario_endereco}.
 
 [se tiver fiador]
-**FIADOR –** **{fiador}**, {fiador_nacionalidade}, {fiador_estado_civil}, {fiador_profissao}, CPF {fiador_cpf}, identidade {fiador_identidade}, com endereço em {fiador_endereco}.
+**FIADOR –** **{fiador}**[, {fiador_nacionalidade}][, {fiador_estado_civil}][, {fiador_profissao}][, CPF {fiador_cpf}][, identidade {fiador_identidade}][, com endereço em {fiador_endereco}].
 [fim]
 
 ## CLÁUSULAS E CONDIÇÕES

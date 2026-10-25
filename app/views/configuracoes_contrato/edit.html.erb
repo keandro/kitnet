@@ -72,6 +72,7 @@
             <% [ [ "# Texto", "título do contrato, centralizado" ], [ "## Texto", "título de uma seção" ], [ "> Texto", "parágrafo com recuo" ],
                  [ "1- Texto", "cláusula; a numeração é refeita em ordem, então pode usar qualquer número" ], [ "a) Texto", "item de uma lista" ],
                  [ "**texto**", "negrito" ], [ "__texto__", "sublinhado" ],
+                 [ "[, RG {locatario_rg}]", "trecho que some do contrato quando o campo está vazio (o rótulo e a vírgula vão junto)" ],
                  [ "[se tiver fiador] … [fim]", "só entra quando o contrato tem fiador (também: [se não tiver fiador], [se tiver taxa de limpeza])" ] ].each do |marca, explicacao| %>
               <dt><code class="rounded bg-white px-1.5 py-0.5 font-mono text-xs text-slate-800 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-100 dark:ring-white/10"><%= marca %></code></dt>
               <dd class="mb-1.5 min-w-0 sm:mb-0"><%= explicacao %></dd>

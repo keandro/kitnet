@@ -6,6 +6,7 @@
 #   1- Texto          cláusula; os números são refeitos em ordem
 #   a) Texto          item de uma lista
 #   **negrito**  __sublinhado__  {campo}
+#   [, RG {locatario_rg}]        trecho que some quando um campo dele está vazio
 #   [se tiver fiador] … [fim]   (também "se não tiver" e "taxa de limpeza")
 class ModeloDeContrato
   ARQUIVO_PADRAO = Rails.root.join("config/contrato_padrao.txt")
@@ -24,6 +25,7 @@ class ModeloDeContrato
   CONDICAO = /\A\[se (n[ãa]o )?tiver (fiador|taxa de limpeza)\]\z/i
   FIM = /\A\[fim\]\z/i
   CAMPO = /\{([a-z_]+)\}/
+  OPCIONAL = /\[([^\[\]]*\{[a-z_]+\}[^\[\]]*)\]/
 
   def self.padrao = File.read(ARQUIVO_PADRAO)
 
@@ -39,7 +41,7 @@ class ModeloDeContrato
         abertas += 1
       elsif linha.match?(FIM)
         abertas.zero? ? erros << "linha #{i + 1}: [fim] sem um [se tiver …] antes" : abertas -= 1
-      elsif linha.start_with?("[") && linha.end_with?("]")
+      elsif linha.match?(/\A\[se\b/i)
         erros << "linha #{i + 1}: #{linha} não é reconhecido (use [se tiver fiador], [se tiver taxa de limpeza] ou [fim])"
       end
       linha.scan(CAMPO).flatten.reject { |campo| NOMES_DOS_CAMPOS.include?(campo) }.each do |campo|
