@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "contratos/modelo/exemplo.pdf", to: "configuracoes_contrato#exemplo", as: :exemplo_do_modelo_de_contrato, format: false
   resources :contratos, except: %i[show] do
     patch :finalizar, on: :member
+    patch :enviar_pdf, on: :member
   end
   get "contratos/:id/contrato.pdf", to: "contratos#pdf", as: :pdf_contrato, format: false
   get "contratos/:id/para-assinar.pdf", to: "contratos#para_assinar", as: :contrato_para_assinar, format: false

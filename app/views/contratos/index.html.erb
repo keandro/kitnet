@@ -33,7 +33,7 @@
             <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor</th>
             <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Vencimento</th>
             <th class="hidden md:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Período</th>
-            <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Situação</th>
+            <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Situação</th>
             <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
           </tr>
         </thead>
@@ -43,20 +43,39 @@
               <td class="px-3 py-3 sm:px-4 max-[359px]:px-2">
                 <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium text-slate-900 dark:text-white">
                   <%= contrato.inquilino %>
-                  <% if @com_pdf.include?(contrato.id) %>
-                    <%= link_to pdf_contrato_path(contrato), target: "_blank", rel: "noopener", data: { turbo: false }, title: "Abrir o contrato em PDF",
-                                class: "inline-flex items-center gap-0.5 rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-semibold text-rose-700 ring-1 ring-rose-600/20 ring-inset hover:bg-rose-100 dark:bg-rose-400/10 dark:text-rose-300 dark:ring-rose-400/20" do %>
-                      <%= icon :document, css_class: "size-3" %> PDF
-                    <% end %>
-                  <% end %>
                 </p>
                 <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                   Kitnet <%= contrato.unidade.nome %><%= " · #{contrato.celular_formatado}" if contrato.celular %> · <%= contrato.fiador ? "fiador: #{contrato.fiador}" : "sem fiador" %>
                 </p>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  <% if @com_pdf.include?(contrato.id) %>
+                    <%= link_to pdf_contrato_path(contrato), target: "_blank", rel: "noopener", data: { turbo: false }, title: "Abrir o contrato assinado em PDF", class: "acao-contrato text-rose-700 ring-rose-600/20 hover:bg-rose-50 dark:text-rose-300 dark:ring-rose-400/20 dark:hover:bg-rose-400/10" do %>
+                      <%= icon :eye, css_class: "size-3.5" %> Ver PDF
+                    <% end %>
+                  <% else %>
+                    <%= form_with url: enviar_pdf_contrato_path(contrato), method: :patch, multipart: true, data: { controller: "enviar-arquivo" } do %>
+                      <label class="acao-contrato cursor-pointer text-slate-600 ring-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:ring-white/15 dark:hover:bg-white/5" title="Enviar o contrato assinado em PDF">
+                        <%= icon :download, css_class: "size-3.5 rotate-180" %> Enviar PDF
+                        <%= file_field_tag :arquivo_pdf, accept: "application/pdf,.pdf", class: "sr-only", data: { action: "change->enviar-arquivo#enviar" } %>
+                      </label>
+                    <% end %>
+                  <% end %>
+                  <% if contrato.finalizado? %>
+                    <%= link_to new_contrato_path(copiar_de: contrato.id), title: "Criar um contrato novo com os dados deste", class: "acao-contrato text-indigo-700 ring-indigo-600/20 hover:bg-indigo-50 dark:text-indigo-300 dark:ring-indigo-400/30 dark:hover:bg-indigo-400/10" do %>
+                      <%= icon :plus, css_class: "size-3.5" %> Novo contrato igual
+                    <% end %>
+                  <% end %>
+                </div>
               </td>
               <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
                 <%= number_to_currency(contrato.valor) %>
                 <span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">dia <%= contrato.dia_vencimento %></span>
+                <%# no celular a coluna Situação some; ela vem aqui embaixo %>
+                <% if contrato.ativo? %>
+                  <span class="block text-xs font-medium text-emerald-700 sm:hidden dark:text-emerald-400">ativo<%= contrato.meses_restantes&.<=(1) ? (contrato.meses_restantes.zero? ? " · venceu" : " · termina mês que vem") : "" %></span>
+                <% else %>
+                  <span class="block text-xs font-medium text-slate-500 sm:hidden dark:text-slate-400">finalizado</span>
+                <% end %>
               </td>
               <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-700 dark:text-slate-300">todo dia <%= contrato.dia_vencimento %></td>
               <td class="hidden md:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-700 dark:text-slate-300">
@@ -65,7 +84,7 @@
                   <span class="block text-xs text-slate-500 dark:text-slate-400"><%= l(contrato.data_inicio) %> a <%= l(contrato.data_fim) %></span>
                 <% end %>
               </td>
-              <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2">
+              <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2">
                 <% if contrato.ativo? %>
                   <%= status_badge("Ativo", tone: :good) %>
                   <% if contrato.meses_restantes&.<=(1) %>

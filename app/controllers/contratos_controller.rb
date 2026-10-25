@@ -1,6 +1,6 @@
 # Contratos de aluguel. Ficam separados dos pagamentos: não geram cobranças.
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: %i[ edit update destroy finalizar pdf para_assinar ]
+  before_action :set_contrato, only: %i[ edit update destroy finalizar enviar_pdf pdf para_assinar ]
 
   # GET /contratos?situacao=ativo|finalizado|todos
   def index
@@ -26,7 +26,15 @@ class ContratosController < ApplicationController
   end
 
   # GET /contratos/new?unidade_id=1
+  # GET /contratos/new?copiar_de=1 — novo contrato com os dados de um anterior,
+  # começando quando o anterior terminou.
   def new
+    if (@origem = Contrato.find_by(id: params[:copiar_de]))
+      @contrato = Contrato.new(@origem.attributes.except("id", "created_at", "updated_at", "status", "data_inicio"))
+      @contrato.data_inicio = @origem.data_fim || Date.current
+      return
+    end
+
     unidade = Unidade.find_by(id: params[:unidade_id])
     @contrato = Contrato.new(unidade: unidade, valor: unidade&.valor_base, duracao_meses: 30, dia_vencimento: 10, data_inicio: Date.current,
                              conta_pagamento: (ContaPagamento.first if ContaPagamento.count == 1))
@@ -59,6 +67,17 @@ class ContratosController < ApplicationController
   def finalizar
     @contrato.finalizado!
     redirect_back_or_to contratos_path, notice: "Contrato de #{@contrato.inquilino} finalizado; a kitnet #{@contrato.unidade.nome} ficou livre.", status: :see_other
+  end
+
+  # PATCH /contratos/1/enviar_pdf — envia o PDF direto da lista.
+  def enviar_pdf
+    if params[:arquivo_pdf].blank?
+      redirect_back_or_to contratos_path, alert: "Escolha o arquivo PDF.", status: :see_other
+    elsif @contrato.update(arquivo_pdf: params[:arquivo_pdf])
+      redirect_back_or_to contratos_path, notice: "PDF do contrato de #{@contrato.inquilino} enviado.", status: :see_other
+    else
+      redirect_back_or_to contratos_path, alert: @contrato.errors.full_messages.to_sentence, status: :see_other
+    end
   end
 
   # DELETE /contratos/1

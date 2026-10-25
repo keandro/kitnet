@@ -5,6 +5,11 @@
 <% end %>
 
 <h1 class="mt-3 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Novo contrato</h1>
+<% if @origem %>
+  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+    Com os dados do contrato de <%= @origem.inquilino %> (kitnet <%= @origem.unidade.nome %><%= ", até #{l(@origem.data_fim)}" if @origem.data_fim %>). Confira e ajuste antes de salvar; o PDF não é copiado.
+  </p>
+<% end %>
 
 <div class="mt-6 max-w-2xl">
   <%= render "form", contrato: @contrato %>

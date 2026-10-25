@@ -59,3 +59,10 @@ td, th {
 .botao-copiar.copiado .icone-copiado {
   display: block;
 }
+
+/* Botões pequenos das linhas da lista de contratos (PDF, novo contrato igual). */
+@layer components {
+  .acao-contrato {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset;
+  }
+}
