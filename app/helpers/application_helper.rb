@@ -85,7 +85,8 @@ module ApplicationHelper
   # Barra lateral (computador), em grupos separados por uma linha.
   def menu_barra_lateral
     [
-      [ [ "Início", root_path, :home ], [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
+      [ [ "Início", root_path, :home ] ],
+      [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
       [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ], [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
       [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
       [ [ "Backup", backups_path, :arquivo ] ]
