@@ -22,6 +22,8 @@ pt-BR:
       fechamento_mensal:
         despesas_gerais: Despesas gerais
         agua_esgoto: Água e esgoto
+        agua_esgoto_1: Água e esgoto (relógio 1)
+        agua_esgoto_2: Água e esgoto (relógio 2)
       contrato:
         unidade: Kitnet
         inquilino: Locatário

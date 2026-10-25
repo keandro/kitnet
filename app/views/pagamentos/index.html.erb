@@ -98,18 +98,28 @@
 <section class="card mt-6 p-5">
   <h2 class="text-sm font-medium text-slate-900 dark:text-white">Custos do mês</h2>
   <%= form_with(model: @fechamento, url: fechamento_mensal_path(ano: @mes.year, mes: @mes.month), method: :patch, html: { autocomplete: "off" }, class: "mt-4") do |form| %>
-    <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
+    <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <%= form.label :despesas_gerais, class: label_classes %>
         <%= money_field form, :despesas_gerais %>
       </div>
       <div>
-        <%= form.label :agua_esgoto, class: label_classes %>
-        <%= money_field form, :agua_esgoto %>
+        <%= form.label :agua_esgoto_1, "Água e esgoto — relógio 1", class: label_classes %>
+        <%= money_field form, :agua_esgoto_1 %>
+      </div>
+      <div>
+        <%= form.label :agua_esgoto_2, "Água e esgoto — relógio 2", class: label_classes %>
+        <%= money_field form, :agua_esgoto_2 %>
       </div>
       <div>
         <%= form.submit "Salvar custos", class: "btn btn-primary w-full" %>
       </div>
     </div>
+    <% if @fechamento.persisted? %>
+      <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">
+        Água e esgoto do mês: <span class="font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@fechamento.agua_esgoto) %></span>
+        · custos do mês: <span class="font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@fechamento.agua_esgoto + @fechamento.despesas_gerais) %></span>
+      </p>
+    <% end %>
   <% end %>
 </section>

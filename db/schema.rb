@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_010000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_020000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
     t.string "locador_nome"
     t.string "locador_qualificacao"
@@ -107,6 +107,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_010000) do
     t.decimal "agua_esgoto", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "agua_esgoto_1", precision: 10, scale: 2
+    t.decimal "agua_esgoto_2", precision: 10, scale: 2
     t.index ["ano", "mes"], name: "index_fechamentos_mensais_on_ano_and_mes", unique: true
   end
 
