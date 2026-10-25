@@ -29,8 +29,9 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 - **Contas para pagamento**: as contas onde os locatários pagam — nome da conta (titular), banco com código e nome (o nome se completa pelo código), agência, conta e chave Pix, com botão para copiar a conta e a chave
 - **Ocupação**: as kitnets ocupadas (com locatário, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base, dia do pagamento e o histórico de pagamentos de cada uma (o lápis do quadro edita o valor base e o dia ali mesmo)
-- **Avisos** (no topo de Finanças): **kitnets a vencer** e **energia a vencer** a partir de 5 dias antes do vencimento ou já vencidas, **contratos a vencer** nos próximos 3 meses ou já vencidos, e o **aniversário do contrato** (a cada 12 meses, 1 mês antes, para reajustar o valor); cada aviso abre onde resolver (registrar o pagamento, a energia do mês ou o contrato)
-- **Finanças** (página inicial): visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
+- **Início** (página inicial): os avisos e, do ano atual, os totais, o resultado por mês e o lucro da energia solar por mês
+- **Avisos** (no Início): **kitnets a vencer** e **energia a vencer** a partir de 5 dias antes do vencimento ou já vencidas, **contratos a vencer** nos próximos 3 meses ou já vencidos, e o **aniversário do contrato** (a cada 12 meses, 1 mês antes, para reajustar o valor); cada aviso abre onde resolver (registrar o pagamento, a energia do mês ou o contrato)
+- **Finanças**: visão anual (resultado, recebido, custos e energia solar do ano escolhido) e o resultado de cada mês; por mês, lança despesas gerais e água e esgoto e soma o lucro da energia solar para chegar ao resultado
 - **Energia**: valor do kWh do mês (a energia total e o valor total são a soma das kitnets) e, por kitnet, a leitura do medidor, o consumo, o valor a cobrar e se já foi pago; um botão manda a conta de cada kitnet pelo WhatsApp para o locatário do contrato ativo
 - **Energia solar**: quanto a energia custaria sem os painéis (conta das kitnets + apartamento), menos o que foi realmente pago; mostra o lucro da energia solar das kitnets e o lucro total do mês
 - Interface responsiva com modo escuro; no celular, navegação na barra de baixo (como num app) com Finanças, Pagamentos, Energia e Energia solar; o resto fica em **Mais**
@@ -212,7 +213,7 @@ Acesse <http://localhost:3000>. Não há login: o app é feito para uso pessoal 
 
 | Rota             | Descrição                         |
 | ---------------- | --------------------------------- |
-| `/`              | Abre Finanças                     |
+| `/`              | Início: avisos e resumo do ano    |
 | `/pagamentos`    | Pagamentos do mês                 |
 | `/contratos`     | Contratos (ativos e finalizados)  |
 | `/ocupacao`      | Kitnets ocupadas e livres         |

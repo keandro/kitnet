@@ -4,35 +4,7 @@ class FinancasController < ApplicationController
     hoje = Date.current
     @ano = params[:ano].to_i.between?(2000, 2100) ? params[:ano].to_i : hoje.year
     @anos = anos_disponiveis(hoje.year)
-    @notificacoes = Notificacoes.new(hoje)
-
-    periodo = Date.new(@ano).all_year
-    recebido = Pagamento.where(data_pagamento: periodo).group("strftime('%m', data_pagamento)").sum(:valor)
-
-    fechamentos = FechamentoMensal.do_ano(@ano)
-    @lucros_solar_kitnets = EnergiaSolarMensal.lucros_do_ano(@ano, tipo: :lucro_kitnets)
-    @lucros_solar = EnergiaSolarMensal.lucros_do_ano(@ano)
-
-    @meses = (1..12).map do |mes|
-      chave = format("%02d", mes)
-      fechamento = fechamentos[mes]
-      linha = {
-        mes: mes,
-        recebido: recebido[chave].to_d,
-        despesas_gerais: fechamento&.despesas_gerais.to_d,
-        agua_esgoto: fechamento&.agua_esgoto.to_d,
-        energia_solar: @lucros_solar_kitnets[mes]
-      }
-      linha[:resultado] = linha[:recebido] + linha[:energia_solar].to_d - linha[:despesas_gerais] - linha[:agua_esgoto]
-      linha
-    end
-    @total_recebido = @meses.sum { |m| m[:recebido] }
-    @totais = %i[despesas_gerais agua_esgoto resultado].index_with { |campo| @meses.sum { |m| m[campo] } }
-    @totais[:energia_solar] = @meses.sum { |m| m[:energia_solar].to_d }
-    # Média do resultado nos meses do ano que tiveram algum movimento.
-    meses_com_movimento = @meses.count { |m| m[:recebido].nonzero? || m[:despesas_gerais].nonzero? || m[:agua_esgoto].nonzero? || m[:energia_solar] }
-    @media_mensal = meses_com_movimento.zero? ? 0 : @totais[:resultado] / meses_com_movimento
-    @meses_com_movimento = meses_com_movimento
+    @resumo = ResumoFinanceiro.new(@ano)
   end
 
   private

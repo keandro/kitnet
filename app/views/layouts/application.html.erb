@@ -26,10 +26,10 @@
     <div class="flex h-full">
       <%# barra lateral (tablet/computador) %>
       <aside class="hidden w-64 shrink-0 flex-col border-r border-slate-200/70 bg-white/80 backdrop-blur lg:flex dark:border-white/5 dark:bg-slate-900/60">
-        <div class="flex h-16 shrink-0 items-center gap-3 px-5">
+        <%= link_to root_path, class: "flex h-16 shrink-0 items-center gap-3 px-5", aria: { label: "LF Kitnets — Início" } do %>
           <%= marca_lf_kitnets %>
           <span class="text-base font-semibold tracking-tight">LF Kitnets</span>
-        </div>
+        <% end %>
 
         <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4" aria-label="Menu">
           <% menu_barra_lateral.each_with_index do |grupo, i| %>
@@ -44,10 +44,10 @@
       <div class="flex min-w-0 flex-1 flex-col">
         <%# barra superior (celular) %>
         <header class="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur lg:hidden dark:border-white/5 dark:bg-slate-900/80">
-          <div class="flex items-center gap-2.5">
+          <%= link_to root_path, class: "flex items-center gap-2.5", aria: { label: "LF Kitnets — Início" } do %>
             <%= marca_lf_kitnets(tamanho: "size-7") %>
             <span class="text-base font-semibold tracking-tight">LF Kitnets</span>
-          </div>
+          <% end %>
         </header>
 
         <main class="flex-1 overflow-y-auto px-4 pt-6 pb-28 sm:px-6 lg:px-10 lg:pt-8 lg:pb-10">

@@ -85,7 +85,7 @@ module ApplicationHelper
   # Barra lateral (computador), em grupos separados por uma linha.
   def menu_barra_lateral
     [
-      [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
+      [ [ "Início", root_path, :home ], [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
       [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ], [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
       [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
       [ [ "Backup", backups_path, :arquivo ] ]
@@ -95,6 +95,7 @@ module ApplicationHelper
   # Áreas do "Mais" (no celular).
   def menu_mais
     [
+      { rotulo: "Início", caminho: root_path, icone: :home, tom: :primary, descricao: "Avisos e resumo do ano" },
       { rotulo: "Contratos", caminho: contratos_path, icone: :document, tom: :info, descricao: "Contratos de aluguel e contrato para assinar" },
       { rotulo: "Ocupação", caminho: ocupacao_path, icone: :users, tom: :warning, descricao: "Kitnets ocupadas e livres" },
       { rotulo: "Kitnets", caminho: unidades_path, icone: :grid, tom: :primary, descricao: "Valor base e histórico de pagamentos" },
@@ -108,7 +109,7 @@ module ApplicationHelper
   end
 
   def menu_mais_ativo?
-    current_page?(mais_path) || menu_mais.any? { |item| menu_ativo?(item[:caminho]) }
+    current_page?(mais_path) || menu_mais.any? { |item| item[:caminho] != root_path && menu_ativo?(item[:caminho]) }
   end
 
   def sidebar_nav_link(label, path, icon_name)

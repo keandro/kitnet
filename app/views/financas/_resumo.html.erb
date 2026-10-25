@@ -1,0 +1,68 @@
+<%# Totais do ano, resultado por mês e lucro da energia solar por mês (Finanças e Início). %>
+<% custos = resumo.totais[:despesas_gerais] + resumo.totais[:agua_esgoto] %>
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+  <%= render "shared/stat_tile", label: "Resultado em #{resumo.ano}", value: number_to_currency(resumo.totais[:resultado]), icon_name: :chart, tone: (resumo.totais[:resultado].negative? ? :critical : :good), value_class: "text-xl",
+        sublabel: (resumo.meses_com_movimento.positive? ? "média de #{number_to_currency(resumo.media_mensal)} por mês (#{pluralize(resumo.meses_com_movimento, "mês", plural: "meses")})" : "sem movimento no ano") %>
+  <%= render "shared/stat_tile", label: "Recebido em #{resumo.ano}", value: number_to_currency(resumo.total_recebido), icon_name: :cash, tone: :primary, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Custos em #{resumo.ano}", value: number_to_currency(custos), icon_name: :exclamation_triangle, tone: :critical, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Energia solar em #{resumo.ano}", value: valor_com_sinal(resumo.totais[:energia_solar]).sub("—", number_to_currency(0)), icon_name: :sun, tone: :info, value_class: "text-xl" %>
+</div>
+
+<% escala = escala_financas(resumo.meses.map { |m| m[:resultado] }) %>
+<% zero = posicao_na_escala(0, escala) %>
+<section class="card mt-6 p-5">
+  <h2 class="text-sm font-medium text-slate-900 dark:text-white">Resultado por mês</h2>
+
+  <div class="mt-6 flex gap-2">
+    <%# eixo y %>
+    <div class="relative h-56 w-16 shrink-0 text-right text-xs tabular-nums text-slate-500 dark:text-slate-400" aria-hidden="true">
+      <% escala[:ticks].each do |tick| %>
+        <span class="absolute right-0 translate-y-1/2" style="bottom: <%= posicao_na_escala(tick, escala) %>%"><%= dinheiro_compacto(tick) %></span>
+      <% end %>
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <div class="relative h-56">
+        <% escala[:ticks].each do |tick| %>
+          <div class="absolute inset-x-0 border-t <%= tick.zero? ? "border-slate-300 dark:border-white/20" : "border-slate-100 dark:border-white/5" %>" style="bottom: <%= posicao_na_escala(tick, escala) %>%"></div>
+        <% end %>
+
+        <div class="absolute inset-0 flex gap-0.5">
+          <% resumo.meses.each do |m| %>
+            <% valor = m[:resultado] %>
+            <% topo_barra = posicao_na_escala(valor, escala) %>
+            <% base, altura = valor.negative? ? [ topo_barra, zero - topo_barra ] : [ zero, topo_barra - zero ] %>
+            <div class="group relative flex h-full flex-1 justify-center" tabindex="0"
+                 aria-label="<%= nome_mes(m[:mes]) %>: resultado <%= number_to_currency(valor) %>, recebido <%= number_to_currency(m[:recebido]) %>">
+              <% if altura.positive? %>
+                <% cor = valor.negative? ? "bg-rose-500 dark:bg-rose-500" : "bg-indigo-600 dark:bg-indigo-500" %>
+                <div class="absolute w-full max-w-6 <%= valor.negative? ? "rounded-b-[4px]" : "rounded-t-[4px]" %> <%= cor %>" style="bottom: <%= base %>%; height: <%= altura %>%"></div>
+              <% end %>
+
+              <div class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg group-hover:block group-focus:block dark:bg-slate-700">
+                <p class="font-medium"><%= nome_mes(m[:mes]).capitalize %> de <%= resumo.ano %></p>
+                <p class="mt-1 tabular-nums">Resultado: <%= number_to_currency(valor) %></p>
+                <p class="tabular-nums text-slate-300">Recebido: <%= number_to_currency(m[:recebido]) %></p>
+                <% custos = m[:despesas_gerais] + m[:agua_esgoto] %>
+                <% if custos.positive? %>
+                  <p class="tabular-nums text-slate-300">Custos: − <%= number_to_currency(custos) %></p>
+                <% end %>
+                <% unless m[:energia_solar].to_d.zero? %>
+                  <p class="tabular-nums text-slate-300">Energia solar: <%= valor_com_sinal(m[:energia_solar]) %></p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-2 flex gap-0.5 text-xs text-slate-500 dark:text-slate-400" aria-hidden="true">
+        <% resumo.meses.each do |m| %>
+          <span class="flex-1 text-center"><span class="sm:hidden"><%= nome_mes(m[:mes], abreviado: true).first.upcase %></span><span class="hidden sm:inline"><%= nome_mes(m[:mes], abreviado: true) %></span></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render "energia_solar/grafico_lucro", ano: resumo.ano, lucros: resumo.lucros_solar, lucros_kitnets: resumo.lucros_solar_kitnets %>
