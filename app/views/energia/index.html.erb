@@ -18,37 +18,35 @@
 
   <%= render "shared/error_summary", object: @conta %>
 
-  <%= form_with(model: @conta, url: conta_energia_path(ano: @conta.ano, mes: @conta.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-4",
-                data: { controller: "tarifa" }) do |form| %>
+  <%= form_with(model: @conta, url: conta_energia_path(ano: @conta.ano, mes: @conta.mes), method: :patch, html: { autocomplete: "off" }, class: "mt-4") do |form| %>
     <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <%= form.label :kwh_total, "Energia total (kWh)", class: label_classes %>
-        <%= form.number_field :kwh_total, value: numero_para_campo(@conta.kwh_total), step: "any", min: 0, inputmode: "decimal", placeholder: "0",
-              class: field_classes(@conta, :kwh_total), data: { tarifa_target: "kwh", action: "input->tarifa#calcular" } %>
+        <%= form.label :valor_kwh, "Valor do kWh", class: label_classes %>
+        <div class="relative">
+          <span class="pointer-events-none absolute inset-y-0 left-3 mt-1.5 flex items-center text-sm text-slate-400">R$</span>
+          <%= form.text_field :valor_kwh, value: valor_kwh_para_campo(@conta.valor_kwh), inputmode: "decimal", placeholder: "0,000000",
+                class: "#{field_classes(@conta, :valor_kwh)} pl-10 tabular-nums" %>
+        </div>
       </div>
       <div>
-        <%= form.label :valor_total, "Valor total (sem o desconto da solar)", class: label_classes %>
-        <%= money_field form, :valor_total, data: { tarifa_target: "total", action: "input->money#format input->tarifa#calcular" } %>
+        <p class="<%= label_classes %>">Energia total (soma das kitnets)</p>
+        <p class="mt-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white"><%= @conta.kwh_total ? "#{kwh(@conta.kwh_total)} kWh" : "—" %></p>
       </div>
       <div>
-        <p class="<%= label_classes %>">Valor do kWh</p>
-        <p class="mt-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white" data-tarifa-target="resultado">
-          <%= @conta.valor_kwh ? number_to_currency(@conta.valor_kwh, precision: 4) : "—" %>
-        </p>
+        <p class="<%= label_classes %>">Valor total (soma das kitnets)</p>
+        <p class="mt-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white"><%= @conta.valor_total ? number_to_currency(@conta.valor_total) : "—" %></p>
       </div>
       <div>
-        <%= form.submit "Salvar conta", class: "btn btn-primary w-full" %>
+        <%= form.submit "Salvar valor do kWh", class: "btn btn-primary w-full" %>
       </div>
     </div>
   <% end %>
 </section>
 
-<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-  <%= render "shared/stat_tile", label: "Consumo das kitnets", value: "#{kwh(consumo_kitnets)} kWh", icon_name: :bolt, tone: :primary, value_class: "text-xl",
-        sublabel: (@conta.kwh_total ? "de #{kwh(@conta.kwh_total)} kWh da conta" : "lance a conta do mês") %>
-  <%= render "shared/stat_tile", label: "Áreas comuns e perdas", value: (@conta.kwh_total ? "#{kwh(@conta.kwh_total - consumo_kitnets)} kWh" : "—"), icon_name: :building, tone: :info, value_class: "text-xl" %>
-  <%= render "shared/stat_tile", label: "A cobrar das kitnets", value: number_to_currency(valor_kitnets), icon_name: :cash, tone: :primary, value_class: "text-xl",
-        sublabel: (@conta.valor_total ? "de #{number_to_currency(@conta.valor_total)} da conta" : nil) %>
+<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+  <%= render "shared/stat_tile", classe: "col-span-2 lg:col-span-1", label: "Consumo das kitnets", value: "#{kwh(consumo_kitnets)} kWh", icon_name: :bolt, tone: :primary, value_class: "text-xl",
+        sublabel: (@conta.valor_kwh ? nil : "lance o valor do kWh") %>
+  <%= render "shared/stat_tile", label: "A cobrar das kitnets", value: number_to_currency(valor_kitnets), icon_name: :cash, tone: :primary, value_class: "text-xl" %>
   <%= render "shared/stat_tile", label: "Já recebido", value: number_to_currency(valor_pago), icon_name: :check_circle, tone: :good, value_class: "text-xl",
         sublabel: "#{leituras.count(&:pago?)} de #{leituras.count { |l| l.valor.present? }} kitnets pagas" %>
 </div>

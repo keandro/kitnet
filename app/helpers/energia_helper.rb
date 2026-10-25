@@ -7,6 +7,13 @@ module EnergiaHelper
   end
 
   # Valor para campos numéricos sem zeros sobrando: 100.0 -> "100", 300.50 -> "300.5"
+  # Valor do kWh no campo: "1,106006", sem os zeros do fim (mas com 2 casas no mínimo).
+  def valor_kwh_para_campo(valor)
+    return if valor.nil?
+
+    number_with_precision(valor, precision: 6, separator: ",", delimiter: "").sub(/(,\d\d\d*?)0+\z/, '\\1')
+  end
+
   def numero_para_campo(valor)
     valor&.to_d&.to_s("F")&.sub(/\.?0+\z/, "")
   end

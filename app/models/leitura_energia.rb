@@ -11,6 +11,10 @@ class LeituraEnergia < ApplicationRecord
   validate :leitura_atual_nao_menor_que_anterior
   validate :data_pagamento_nao_pode_ser_futura
 
+  # Energia total e valor total da conta são a soma das kitnets.
+  after_save :recalcular_conta, if: -> { saved_change_to_leitura_anterior? || saved_change_to_leitura_atual? }
+  after_destroy :recalcular_conta
+
   def consumo
     leitura_atual - leitura_anterior if leitura_atual && leitura_anterior
   end
@@ -25,6 +29,10 @@ class LeituraEnergia < ApplicationRecord
   end
 
   private
+
+  def recalcular_conta
+    conta_energia.recalcular_totais!
+  end
 
   def leitura_atual_nao_menor_que_anterior
     errors.add(:leitura_atual, "não pode ser menor que a anterior") if consumo&.negative?
