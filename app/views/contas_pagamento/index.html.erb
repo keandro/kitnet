@@ -23,7 +23,7 @@
             <h2 class="truncate text-base font-semibold text-slate-900 dark:text-white"><%= conta.titular %></h2>
             <p class="truncate text-sm text-slate-500 dark:text-slate-400"><%= conta.banco || "Banco não informado" %></p>
           </div>
-          <%= link_to edit_conta_pagamento_path(conta), class: "-m-1 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5 dark:hover:text-slate-200", aria: { label: "Editar a conta de #{conta.titular}" } do %>
+          <%= link_to edit_conta_pagamento_path(conta), class: "acao acao-azul acao-icone", aria: { label: "Editar a conta de #{conta.titular}" } do %>
             <%= icon :pencil, css_class: "size-4" %>
           <% end %>
         </div>
@@ -36,7 +36,7 @@
               <dd class="min-w-0 flex-1 break-all font-medium text-slate-900 tabular-nums dark:text-white"><%= valor %></dd>
               <% unless rotulo == "Agência" %>
                 <button type="button" data-controller="copiar" data-copiar-texto-value="<%= valor %>" data-action="copiar#copiar"
-                        class="botao-copiar -my-1 shrink-0 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/5 dark:hover:text-slate-200"
+                        class="botao-copiar acao acao-cinza acao-icone -my-1"
                         aria-label="Copiar <%= rotulo.downcase %>" title="Copiar">
                   <%= icon :copiar, css_class: "icone-copiar size-4" %>
                   <%= icon :check_circle, css_class: "icone-copiado size-4 text-emerald-600 dark:text-emerald-400" %>

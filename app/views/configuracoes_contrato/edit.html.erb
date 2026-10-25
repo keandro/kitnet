@@ -102,7 +102,7 @@
         <%= icon :document, css_class: "size-4" %> Ver PDF de exemplo
       <% end %>
       <% if @configuracao.texto_modelo_in_database.present? %>
-        <%= form.button "Restaurar texto original", name: "restaurar", value: "1", class: "btn btn-secondary",
+        <%= form.button "Restaurar texto original", name: "restaurar", value: "1", class: "btn btn-amarelo",
               data: { turbo_confirm: "Voltar o texto do contrato ao original? As mudanças feitas no texto se perdem.", confirmar_rotulo: "Restaurar", confirmar_perigo: "true" } %>
       <% end %>
       <%= link_to "Cancelar", contratos_path, class: "btn btn-secondary" %>

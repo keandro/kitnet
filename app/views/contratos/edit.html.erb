@@ -11,7 +11,7 @@
       <%= icon :document, css_class: "size-4" %> Contrato para assinar
     <% end %>
     <% if @contrato.status_was == "ativo" %>
-      <%= button_to finalizar_contrato_path(@contrato), method: :patch, form_class: "inline-block", class: "btn btn-secondary", data: { turbo_confirm: "Finalizar o contrato de #{@contrato.inquilino_was}? A kitnet fica livre.", confirmar_rotulo: "Finalizar" } do %>
+      <%= button_to finalizar_contrato_path(@contrato), method: :patch, form_class: "inline-block", class: "btn btn-danger", data: { turbo_confirm: "Finalizar o contrato de #{@contrato.inquilino_was}? A kitnet fica livre.", confirmar_rotulo: "Finalizar" } do %>
         <%= icon :check_circle, css_class: "size-4" %> Finalizar
       <% end %>
     <% end %>

@@ -24,6 +24,13 @@
   .confirmacao-icone.perigo {
     @apply bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300;
   }
+  /* Ações da página com cor: editar (azul) e desfazer/restaurar (amarelo). */
+  .btn-azul {
+    @apply bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-600/25 ring-inset hover:bg-indigo-100 dark:bg-indigo-400/10 dark:text-indigo-300 dark:ring-indigo-400/30 dark:hover:bg-indigo-400/20;
+  }
+  .btn-amarelo {
+    @apply bg-amber-50 text-amber-800 shadow-sm ring-1 ring-amber-600/25 ring-inset hover:bg-amber-100 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/30 dark:hover:bg-amber-400/20;
+  }
   .btn-danger {
     @apply bg-white text-rose-600 ring-1 ring-rose-200 ring-inset hover:bg-rose-50 dark:bg-transparent dark:text-rose-400 dark:ring-rose-400/30 dark:hover:bg-rose-400/10;
   }
@@ -60,9 +67,28 @@ td, th {
   display: block;
 }
 
-/* Botões pequenos das linhas da lista de contratos (PDF, novo contrato igual). */
+/* Botões de ação das listas e cartões (editar, finalizar, pago…): com fundo e
+   cor pelo tipo da ação. .acao-icone é o quadrado só com ícone. */
 @layer components {
-  .acao-contrato {
-    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset;
+  .acao {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-semibold ring-1 ring-inset transition-colors;
+  }
+  .acao-icone {
+    @apply size-9 shrink-0 px-0 py-0;
+  }
+  .acao-azul {
+    @apply bg-indigo-50 text-indigo-700 ring-indigo-600/20 hover:bg-indigo-100 dark:bg-indigo-400/10 dark:text-indigo-300 dark:ring-indigo-400/30 dark:hover:bg-indigo-400/20;
+  }
+  .acao-vermelho {
+    @apply bg-rose-50 text-rose-700 ring-rose-600/20 hover:bg-rose-100 dark:bg-rose-400/10 dark:text-rose-300 dark:ring-rose-400/30 dark:hover:bg-rose-400/20;
+  }
+  .acao-verde {
+    @apply bg-emerald-50 text-emerald-700 ring-emerald-600/20 hover:bg-emerald-100 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/30 dark:hover:bg-emerald-400/20;
+  }
+  .acao-amarelo {
+    @apply bg-amber-50 text-amber-800 ring-amber-600/25 hover:bg-amber-100 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/30 dark:hover:bg-amber-400/20;
+  }
+  .acao-cinza {
+    @apply bg-white text-slate-700 ring-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:text-slate-200 dark:ring-white/15 dark:hover:bg-white/10;
   }
 }

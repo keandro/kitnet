@@ -64,7 +64,7 @@
               <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 text-sm text-slate-700 dark:text-slate-300"><%= l(copia.data, format: "%d/%m/%Y, %H:%M") %></td>
               <td class="whitespace-nowrap px-3 py-3 sm:px-4 text-right text-sm tabular-nums text-slate-700 dark:text-slate-300"><%= number_to_human_size(copia.tamanho) %></td>
               <td class="whitespace-nowrap px-3 py-3 sm:px-4 text-right">
-                <%= link_to icon(:download, css_class: "size-4"), baixar_backup_path(nome: copia.nome), data: { turbo: false }, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Baixar #{copia.nome}" %>
+                <%= link_to icon(:download, css_class: "size-4"), baixar_backup_path(nome: copia.nome), data: { turbo: false }, class: "acao acao-cinza acao-icone", title: "Baixar #{copia.nome}" %>
               </td>
             </tr>
           <% end %>

@@ -109,7 +109,7 @@
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_com_sinal(m[:energia_solar]) %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %><span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">recebido <%= number_to_currency(m[:recebido]) %></span></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
-              <%= link_to icon(:pencil, css_class: "size-4"), editar, class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar custos de #{nome_mes(m[:mes])}" %>
+              <%= link_to icon(:pencil, css_class: "size-4"), editar, class: "acao acao-azul acao-icone", title: "Editar custos de #{nome_mes(m[:mes])}" %>
             </td>
           </tr>
         <% end %>

@@ -8,7 +8,7 @@
   <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(pagamento.valor) %></td>
   <td class="hidden sm:table-cell max-w-xs truncate px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-500 dark:text-slate-400" title="<%= pagamento.observacoes %>"><%= pagamento.observacoes.presence || "—" %></td>
   <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
-    <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "inline-flex p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400", title: "Editar" %>
-    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "inline-block", class: "inline-flex cursor-pointer p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400", data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(pagamento.valor)} da kitnet #{pagamento.unidade.nome}?", confirmar_rotulo: "Remover", confirmar_perigo: "true" }, title: "Remover" %>
+    <%= link_to icon(:pencil, css_class: "size-4"), edit_pagamento_path(pagamento), class: "acao acao-azul acao-icone", title: "Editar", aria: { label: "Editar o pagamento" } %>
+    <%= button_to icon(:trash, css_class: "size-4"), pagamento, method: :delete, form_class: "ml-1 inline-block", class: "acao acao-vermelho acao-icone", aria: { label: "Remover o pagamento" }, data: { turbo_confirm: "Remover o pagamento de #{number_to_currency(pagamento.valor)} da kitnet #{pagamento.unidade.nome}?", confirmar_rotulo: "Remover", confirmar_perigo: "true" }, title: "Remover" %>
   </td>
 </tr>
