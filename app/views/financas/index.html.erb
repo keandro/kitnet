@@ -26,8 +26,8 @@
         <tr>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mês</th>
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Recebido</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
-          <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
+          <th class="hidden xl:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Despesas gerais</th>
+          <th class="hidden xl:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Menos </span>Água e esgoto</th>
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span class="sr-only">Mais </span>Energia solar</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Resultado</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Editar</span></th>
@@ -40,8 +40,8 @@
               data-controller="row-link" data-row-link-url-value="<%= pagamentos_path(ano: @ano, mes: m[:mes]) %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= nome_mes(m[:mes]).capitalize %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(m[:recebido]) %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:despesas_gerais], sinal: "−") %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_lancado(m[:agua_esgoto], sinal: "−") %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= valor_com_sinal(m[:energia_solar]) %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums <%= m[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(m[:resultado]) %><span class="block text-xs font-normal text-slate-500 sm:hidden dark:text-slate-400">recebido <%= number_to_currency(m[:recebido]) %></span></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
@@ -54,8 +54,8 @@
         <tr>
           <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-semibold text-slate-900 dark:text-white">Total <%= @ano %></td>
           <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(@resumo.total_recebido) %></td>
-          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@resumo.totais[:despesas_gerais], sinal: "−") %></td>
-          <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@resumo.totais[:agua_esgoto], sinal: "−") %></td>
+          <td class="hidden xl:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@resumo.totais[:despesas_gerais], sinal: "−") %></td>
+          <td class="hidden xl:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_lancado(@resumo.totais[:agua_esgoto], sinal: "−") %></td>
           <td class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= valor_com_sinal(@resumo.totais[:energia_solar]) %></td>
           <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums <%= @resumo.totais[:resultado].negative? ? "text-rose-700 dark:text-rose-400" : "text-slate-900 dark:text-white" %>"><%= number_to_currency(@resumo.totais[:resultado]) %></td>
           <td></td>

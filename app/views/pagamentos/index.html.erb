@@ -41,6 +41,7 @@
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Valor base</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pago no mês</th>
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Pagamento</th>
+          <th class="hidden xl:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Observações</th>
           <th class="px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
         </tr>
       </thead>
@@ -48,8 +49,15 @@
         <% @unidades.each do |unidade| %>
           <% pagos = @por_unidade[unidade.id] || [] %>
           <% vazia = vazias.include?(unidade) %>
+          <% observacoes = pagos.filter_map { |p| p.observacoes.presence }.join(" · ") %>
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5" data-controller="row-link" data-row-link-url-value="<%= unidade_path(unidade) %>" data-action="click->row-link#visit">
-            <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
+            <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white">
+              <%= unidade.nome %>
+              <%# em telas menores a coluna Observações some; ela vem aqui embaixo %>
+              <% if observacoes.present? %>
+                <span class="block max-w-24 truncate text-xs font-normal text-slate-500 min-[360px]:max-w-36 sm:max-w-28 md:max-w-56 xl:hidden dark:text-slate-400" title="<%= observacoes %>"><%= observacoes %></span>
+              <% end %>
+            </td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= unidade.valor_base ? number_to_currency(unidade.valor_base) : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
               <%= pagos.any? ? number_to_currency(pagos.sum(&:valor)) : "—" %>
@@ -73,9 +81,10 @@
                 <span class="text-slate-400 dark:text-slate-500">—</span>
               <% end %>
             </td>
+            <td class="hidden xl:table-cell max-w-xs truncate px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm text-slate-500 dark:text-slate-400" title="<%= observacoes %>"><%= observacoes.presence || "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
-              <%= link_to new_pagamento_path(unidade_id: unidade.id, data: data_sugerida), class: "acao acao-verde" do %>
-                <%= icon :plus, css_class: "size-4" %> Registrar
+              <%= link_to new_pagamento_path(unidade_id: unidade.id, data: data_sugerida), class: "acao acao-verde max-xl:size-9 max-xl:px-0", title: "Registrar pagamento", aria: { label: "Registrar pagamento da kitnet #{unidade.nome}" } do %>
+                <%= icon :plus, css_class: "size-4" %><span class="max-xl:hidden">Registrar</span>
               <% end %>
             </td>
           </tr>

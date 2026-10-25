@@ -33,7 +33,7 @@
         <p class="mt-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium tabular-nums text-slate-900 dark:bg-white/5 dark:text-white"><%= @conta.valor_total ? number_to_currency(@conta.valor_total) : "—" %></p>
       </div>
       <div>
-        <%= form.submit "Salvar valor do kWh", class: "btn btn-primary w-full" %>
+        <%= form.submit "Salvar", class: "btn btn-primary w-full" %>
       </div>
     </div>
   <% end %>
@@ -63,8 +63,8 @@
       <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
           <%# no celular ficam Kitnet, Valor (com a situação embaixo) e os botões %>
-          <% [ [ "Kitnet", "left", true ], [ "Leitura anterior", "right", false ], [ "Leitura atual", "right", false ], [ "Consumo", "right", false ], [ "Valor", "right", true ], [ "Pagamento", "left", false ] ].each do |titulo, lado, celular| %>
-            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
+          <% [ [ "Kitnet", "left", true ], [ "Leitura anterior", "right", "xl" ], [ "Leitura atual", "right", "xl" ], [ "Consumo", "right", "md" ], [ "Valor", "right", true ], [ "Pagamento", "left", false ] ].each do |titulo, lado, celular| %>
+            <th class="<%= { "xl" => "hidden xl:table-cell", "md" => "hidden md:table-cell" }.fetch(celular) { "hidden sm:table-cell" unless celular } %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
           <% end %>
           <th class="hidden sm:table-cell px-3 py-3 sm:px-4 max-[359px]:px-2"><span class="sr-only">Ações</span></th>
           <th class="px-2 py-3 sm:px-4"><span class="sr-only">Mensagem</span></th>
@@ -75,9 +75,9 @@
           <% leitura = @leituras[unidade.id] %>
           <tr>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= unidade.nome %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_anterior) %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_atual) %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= leitura&.consumo ? "#{kwh(leitura.consumo)} kWh" : "—" %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_anterior) %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= kwh(leitura&.leitura_atual) %></td>
+            <td class="hidden md:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= leitura&.consumo ? "#{kwh(leitura.consumo)} kWh" : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white">
               <%= leitura&.valor ? number_to_currency(leitura.valor) : "—" %>
               <% if leitura&.pago? %>
@@ -97,12 +97,12 @@
             </td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm">
               <% if leitura&.valor && !leitura.pago? %>
-                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "acao acao-verde", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?", confirmar_rotulo: "Marcar como pago" } do %>
-                  <%= icon :check_circle, css_class: "size-4" %> Pago
+                <%= button_to pagar_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "acao acao-verde max-xl:size-9 max-xl:px-0", title: "Marcar como pago", data: { turbo_confirm: "Marcar a energia da kitnet #{unidade.nome} como paga hoje?", confirmar_rotulo: "Marcar como pago" } do %>
+                  <%= icon :check_circle, css_class: "size-4" %><span class="max-xl:hidden">Pago</span>
                 <% end %>
               <% elsif leitura&.pago? %>
-                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "acao acao-amarelo", title: "Desfazer o pagamento", data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto.", confirmar_rotulo: "Desfazer" } do %>
-                  <%= icon :desfazer, css_class: "size-4" %> Desfazer
+                <%= button_to desfazer_pagamento_leitura_energia_path(leitura), method: :patch, form_class: "inline-block", class: "acao acao-amarelo max-xl:size-9 max-xl:px-0", title: "Desfazer o pagamento", data: { turbo_confirm: "Desfazer o pagamento da energia da kitnet #{unidade.nome} (pago em #{l(leitura.data_pagamento)})? Ela volta para em aberto.", confirmar_rotulo: "Desfazer" } do %>
+                  <%= icon :desfazer, css_class: "size-4" %><span class="max-xl:hidden">Desfazer</span>
                 <% end %>
               <% end %>
             </td>
@@ -154,8 +154,8 @@
     <table class="min-w-full divide-y divide-slate-100 dark:divide-white/5">
       <thead class="bg-slate-50/70 dark:bg-white/[0.03]">
         <tr>
-          <% [ [ "Mês", "left", true ], [ "kWh da conta", "right", false ], [ "Valor do kWh", "right", false ], [ "Valor da conta", "right", true ], [ "Consumo das kitnets", "right", false ], [ "A cobrar das kitnets", "right", true ], [ "Já recebido", "right", false ] ].each do |titulo, lado, celular| %>
-            <th class="<%= "hidden sm:table-cell" unless celular %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
+          <% [ [ "Mês", "left", true ], [ "kWh da conta", "right", "xl" ], [ "Valor do kWh", "right", "xl" ], [ "Valor da conta", "right", true ], [ "Consumo das kitnets", "right", false ], [ "A cobrar das kitnets", "right", true ], [ "Já recebido", "right", false ] ].each do |titulo, lado, celular| %>
+            <th class="<%= celular == "xl" ? "hidden xl:table-cell" : ("hidden sm:table-cell" unless celular) %> px-3 py-3 sm:px-4 max-[359px]:px-2 text-<%= lado %> text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><%= titulo %></th>
           <% end %>
         </tr>
       </thead>
@@ -165,8 +165,8 @@
           <tr class="cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 <%= "bg-indigo-50/60 dark:bg-indigo-400/5" if l[:mes] == @conta.mes %>"
               data-controller="row-link" data-row-link-url-value="<%= energia_path(ano: @conta.ano, mes: l[:mes]) %>" data-action="click->row-link#visit">
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-medium text-slate-900 dark:text-white"><%= t("date.month_names")[l[:mes]].capitalize %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.kwh_total ? "#{kwh(c.kwh_total)} kWh" : "—" %></td>
-            <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.valor_kwh ? number_to_currency(c.valor_kwh, precision: 3) : "—" %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.kwh_total ? "#{kwh(c.kwh_total)} kWh" : "—" %></td>
+            <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= c&.valor_kwh ? number_to_currency(c.valor_kwh, precision: 3) : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-900 dark:text-white"><%= c&.valor_total ? number_to_currency(c.valor_total) : "—" %></td>
             <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm tabular-nums text-slate-500 dark:text-slate-400"><%= l[:consumo].positive? ? "#{kwh(l[:consumo])} kWh" : "—" %></td>
             <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-medium tabular-nums text-slate-900 dark:text-white"><%= l[:cobrar].positive? ? number_to_currency(l[:cobrar]) : "—" %></td>
@@ -177,8 +177,8 @@
       <tfoot class="bg-slate-50 dark:bg-white/5">
         <tr>
           <td class="px-3 py-3 sm:px-4 max-[359px]:px-2 text-sm font-semibold text-slate-900 dark:text-white">Total <%= @conta.ano %></td>
-          <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= kwh(linhas.sum { |l| l[:conta]&.kwh_total.to_d }) %> kWh</td>
-          <td class="hidden sm:table-cell"></td>
+          <td class="hidden xl:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= kwh(linhas.sum { |l| l[:conta]&.kwh_total.to_d }) %> kWh</td>
+          <td class="hidden xl:table-cell"></td>
           <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(linhas.sum { |l| l[:conta]&.valor_total.to_d }) %></td>
           <td class="hidden sm:table-cell whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= kwh(linhas.sum { |l| l[:consumo] }) %> kWh</td>
           <td class="whitespace-nowrap px-3 py-3 sm:px-4 max-[359px]:px-2 text-right text-sm font-semibold tabular-nums text-slate-900 dark:text-white"><%= number_to_currency(linhas.sum { |l| l[:cobrar] }) %></td>
