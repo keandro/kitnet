@@ -39,6 +39,8 @@ class Contrato < ApplicationRecord
   validate :arquivo_pdf_valido, if: -> { arquivo_pdf.present? }
 
   after_save :salvar_pdf
+  # Mudar o valor de um contrato já salvo conta como o reajuste do ano.
+  before_update { self.reajustado_em = Date.current if will_save_change_to_valor? && !will_save_change_to_reajustado_em? }
 
   # 11 dígitos, não todos iguais, com os dois dígitos verificadores certos.
   def self.cpf_valido?(cpf)
@@ -72,6 +74,20 @@ class Contrato < ApplicationRecord
     return unless persisted?
 
     @documento_info ||= ContratoDocumento.sem_dados.find_by(contrato_id: id)
+  end
+
+  # Próximo aniversário (12, 24… meses do início) ainda sem reajuste, a partir
+  # de 1 mês antes dele; nil se não há nenhum pendente. Retorna [data, anos].
+  def aniversario_pendente(hoje = Date.current)
+    return unless ativo? && data_inicio
+
+    anos = 1
+    anos += 1 while data_inicio.advance(years: anos + 1).prev_month <= hoje
+    data = data_inicio.advance(years: anos)
+    return if data.prev_month > hoje || data >= data_fim
+    return if reajustado_em && reajustado_em >= data.prev_month
+
+    [ data, anos ]
   end
 
   def meses_restantes

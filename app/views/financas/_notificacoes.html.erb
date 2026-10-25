@@ -1,9 +1,9 @@
-<%# Avisos de hoje (não dependem do ano escolhido). %>
+<%# Avisos de hoje (não dependem do ano escolhido). Aniversário do contrato: muda o valor no contrato ou toque em "Valor atualizado". %>
 <% grupos = [
      { titulo: "Kitnets a vencer", icone: :cash, avisos: notificacoes.kitnets, vazio: "Nenhum aluguel vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
      { titulo: "Energia a vencer", icone: :bolt, avisos: notificacoes.energia, vazio: "Nenhuma conta de energia vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
      { titulo: "Contratos a vencer", icone: :document, avisos: notificacoes.contratos, vazio: "Nenhum contrato terminando nos próximos #{Notificacoes::MESES_CONTRATO} meses.", contrato: true },
-     { titulo: "Outros avisos", icone: :exclamation_triangle, avisos: notificacoes.outros, vazio: "Nada por aqui." }
+     { titulo: "Aniversário do contrato", icone: :clock, avisos: notificacoes.aniversarios, vazio: "Nenhum contrato fazendo aniversário no próximo mês.", aniversario: true }
    ] %>
 <section class="card mt-6 p-5" aria-labelledby="avisos-titulo">
   <div class="flex items-center gap-2">
@@ -32,10 +32,22 @@
                   <span class="flex items-start justify-between gap-2">
                     <span class="min-w-0 truncate text-sm font-medium text-slate-900 dark:text-white"><%= aviso.titulo %></span>
                     <span class="shrink-0 text-xs font-semibold <%= vencido ? "text-rose-700 dark:text-rose-400" : "text-amber-700 dark:text-amber-400" %>">
-                      <%= grupo[:contrato] ? prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje, verbo: "termina", passado: "terminou") : prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje) %>
+                      <% if grupo[:contrato] %>
+                        <%= prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje, verbo: "termina", passado: "terminou") %>
+                      <% elsif grupo[:aniversario] %>
+                        <%= prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje, verbo: "faz", passado: "fez") %>
+                      <% else %>
+                        <%= prazo_do_aviso(aviso.vencimento, hoje: notificacoes.hoje) %>
+                      <% end %>
                     </span>
                   </span>
                   <span class="mt-0.5 block truncate text-xs text-slate-500 dark:text-slate-400"><%= aviso.detalhe %> · <%= l(aviso.vencimento) %></span>
+                <% end %>
+                <% if aviso.acao %>
+                  <%= button_to aviso.acao, method: :patch, form_class: "mt-1.5", class: "acao acao-verde w-full",
+                        data: { turbo_confirm: "O valor do contrato de #{aviso.titulo} já foi atualizado (ou fica o mesmo)? O aviso some até o próximo aniversário.", confirmar_rotulo: "Valor atualizado" } do %>
+                    <%= icon :check_circle, css_class: "size-4" %> Valor atualizado
+                  <% end %>
                 <% end %>
               </li>
             <% end %>

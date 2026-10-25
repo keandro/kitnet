@@ -1,6 +1,6 @@
 # Contratos de aluguel. Ficam separados dos pagamentos: não geram cobranças.
 class ContratosController < ApplicationController
-  before_action :set_contrato, only: %i[ edit update destroy finalizar enviar_pdf pdf para_assinar ]
+  before_action :set_contrato, only: %i[ edit update destroy finalizar enviar_pdf reajustado pdf para_assinar ]
 
   # GET /contratos?situacao=ativo|finalizado|todos
   def index
@@ -30,7 +30,7 @@ class ContratosController < ApplicationController
   # começando quando o anterior terminou.
   def new
     if (@origem = Contrato.find_by(id: params[:copiar_de]))
-      @contrato = Contrato.new(@origem.attributes.except("id", "created_at", "updated_at", "status", "data_inicio"))
+      @contrato = Contrato.new(@origem.attributes.except("id", "created_at", "updated_at", "status", "data_inicio", "reajustado_em"))
       @contrato.data_inicio = @origem.data_fim || Date.current
       return
     end
@@ -67,6 +67,12 @@ class ContratosController < ApplicationController
   def finalizar
     @contrato.finalizado!
     redirect_back_or_to contratos_path, notice: "Contrato de #{@contrato.inquilino} finalizado; a kitnet #{@contrato.unidade.nome} ficou livre.", status: :see_other
+  end
+
+  # PATCH /contratos/1/reajustado — o aviso de aniversário sem mudar o valor.
+  def reajustado
+    @contrato.update!(reajustado_em: Date.current)
+    redirect_back_or_to financas_path, notice: "Reajuste do contrato de #{@contrato.inquilino} marcado como feito.", status: :see_other
   end
 
   # PATCH /contratos/1/enviar_pdf — envia o PDF direto da lista.

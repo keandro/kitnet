@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_24_030000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_010000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
     t.string "locador_nome"
     t.string "locador_qualificacao"
@@ -83,6 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_030000) do
     t.string "fiador_estado_civil"
     t.string "fiador_profissao"
     t.integer "conta_pagamento_id"
+    t.date "reajustado_em"
     t.index ["conta_pagamento_id"], name: "index_contratos_on_conta_pagamento_id"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"

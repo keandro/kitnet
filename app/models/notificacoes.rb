@@ -5,12 +5,15 @@
 # - energia a vencer: leitura com valor e sem pagamento, que vence no dia do
 #   aluguel da kitnet no próprio mês da conta;
 # - contratos a vencer: ativos que terminam nos próximos 3 meses ou já terminaram;
-# - outros: reservado para avisos futuros.
+# - aniversário do contrato: a cada 12 meses do início, 1 mês antes, para
+#   reajustar o valor; some quando o valor muda ou é marcado como atualizado.
 class Notificacoes
   ANTECEDENCIA = 5 # dias
   MESES_CONTRATO = 3
 
-  Aviso = Data.define(:titulo, :detalhe, :vencimento, :caminho)
+  Aviso = Data.define(:titulo, :detalhe, :vencimento, :caminho, :acao) do
+    def initialize(acao: nil, **) = super
+  end
 
   include Rails.application.routes.url_helpers
 
@@ -69,13 +72,19 @@ class Notificacoes
     end
   end
 
-  # Espaço para um próximo tipo de aviso.
-  def outros
-    []
+  def aniversarios
+    @aniversarios ||= @contratos.values.filter_map do |contrato|
+      data, anos = contrato.aniversario_pendente(@hoje)
+      next unless data
+
+      Aviso.new(titulo: contrato.inquilino,
+                detalhe: "Kitnet #{contrato.unidade.nome} · #{anos} #{anos == 1 ? "ano" : "anos"} · #{ActiveSupport::NumberHelper.number_to_currency(contrato.valor)}",
+                vencimento: data, caminho: edit_contrato_path(contrato), acao: reajustado_contrato_path(contrato))
+    end.sort_by(&:vencimento)
   end
 
   def total
-    kitnets.size + energia.size + contratos.size + outros.size
+    kitnets.size + energia.size + contratos.size + aniversarios.size
   end
 
   private
