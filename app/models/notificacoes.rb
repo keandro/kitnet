@@ -1,8 +1,8 @@
 # Avisos da página Finanças, sempre em relação a hoje:
-# - kitnets a pagar: aluguel sem pagamento no mês, a partir de 5 dias antes do
+# - kitnets a vencer: aluguel sem pagamento no mês, a partir de 5 dias antes do
 #   vencimento (dia do contrato ativo ou, sem contrato, o dia do pagamento da
 #   kitnet); o mês passado sem pagamento aparece como vencido;
-# - energia a pagar: leitura com valor e sem pagamento, que vence no dia do
+# - energia a vencer: leitura com valor e sem pagamento, que vence no dia do
 #   aluguel da kitnet no próprio mês da conta;
 # - contratos a vencer: ativos que terminam nos próximos 3 meses ou já terminaram;
 # - outros: reservado para avisos futuros.

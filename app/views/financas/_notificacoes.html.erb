@@ -1,7 +1,7 @@
 <%# Avisos de hoje (não dependem do ano escolhido). %>
 <% grupos = [
-     { titulo: "Kitnets a pagar", icone: :cash, avisos: notificacoes.kitnets, vazio: "Nenhum aluguel vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
-     { titulo: "Energia a pagar", icone: :bolt, avisos: notificacoes.energia, vazio: "Nenhuma conta de energia vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
+     { titulo: "Kitnets a vencer", icone: :cash, avisos: notificacoes.kitnets, vazio: "Nenhum aluguel vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
+     { titulo: "Energia a vencer", icone: :bolt, avisos: notificacoes.energia, vazio: "Nenhuma conta de energia vencendo nos próximos #{Notificacoes::ANTECEDENCIA} dias." },
      { titulo: "Contratos a vencer", icone: :document, avisos: notificacoes.contratos, vazio: "Nenhum contrato terminando nos próximos #{Notificacoes::MESES_CONTRATO} meses.", contrato: true },
      { titulo: "Outros avisos", icone: :exclamation_triangle, avisos: notificacoes.outros, vazio: "Nada por aqui." }
    ] %>
