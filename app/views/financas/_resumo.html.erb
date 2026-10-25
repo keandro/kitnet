@@ -5,7 +5,8 @@
         sublabel: (resumo.meses_com_movimento.positive? ? "média de #{number_to_currency(resumo.media_mensal)} por mês (#{pluralize(resumo.meses_com_movimento, "mês", plural: "meses")})" : "sem movimento no ano") %>
   <%= render "shared/stat_tile", label: "Recebido em #{resumo.ano}", value: number_to_currency(resumo.total_recebido), icon_name: :cash, tone: :primary, value_class: "text-xl" %>
   <%= render "shared/stat_tile", label: "Custos em #{resumo.ano}", value: number_to_currency(custos), icon_name: :exclamation_triangle, tone: :critical, value_class: "text-xl" %>
-  <%= render "shared/stat_tile", label: "Energia solar em #{resumo.ano}", value: valor_com_sinal(resumo.totais[:energia_solar]).sub("—", number_to_currency(0)), icon_name: :sun, tone: :info, value_class: "text-xl" %>
+  <%= render "shared/stat_tile", label: "Energia solar em #{resumo.ano}", value: valor_com_sinal(resumo.totais[:energia_solar]).sub("—", number_to_currency(0)), icon_name: :sun, tone: :info, value_class: "text-xl",
+        sublabel: safe_join([ "das kitnets", tag.br, "total: ", tag.span(valor_com_sinal(resumo.lucros_solar.values.sum).sub("—", number_to_currency(0)), class: "whitespace-nowrap") ]) %>
 </div>
 
 <% escala = escala_financas(resumo.meses.map { |m| m[:resultado] }) %>
