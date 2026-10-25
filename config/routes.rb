@@ -32,7 +32,6 @@ Rails.application.routes.draw do
     patch "leituras", to: "energia#update_leituras", as: :leituras_energia
   end
   scope "financas/:ano/:mes", constraints: { ano: /\d{4}/, mes: /\d{1,2}/ } do
-    get "editar", to: "fechamentos_mensais#edit", as: :editar_fechamento_mensal
     patch "", to: "fechamentos_mensais#update", as: :fechamento_mensal
   end
 
