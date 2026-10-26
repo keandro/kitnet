@@ -61,9 +61,14 @@ class ContratoPdf
 
   def v(valor) = valor.present? ? escapar(valor.to_s) : VAZIO
 
-  # O formato do Prawn só entende &amp; &lt; &gt;; o html_escape também troca
-  # aspas e apóstrofos ("D'azul" saía como "D&#39;azul").
-  def escapar(texto) = texto.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+  # O formato do Prawn só entende &amp; &lt; &gt; (o html_escape também troca
+  # aspas e apóstrofos: "D'azul" saía como "D&#39;azul"). A fonte do PDF só tem
+  # os caracteres do Windows-1252; os outros (✓, emojis) viram "?" em vez de
+  # impedir o PDF de ser gerado.
+  def escapar(texto)
+    texto.encode("Windows-1252", invalid: :replace, undef: :replace, replace: "?").encode("UTF-8")
+         .gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+  end
 
   def paragrafo(pdf, texto, indent: 0, depois: 8)
     pdf.text texto, inline_format: true, align: :justify, indent_paragraphs: indent
