@@ -10,12 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_010000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_020000) do
   create_table "configuracoes_contrato", force: :cascade do |t|
-    t.string "locador_nome"
-    t.string "locador_qualificacao"
-    t.string "locador_cpf"
-    t.string "locador_endereco"
     t.string "imovel_endereco"
     t.string "imovel_bairro_cidade"
     t.string "cidade_assinatura"
@@ -84,7 +80,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_010000) do
     t.string "fiador_profissao"
     t.integer "conta_pagamento_id"
     t.date "reajustado_em"
+    t.integer "locador_id"
     t.index ["conta_pagamento_id"], name: "index_contratos_on_conta_pagamento_id"
+    t.index ["locador_id"], name: "index_contratos_on_locador_id"
     t.index ["unidade_id", "status"], name: "index_contratos_on_unidade_id_and_status"
     t.index ["unidade_id"], name: "index_contratos_on_unidade_id"
   end
@@ -125,6 +123,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_010000) do
     t.index ["unidade_id"], name: "index_leituras_energia_on_unidade_id"
   end
 
+  create_table "locadores", force: :cascade do |t|
+    t.string "nome", null: false
+    t.string "nacionalidade"
+    t.string "estado_civil"
+    t.string "profissao"
+    t.string "cpf"
+    t.string "endereco"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pagamentos", force: :cascade do |t|
     t.integer "unidade_id", null: false
     t.decimal "valor", precision: 10, scale: 2, null: false
@@ -147,6 +156,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_010000) do
 
   add_foreign_key "contrato_documentos", "contratos"
   add_foreign_key "contratos", "contas_pagamento"
+  add_foreign_key "contratos", "locadores"
   add_foreign_key "contratos", "unidades"
   add_foreign_key "leituras_energia", "contas_energia", column: "conta_energia_id"
   add_foreign_key "leituras_energia", "unidades"

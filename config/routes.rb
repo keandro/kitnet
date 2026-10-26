@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get "contratos/:id/contrato.pdf", to: "contratos#pdf", as: :pdf_contrato, format: false
   get "contratos/:id/para-assinar.pdf", to: "contratos#para_assinar", as: :contrato_para_assinar, format: false
   resources :contas_pagamento, path: "contas-para-pagamento", except: %i[show]
+  resources :locadores, except: %i[show]
   get "ocupacao", to: "ocupacao#index", as: :ocupacao
   get "mais", to: "mais#index", as: :mais
   get "financas", to: "financas#index", as: :financas

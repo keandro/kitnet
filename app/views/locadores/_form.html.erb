@@ -1,0 +1,39 @@
+<div class="card p-6">
+  <%= render "shared/error_summary", object: locador %>
+
+  <%= form_with(model: locador, html: { autocomplete: "off" }) do |form| %>
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <%= form.label :nome, "Nome completo", class: label_classes %>
+        <%= form.text_field :nome, class: field_classes(locador, :nome), autofocus: locador.new_record? %>
+      </div>
+      <div>
+        <%= form.label :nacionalidade, class: label_classes %>
+        <%= form.text_field :nacionalidade, placeholder: "brasileiro(a)", class: field_classes(locador, :nacionalidade) %>
+      </div>
+      <div>
+        <%= form.label :estado_civil, "Estado civil", class: label_classes %>
+        <%= form.text_field :estado_civil, placeholder: "solteiro(a)", class: field_classes(locador, :estado_civil) %>
+      </div>
+      <div>
+        <%= form.label :profissao, "Profissão", class: label_classes %>
+        <%= form.text_field :profissao, class: field_classes(locador, :profissao) %>
+      </div>
+      <div>
+        <%= form.label :cpf, "CPF", class: label_classes %>
+        <%= form.text_field :cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+              class: field_classes(locador, :cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= form.label :endereco, "Endereço", class: label_classes %>
+        <%= form.text_field :endereco, placeholder: "rua, número, bairro, cidade/UF", class: field_classes(locador, :endereco) %>
+      </div>
+    </div>
+    <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">O que ficar em branco não aparece no contrato.</p>
+
+    <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-white/5">
+      <%= link_to "Cancelar", locadores_path, class: "btn btn-secondary" %>
+      <%= form.submit "Salvar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

@@ -3,6 +3,13 @@
 
   <%= form_with(model: contrato, html: { autocomplete: "off" }, data: (contrato.new_record? ? { controller: "valor-base" } : {})) do |form| %>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <%= form.label :locador_id, "Locador", class: label_classes %>
+        <%= form.select :locador_id, Locador.ordenados.map { |l| [ l.nome, l.id ] }, { include_blank: "Nenhum (fica em branco no contrato)" },
+              class: field_classes(contrato, :locador) %>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Quem assina o contrato como locador. <%= link_to "Cadastrar locador", new_locador_path, class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %></p>
+      </div>
+
       <fieldset class="sm:col-span-2 grid grid-cols-1 gap-5 rounded-xl p-4 ring-1 ring-slate-200 ring-inset sm:grid-cols-2 dark:ring-white/10">
         <legend class="px-1 text-sm font-semibold text-slate-900 dark:text-white">Locatário</legend>
         <div class="sm:col-span-2">

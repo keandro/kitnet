@@ -87,7 +87,7 @@ module ApplicationHelper
     [
       [ [ "Início", root_path, :home ] ],
       [ [ "Finanças", financas_path, :chart ], [ "Pagamentos", pagamentos_path, :cash ], [ "Kitnets", unidades_path, :grid ] ],
-      [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ], [ "Contas para pagamento", contas_pagamento_path, :banco ] ],
+      [ [ "Contratos", contratos_path, :document ], [ "Ocupação", ocupacao_path, :users ], [ "Contas para pagamento", contas_pagamento_path, :banco ], [ "Locadores", locadores_path, :users ] ],
       [ [ "Energia", energia_path, :bolt ], [ "Energia solar", energia_solar_path, :sun ] ],
       [ [ "Backup", backups_path, :arquivo ] ]
     ]
@@ -101,6 +101,7 @@ module ApplicationHelper
       { rotulo: "Ocupação", caminho: ocupacao_path, icone: :users, tom: :warning, descricao: "Kitnets ocupadas e livres" },
       { rotulo: "Kitnets", caminho: unidades_path, icone: :grid, tom: :primary, descricao: "Valor base e histórico de pagamentos" },
       { rotulo: "Contas para pagamento", caminho: contas_pagamento_path, icone: :banco, tom: :good, descricao: "Banco, agência, conta e chave Pix" },
+      { rotulo: "Locadores", caminho: locadores_path, icone: :users, tom: :info, descricao: "Quem assina os contratos como locador" },
       { rotulo: "Backup", caminho: backups_path, icone: :arquivo, tom: :neutral, descricao: "Exportar, importar e cópias" }
     ]
   end

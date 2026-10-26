@@ -24,8 +24,9 @@ Sistema web para a gestão financeira de 12 kitnets de aluguel: pagamentos receb
 ## Funcionalidades
 
 - **Pagamentos**: os aluguéis recebidos no mês, por kitnet, com quem já pagou e quem falta entre as kitnets com valor base, e os **custos do mês** (despesas gerais e água e esgoto dos **dois relógios**, somados; os mesmos de Finanças); cada pagamento tem valor (sugerido pelo valor base da kitnet), data (sugerida pelo dia do pagamento da kitnet) e observações
-- **Contratos**: quem aluga cada kitnet — locatário (nome, celular para WhatsApp, CPF, RG, nacionalidade, estado civil e profissão), fiador (opcional, com os mesmos dados e endereço), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado`, a conta para pagamento (uma das Contas para pagamento) e o contrato em PDF (opcional, até 20 MB). Na lista, cada contrato tem **Ver PDF** ou **Enviar PDF** (o arquivo sobe assim que é escolhido), e os finalizados têm **Novo contrato igual**, que abre um contrato novo com os mesmos dados, começando quando o anterior terminou. Independentes dos pagamentos: não geram cobranças
-- **Contrato para assinar**: gera o PDF do contrato de locação (modelo das kitnets) com os dados do locatário, fiador, valor e prazo por extenso; a forma de pagamento sai da conta para pagamento escolhida no contrato; os dados fixos (locador, imóvel, foro, taxa de limpeza) ficam em *Contratos → Modelo do contrato*, no banco, fora do código. Lá também se edita o texto inteiro do contrato (títulos, cláusulas renumeradas sozinhas, negrito/sublinhado, campos como `{locatario}`, trechos entre colchetes que somem quando o campo está vazio — ex.: `[, RG {locatario_rg}]` — e trechos que só entram com fiador ou taxa de limpeza), com PDF de exemplo e botão para voltar ao texto original (`config/contrato_padrao.txt`)
+- **Contratos**: quem aluga cada kitnet — locatário (nome, celular para WhatsApp, CPF, RG, nacionalidade, estado civil e profissão), fiador (opcional, com os mesmos dados e endereço), valor (sugerido pelo valor base), duração em meses, dia de vencimento, início (opcional), situação `ativo` ou `finalizado`, o locador (um dos Locadores), a conta para pagamento (uma das Contas para pagamento) e o contrato em PDF (opcional, até 20 MB). Na lista, cada contrato tem **Ver PDF** ou **Enviar PDF** (o arquivo sobe assim que é escolhido), e os finalizados têm **Novo contrato igual**, que abre um contrato novo com os mesmos dados, começando quando o anterior terminou. Independentes dos pagamentos: não geram cobranças
+- **Contrato para assinar**: gera o PDF do contrato de locação (modelo das kitnets) com os dados do locatário, fiador, valor e prazo por extenso; a forma de pagamento sai da conta para pagamento escolhida no contrato; o locador vem do contrato; os dados fixos (imóvel, foro, taxa de limpeza) ficam em *Contratos → Modelo do contrato*, no banco, fora do código. Lá também se edita o texto inteiro do contrato (títulos, cláusulas renumeradas sozinhas, negrito/sublinhado, campos como `{locatario}`, trechos entre colchetes que somem quando o campo está vazio — ex.: `[, RG {locatario_rg}]` — e trechos que só entram com fiador ou taxa de limpeza), com PDF de exemplo e botão para voltar ao texto original (`config/contrato_padrao.txt`)
+- **Locadores**: quem assina os contratos como locador (nome, nacionalidade, estado civil, profissão, CPF e endereço); cada contrato escolhe o seu, e o texto do contrato é o mesmo para todos
 - **Contas para pagamento**: as contas onde os locatários pagam — nome da conta (titular), banco com código e nome (o nome se completa pelo código), agência, conta e chave Pix, com botão para copiar a conta e a chave
 - **Ocupação**: as kitnets ocupadas (com locatário, valor e vencimento) e as livres, pelos contratos ativos
 - **Kitnets**: as 12 kitnets fixas, por andar, mais a antiga casa (descontinuada, para os pagamentos do passado), com valor base, dia do pagamento e o histórico de pagamentos de cada uma (o lápis do quadro edita o valor base e o dia ali mesmo)
@@ -66,6 +67,7 @@ classDiagram
         +bigint id
         +bigint unidade_id
         +bigint conta_pagamento_id
+        +bigint locador_id
         +string inquilino
         +string celular
         +string fiador
@@ -137,6 +139,16 @@ classDiagram
         +valor()
     }
 
+    class Locador {
+        +bigint id
+        +string nome
+        +string nacionalidade
+        +string estado_civil
+        +string profissao
+        +string cpf
+        +string endereco
+    }
+
     class ContaPagamento {
         +bigint id
         +string titular
@@ -151,6 +163,7 @@ classDiagram
     Unidade "1" --> "0..*" Contrato : alugada em
     Contrato "1" --> "0..1" ContratoDocumento : PDF
     ContaPagamento "0..1" <-- "0..*" Contrato : paga em
+    Locador "0..1" <-- "0..*" Contrato : assina
     ContaEnergia "1" --> "0..*" LeituraEnergia : rateia
     Unidade "1" --> "0..*" LeituraEnergia : medidor
 ```

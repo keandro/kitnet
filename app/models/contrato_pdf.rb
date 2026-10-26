@@ -86,8 +86,8 @@ class ContratoPdf
   # Valores dos {campos}, já escapados.
   def valores
     @valores ||= {
-      "locador" => @cfg.locador_nome, "locador_qualificacao" => @cfg.locador_qualificacao,
-      "locador_cpf" => @cfg.locador_cpf, "locador_endereco" => @cfg.locador_endereco,
+      "locador" => @c.locador&.nome, "locador_qualificacao" => @c.locador&.qualificacao,
+      "locador_cpf" => @c.locador&.cpf, "locador_endereco" => @c.locador&.endereco,
       "locatario" => @c.inquilino, "locatario_nacionalidade" => @c.inquilino_nacionalidade,
       "locatario_estado_civil" => @c.inquilino_estado_civil, "locatario_profissao" => @c.inquilino_profissao,
       "locatario_cpf" => @c.inquilino_cpf, "locatario_rg" => @c.inquilino_rg,
@@ -114,7 +114,7 @@ class ContratoPdf
 
   def assinaturas(pdf)
     data = I18n.l(Date.current, format: "%d de %B de %Y")
-    pessoas = [ [ "LOCADOR", @cfg.locador_nome ], [ "LOCATÁRIO", @c.inquilino ] ]
+    pessoas = [ [ "LOCADOR", @c.locador&.nome ], [ "LOCATÁRIO", @c.inquilino ] ]
     pessoas << [ "FIADOR", @c.fiador ] if com_fiador?
 
     pdf.start_new_page if pdf.cursor < 120 + pessoas.size * 62

@@ -1,0 +1,42 @@
+<% content_for :title, "Locadores" %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Locadores</h1>
+  <%= link_to new_locador_path, class: "btn btn-primary" do %>
+    <%= icon :plus, css_class: "size-4" %> Novo locador
+  <% end %>
+</div>
+
+<% if @locadores.empty? %>
+  <div class="card mt-6 px-6 py-12 text-center">
+    <span class="mx-auto flex size-12 items-center justify-center rounded-xl <%= icon_chip_classes(:primary) %>"><%= icon :users, css_class: "size-6" %></span>
+    <p class="mt-4 text-sm font-semibold text-slate-900 dark:text-white">Nenhum locador ainda</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Cadastre quem assina os contratos como locador.</p>
+  </div>
+<% else %>
+  <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <% @locadores.each do |locador| %>
+      <article class="card p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-xl <%= icon_chip_classes(:primary) %>"><%= icon :users, css_class: "size-5" %></span>
+          <div class="min-w-0 flex-1">
+            <h2 class="break-words text-base font-semibold text-slate-900 dark:text-white"><%= locador.nome %></h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              <%= pluralize(@contratos_por_locador[locador.id].to_i, "contrato ativo", plural: "contratos ativos") %>
+            </p>
+          </div>
+          <%= link_to icon(:pencil, css_class: "size-4"), edit_locador_path(locador), class: "acao acao-azul acao-icone", title: "Editar", aria: { label: "Editar o locador #{locador.nome}" } %>
+        </div>
+
+        <dl class="mt-4 divide-y divide-slate-100 text-sm dark:divide-white/5">
+          <% [ [ "Qualificação", locador.qualificacao ], [ "CPF", locador.cpf ], [ "Endereço", locador.endereco ] ].each do |rotulo, valor| %>
+            <div class="flex gap-3 py-2.5">
+              <dt class="w-24 shrink-0 text-slate-500 dark:text-slate-400"><%= rotulo %></dt>
+              <dd class="min-w-0 flex-1 break-words font-medium text-slate-900 dark:text-white"><%= valor || "—" %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </article>
+    <% end %>
+  </div>
+<% end %>

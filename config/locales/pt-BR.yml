@@ -32,6 +32,7 @@ pt-BR:
         fiador_cpf: CPF do fiador
         fiador: Fiador
         conta_pagamento: Conta para pagamento
+        locador: Locador
         valor: Valor
         duracao_meses: Duração (meses)
         dia_vencimento: Dia de vencimento
@@ -49,6 +50,13 @@ pt-BR:
         agencia: Agência
         conta: Conta
         chave_pix: Chave Pix
+      locador:
+        nome: Nome
+        nacionalidade: Nacionalidade
+        estado_civil: Estado civil
+        profissao: Profissão
+        cpf: CPF
+        endereco: Endereço
       pagamento:
         unidade: Kitnet
         valor: Valor

@@ -5,33 +5,13 @@
 <% end %>
 
 <h1 class="mt-3 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Modelo do contrato</h1>
-<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Dados e texto que se repetem em todos os contratos para assinar. A conta para pagamento é escolhida em cada contrato.</p>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Dados e texto que se repetem em todos os contratos para assinar. O locador e a conta para pagamento são escolhidos em cada contrato (<%= link_to "Locadores", locadores_path, class: "font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" %>).</p>
 
 <div class="card mt-6 max-w-4xl p-6">
   <%= render "shared/error_summary", object: @configuracao %>
 
   <%= form_with model: @configuracao, url: modelo_de_contrato_path, method: :patch, html: { autocomplete: "off" } do |form| %>
-    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Locador</h2>
-    <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2">
-      <div class="sm:col-span-2">
-        <%= form.label :locador_nome, "Nome completo", class: label_classes %>
-        <%= form.text_field :locador_nome, class: field_classes(@configuracao, :locador_nome) %>
-      </div>
-      <div>
-        <%= form.label :locador_qualificacao, "Nacionalidade, estado civil, profissão", class: label_classes %>
-        <%= form.text_field :locador_qualificacao, placeholder: "brasileiro, solteiro, advogado", class: field_classes(@configuracao, :locador_qualificacao) %>
-      </div>
-      <div>
-        <%= form.label :locador_cpf, "CPF", class: label_classes %>
-        <%= form.text_field :locador_cpf, inputmode: "numeric", class: field_classes(@configuracao, :locador_cpf) %>
-      </div>
-      <div class="sm:col-span-2">
-        <%= form.label :locador_endereco, "Endereço", class: label_classes %>
-        <%= form.text_field :locador_endereco, class: field_classes(@configuracao, :locador_endereco) %>
-      </div>
-    </div>
-
-    <h2 class="mt-8 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Imóvel e taxa</h2>
+    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Imóvel e taxa</h2>
     <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :imovel_endereco, "Rua e número do prédio", class: label_classes %>

@@ -8,6 +8,7 @@ class Contrato < ApplicationRecord
 
   belongs_to :unidade
   belongs_to :conta_pagamento, optional: true
+  belongs_to :locador, optional: true
   has_one :documento, class_name: "ContratoDocumento", dependent: :destroy
 
   # Upload do PDF pelo formulário (arquivo novo ou "remover").

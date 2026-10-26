@@ -1,5 +1,5 @@
-# Dados fixos do contrato escrito (uma configuração só): locador, endereço do
-# imóvel, foro, taxa de limpeza e o texto do contrato.
+# Dados fixos do contrato escrito (uma configuração só): endereço do imóvel,
+# foro, taxa de limpeza e o texto do contrato (o locador é escolhido em cada contrato).
 # Ficam no banco, fora do código, porque são dados pessoais.
 class ConfiguracaoContrato < ApplicationRecord
   self.table_name = "configuracoes_contrato"
@@ -7,7 +7,7 @@ class ConfiguracaoContrato < ApplicationRecord
   include ValorMonetario
   valor_monetario :taxa_limpeza
 
-  normalizes :locador_nome, :locador_qualificacao, :locador_cpf, :locador_endereco, :imovel_endereco,
+  normalizes :imovel_endereco,
              :imovel_bairro_cidade, :cidade_assinatura, :foro, with: ->(texto) { texto.squish.presence }
   # Igual ao texto padrão fica vazio, para seguir o padrão se ele mudar.
   normalizes :texto_modelo, with: ->(texto) {

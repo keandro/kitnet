@@ -20,4 +20,5 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular "fiador", "fiadores"
   inflect.irregular "conta_pagamento", "contas_pagamento"
+  inflect.irregular "locador", "locadores"
 end
