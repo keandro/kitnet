@@ -49,7 +49,7 @@ class ContratoPdf
   # viram formatação. Um trecho entre colchetes ("[, RG {locatario_rg}]") some
   # quando algum campo dele está vazio.
   def preencher(texto)
-    String.new(ERB::Util.html_escape(texto))
+    escapar(texto)
       .gsub(ModeloDeContrato::OPCIONAL) do
         trecho = Regexp.last_match(1)
         trecho.scan(ModeloDeContrato::CAMPO).flatten.any? { |campo| valores[campo] == VAZIO } ? "" : trecho
@@ -59,7 +59,11 @@ class ContratoPdf
       .gsub(ModeloDeContrato::CAMPO) { valores.fetch($1, $&) }
   end
 
-  def v(valor) = valor.present? ? ERB::Util.html_escape(valor.to_s) : VAZIO
+  def v(valor) = valor.present? ? escapar(valor.to_s) : VAZIO
+
+  # O formato do Prawn só entende &amp; &lt; &gt;; o html_escape também troca
+  # aspas e apóstrofos ("D'azul" saía como "D&#39;azul").
+  def escapar(texto) = texto.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
 
   def paragrafo(pdf, texto, indent: 0, depois: 8)
     pdf.text texto, inline_format: true, align: :justify, indent_paragraphs: indent
