@@ -15,11 +15,11 @@
     <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :imovel_endereco, "Rua e número do prédio", class: label_classes %>
-        <%= form.text_field :imovel_endereco, placeholder: "rua …, 340", class: field_classes(@configuracao, :imovel_endereco) %>
+        <%= form.text_field :imovel_endereco, class: field_classes(@configuracao, :imovel_endereco) %>
       </div>
       <div>
         <%= form.label :imovel_bairro_cidade, "Bairro e cidade", class: label_classes %>
-        <%= form.text_field :imovel_bairro_cidade, placeholder: "Itapuã, Vila Velha/ES", class: field_classes(@configuracao, :imovel_bairro_cidade) %>
+        <%= form.text_field :imovel_bairro_cidade, class: field_classes(@configuracao, :imovel_bairro_cidade) %>
       </div>
       <div>
         <%= form.label :taxa_limpeza, "Taxa de limpeza e pintura", class: label_classes %>
@@ -32,11 +32,11 @@
     <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <%= form.label :cidade_assinatura, "Cidade da assinatura", class: label_classes %>
-        <%= form.text_field :cidade_assinatura, placeholder: "Vila Velha", class: field_classes(@configuracao, :cidade_assinatura) %>
+        <%= form.text_field :cidade_assinatura, class: field_classes(@configuracao, :cidade_assinatura) %>
       </div>
       <div>
         <%= form.label :foro, "Foro", class: label_classes %>
-        <%= form.text_field :foro, placeholder: "Vila Velha/ES", class: field_classes(@configuracao, :foro) %>
+        <%= form.text_field :foro, class: field_classes(@configuracao, :foro) %>
       </div>
     </div>
 

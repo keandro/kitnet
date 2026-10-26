@@ -18,12 +18,12 @@
         </div>
         <div class="sm:col-span-2">
           <%= form.label :celular, "Celular (WhatsApp)", class: label_classes %>
-          <%= form.telephone_field :celular, value: contrato.celular_formatado || contrato.celular, placeholder: "(27) 99999-9999", inputmode: "tel",
+          <%= form.telephone_field :celular, value: contrato.celular_formatado || contrato.celular, inputmode: "tel",
                 class: field_classes(contrato, :celular), data: { controller: "celular", action: "input->celular#formatar" } %>
         </div>
         <div>
           <%= form.label :inquilino_cpf, "CPF", class: label_classes %>
-          <%= form.text_field :inquilino_cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+          <%= form.text_field :inquilino_cpf, inputmode: "numeric", maxlength: 14,
                 class: field_classes(contrato, :inquilino_cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
         </div>
         <div>
@@ -32,11 +32,11 @@
         </div>
         <div>
           <%= form.label :inquilino_nacionalidade, "Nacionalidade", class: label_classes %>
-          <%= form.text_field :inquilino_nacionalidade, placeholder: "brasileiro(a)", class: field_classes(contrato, :inquilino_nacionalidade) %>
+          <%= form.text_field :inquilino_nacionalidade, class: field_classes(contrato, :inquilino_nacionalidade) %>
         </div>
         <div>
           <%= form.label :inquilino_estado_civil, "Estado civil", class: label_classes %>
-          <%= form.text_field :inquilino_estado_civil, placeholder: "solteiro(a)", class: field_classes(contrato, :inquilino_estado_civil) %>
+          <%= form.text_field :inquilino_estado_civil, class: field_classes(contrato, :inquilino_estado_civil) %>
         </div>
         <div>
           <%= form.label :inquilino_profissao, "Profissão", class: label_classes %>
@@ -46,14 +46,14 @@
       </fieldset>
 
       <fieldset class="sm:col-span-2 grid grid-cols-1 gap-5 rounded-xl p-4 ring-1 ring-slate-200 ring-inset sm:grid-cols-2 dark:ring-white/10">
-        <legend class="px-1 text-sm font-semibold text-slate-900 dark:text-white">Fiador</legend>
+        <legend class="px-1 text-sm font-semibold text-slate-900 dark:text-white">Fiador <span class="font-normal text-slate-500 dark:text-slate-400">(se tiver)</span></legend>
         <div class="sm:col-span-2">
           <%= form.label :fiador, "Nome do fiador", class: label_classes %>
-          <%= form.text_field :fiador, placeholder: "Deixe em branco se não tiver", class: field_classes(contrato, :fiador) %>
+          <%= form.text_field :fiador, class: field_classes(contrato, :fiador) %>
         </div>
         <div>
           <%= form.label :fiador_cpf, "CPF", class: label_classes %>
-          <%= form.text_field :fiador_cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+          <%= form.text_field :fiador_cpf, inputmode: "numeric", maxlength: 14,
                 class: field_classes(contrato, :fiador_cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
         </div>
         <div>
@@ -62,11 +62,11 @@
         </div>
         <div>
           <%= form.label :fiador_nacionalidade, "Nacionalidade", class: label_classes %>
-          <%= form.text_field :fiador_nacionalidade, placeholder: "brasileiro(a)", class: field_classes(contrato, :fiador_nacionalidade) %>
+          <%= form.text_field :fiador_nacionalidade, class: field_classes(contrato, :fiador_nacionalidade) %>
         </div>
         <div>
           <%= form.label :fiador_estado_civil, "Estado civil", class: label_classes %>
-          <%= form.text_field :fiador_estado_civil, placeholder: "solteiro(a)", class: field_classes(contrato, :fiador_estado_civil) %>
+          <%= form.text_field :fiador_estado_civil, class: field_classes(contrato, :fiador_estado_civil) %>
         </div>
         <div>
           <%= form.label :fiador_profissao, "Profissão", class: label_classes %>
@@ -74,7 +74,7 @@
         </div>
         <div class="sm:col-span-2">
           <%= form.label :fiador_endereco, "Endereço", class: label_classes %>
-          <%= form.text_field :fiador_endereco, placeholder: "rua, número, bairro, cidade/UF", class: field_classes(contrato, :fiador_endereco) %>
+          <%= form.text_field :fiador_endereco, class: field_classes(contrato, :fiador_endereco) %>
         </div>
       </fieldset>
 

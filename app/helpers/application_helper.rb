@@ -61,7 +61,7 @@ module ApplicationHelper
 
     tag.div(class: "relative") do
       tag.span("R$", class: "pointer-events-none absolute inset-y-0 left-3 mt-1.5 flex items-center text-sm text-slate-400") +
-        form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off", placeholder: format_money(0, precision: decimais),
+        form.text_field(attribute, value: valor, inputmode: "numeric", autocomplete: "off",
                         class: "#{field_classes(form.object, attribute)} pl-10",
                         data: { controller: "money", action: "input->money#format", money_decimais_value: decimais }.merge(data))
     end

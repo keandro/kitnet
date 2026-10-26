@@ -9,11 +9,11 @@
       </div>
       <div>
         <%= form.label :nacionalidade, class: label_classes %>
-        <%= form.text_field :nacionalidade, placeholder: "brasileiro(a)", class: field_classes(locador, :nacionalidade) %>
+        <%= form.text_field :nacionalidade, class: field_classes(locador, :nacionalidade) %>
       </div>
       <div>
         <%= form.label :estado_civil, "Estado civil", class: label_classes %>
-        <%= form.text_field :estado_civil, placeholder: "solteiro(a)", class: field_classes(locador, :estado_civil) %>
+        <%= form.text_field :estado_civil, class: field_classes(locador, :estado_civil) %>
       </div>
       <div>
         <%= form.label :profissao, "Profissão", class: label_classes %>
@@ -21,12 +21,12 @@
       </div>
       <div>
         <%= form.label :cpf, "CPF", class: label_classes %>
-        <%= form.text_field :cpf, inputmode: "numeric", placeholder: "000.000.000-00", maxlength: 14,
+        <%= form.text_field :cpf, inputmode: "numeric", maxlength: 14,
               class: field_classes(locador, :cpf), data: { controller: "cpf", action: "input->cpf#formatar" } %>
       </div>
       <div class="sm:col-span-2">
         <%= form.label :endereco, "Endereço", class: label_classes %>
-        <%= form.text_field :endereco, placeholder: "rua, número, bairro, cidade/UF", class: field_classes(locador, :endereco) %>
+        <%= form.text_field :endereco, class: field_classes(locador, :endereco) %>
       </div>
     </div>
     <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">O que ficar em branco não aparece no contrato.</p>

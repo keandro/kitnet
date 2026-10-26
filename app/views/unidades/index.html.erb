@@ -45,7 +45,7 @@
             <%= money_field form, :valor_base, data: { edicao_rapida_target: "campo" } %>
             <div class="mt-2 flex items-center gap-2">
               <%= form.label :dia_pagamento, "Dia", class: "shrink-0 text-xs font-medium text-slate-600 dark:text-slate-300" %>
-              <%= form.number_field :dia_pagamento, in: 1..31, inputmode: "numeric", placeholder: "—",
+              <%= form.number_field :dia_pagamento, in: 1..31, inputmode: "numeric",
                     class: field_classes(unidade, :dia_pagamento).sub("mt-1.5 ", "").sub("py-2", "py-1.5"), aria: { label: "Dia do pagamento da kitnet #{unidade.nome}" } %>
             </div>
             <div class="mt-2 flex flex-wrap gap-2">
